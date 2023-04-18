@@ -1,5 +1,5 @@
 const formgetPost = document.getElementById("modalFromSection");
-const pushButton = document.getElementById("PushButton");
+const pushButton = document.getElementById("pushButton");
 
 const pushContent = `
 <div class="modal-content">
@@ -22,7 +22,7 @@ const pushContent = `
 </div>
         `;
 
-PushButton.addEventListener('click', pushModal);
+pushButton.addEventListener('click', pushModal);
 
 function pushModal() {
     formgetPost.innerHTML = pushContent;
