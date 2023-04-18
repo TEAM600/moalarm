@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="./image/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="./image/favicon.ico" type="image/x-icon">
+    <!-- title -->
+    <title>Moalarm</title>
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- bootstrap -->
+    <link href="./assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- css -->
+    <link href="main.css" rel="stylesheet">
+    <link href="main-page.css" rel="stylesheet">
+  </head>
+  <body class="bg-light">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
+      <div class="container-fluid">
+        <a class="navbar-brand mx-3" href="#">Moalarm</a>
+        <button class="navbar-toggler border-0 ms-auto" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+          <ul class="navbar-nav me-auto align-items-center">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Key</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Dashboard</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/"><i class="bi bi-github" style="font-size: 2.8rem; color: white;"></i></a>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-lg btn-outline-light mx-3" type="submit">Logout</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- main -->
+    <main class="container">
+      <!-- api key -->
+      <div class="d-flex align-items-center p-4 my-3 text-white bg-dark rounded shadow-sm">
+        <div class="mx-2">
+          <i class="bi bi-key" style="font-size: 3rem;"></i>
+        </div>
+        <div class="mx-2">
+          <h4 class="mb-0">API Key :</h4>
+        </div>
+        <div class="mx-2">
+          <span class="api-key">1234567890</span>
+        </div>
+        <button type="button" class="btn btn-dark">
+          <i class="bi bi-arrow-repeat" style="font-size: 1.8rem;"></i>
+        </button>
+      </div>
+      <!-- channel -->
+      <div class="my-3 p-5 bg-body rounded shadow-sm">
+        <h4 class="channel-title border-bottom pb-4 mb-0">Channel</h4>
+        <div class="d-flex text-muted pt-3">
+          <i class="bi bi-envelope" style="font-size: 1.8rem; color: #212529;"></i>
+          <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="channel-name">SMS</span>
+              <button class="channel-btn btn btn-primary">REGIST</button>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex text-muted pt-3">
+          <i class="bi bi-send" style="font-size: 1.8rem; color: #212529;"></i>
+          <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="channel-name">Mail</span>
+              <button class="channel-btn btn btn-primary">REGIST</button>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex text-muted pt-3">
+          <i class="bi bi-phone" style="font-size: 1.8rem; color: #212529;"></i>
+          <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="channel-name">Push Notification</span>
+              <button class="channel-btn btn btn-danger">DELETE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
