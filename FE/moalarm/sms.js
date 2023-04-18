@@ -1,4 +1,4 @@
-const formgetSMS = document.getElementById("formget");
+const formgetSMS = document.getElementById("modalFromSection");
 const smsButton = document.getElementById("SMSButton");
 
 const smsContent = `

@@ -1,4 +1,4 @@
-const formget = document.getElementById("formget");
+const formget = document.getElementById("modalFromSection");
 const mailButton = document.getElementById("mailButton");
 
 const mailContent = `
