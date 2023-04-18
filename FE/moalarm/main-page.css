@@ -1,0 +1,19 @@
+.channel-title {
+    font-weight: 600;
+    font-size: 32px;
+}
+  
+.channel-name {
+    font-weight: 600;
+    margin-left: 16px;
+    font-size: 22px;
+}
+
+.channel-btn {
+    width: 88px;
+    font-size: 18px;
+}
+
+.api-key {
+    font-size: 28px;
+}
