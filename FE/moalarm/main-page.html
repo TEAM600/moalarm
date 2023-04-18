@@ -74,7 +74,7 @@
           <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
             <div class="d-flex justify-content-between align-items-center">
               <span class="channel-name">SMS</span>
-              <button id = "SMSButton" type="button" class="channel-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalComponent" data-bs-whatever="@getbootstrap">REGIST</button>
+              <button id = "smsButton" type="button" class="channel-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalComponent" data-bs-whatever="@getbootstrap">REGIST</button>
             </div>
           </div>
         </div>
@@ -101,8 +101,8 @@
       </div>
     </main>
 
-    <div class="modal fade" id="modalComponent" tabindex="-3" aria-labelledby="modalLabel" aria-hidden="true">
-      <div class="modal-dialog" id="modalFromSection">
+    <div class="modal fade" style="top:20%;" id="modalComponent" tabindex="-3" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog" id="modalFormSection">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="modalLabel">SMS</h5>
@@ -112,17 +112,17 @@
             <form>
               <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">API-Key:</label>
-                <input type="text" class="form-control" id="api-Key">
+                <input type="text" class="form-control" id="apiKey">
               </div>
               <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">API_SECRET:</label>
-                <input type="password" class="form-control" id="api_secret">
+                <input type="password" class="form-control" id="apiSecret">
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <div id="SMSPost" class="btn btn-primary" onclick="smsPost()">Regist</button>
+            <div id="smsPost" class="btn btn-primary" onclick="smsPost()">Regist</button>
           </div>
         </div>
       </div>
