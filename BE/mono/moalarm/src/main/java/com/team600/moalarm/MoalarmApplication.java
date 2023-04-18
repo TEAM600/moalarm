@@ -1,4 +1,4 @@
-package team600.moalarm;
+package com.team600.moalarm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
