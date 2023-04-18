@@ -14,8 +14,8 @@ const smsContent = `
                 <input type="text" class="form-control" id="api-Key">
               </div>
               <div class="mb-3">
-                <label for="recipient-name" class="col-form-label">API_SECRET:</label>
-                <input type="password" class="form-control" id="api_secret">
+                <label for="recipient-name" class="col-form-label">API-Secret:</label>
+                <input type="password" class="form-control" id="api-secret">
               </div>
             </form>
           </div>

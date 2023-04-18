@@ -4,18 +4,14 @@ const PushButton = document.getElementById("PushButton");
 const pushContent = `
 <div class="modal-content">
   <div class="modal-header">
-    <h5 class="modal-title" id="SMSModalLabel">SMS</h5>
+    <h5 class="modal-title" id="SMSModalLabel">PUSH</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     <form>
       <div class="mb-3">
-        <label for="recipient-name" class="col-form-label">API-Key:</label>
-        <input type="text" class="form-control" id="api-Key">
-      </div>
-      <div class="mb-3">
-        <label for="recipient-name" class="col-form-label">API_SECRET:</label>
-        <input type="password" class="form-control" id="api_secret">
+        <label for="recipient-name" class="col-form-label">Service-Key:</label>
+        <textarea rows="15" class="form-control" id="service-key"></textarea>
       </div>
     </form>
   </div>
