@@ -1,5 +1,5 @@
 const formgetPost = document.getElementById("modalFromSection");
-const PushButton = document.getElementById("PushButton");
+const pushButton = document.getElementById("PushButton");
 
 const pushContent = `
 <div class="modal-content">
