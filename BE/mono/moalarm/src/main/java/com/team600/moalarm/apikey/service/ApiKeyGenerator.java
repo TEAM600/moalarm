@@ -1,4 +1,4 @@
-package com.team600.moalarm.common.service;
+package com.team600.moalarm.apikey.service;
 
 public interface ApiKeyGenerator {
     String createApiKey();

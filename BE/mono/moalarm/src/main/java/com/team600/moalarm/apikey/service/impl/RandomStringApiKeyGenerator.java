@@ -1,5 +1,6 @@
-package com.team600.moalarm.common.service;
+package com.team600.moalarm.apikey.service.impl;
 
+import com.team600.moalarm.apikey.service.ApiKeyGenerator;
 import java.security.SecureRandom;
 import java.util.Base64;
 import lombok.extern.slf4j.Slf4j;

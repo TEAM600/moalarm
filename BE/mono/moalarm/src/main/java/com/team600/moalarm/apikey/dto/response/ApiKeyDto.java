@@ -1,4 +1,4 @@
-package com.team600.moalarm.member.dto.response;
+package com.team600.moalarm.apikey.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
