@@ -74,32 +74,42 @@
           <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
             <div class="d-flex justify-content-between align-items-center">
               <span class="channel-name">SMS</span>
-              <button class="channel-btn btn btn-primary">REGIST</button>
+              <button id = "smsButton" type="button" class="channel-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalComponent" data-bs-whatever="@getbootstrap">REGIST</button>
             </div>
           </div>
         </div>
+
         <div class="d-flex text-muted pt-3">
           <i class="bi bi-send" style="font-size: 1.8rem; color: #212529;"></i>
           <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
             <div class="d-flex justify-content-between align-items-center">
               <span class="channel-name">Mail</span>
-              <button class="channel-btn btn btn-primary">REGIST</button>
+              <button id="mailButton" type="button" class="channel-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalComponent" data-bs-whatever="@getbootstrap">REGIST</button>
             </div>
           </div>
         </div>
+
         <div class="d-flex text-muted pt-3">
           <i class="bi bi-phone" style="font-size: 1.8rem; color: #212529;"></i>
           <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
             <div class="d-flex justify-content-between align-items-center">
               <span class="channel-name">Push Notification</span>
-              <button class="channel-btn btn btn-danger">DELETE</button>
+              <button id="pushButton" type="button" class="channel-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalComponent" data-bs-whatever="@getbootstrap">REGIST</button>
             </div>
           </div>
         </div>
       </div>
     </main>
 
+    <div class="modal fade" id="modalComponent" tabindex="-3" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog" id="modalFormSection">
+      </div>
+    </div>
+
     <script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>
+    <script src="mail.js"></script>
+    <script src="push.js"></script>
+    <script src="sms.js"></script>
   </body>
 </html>
