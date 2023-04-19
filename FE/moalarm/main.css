@@ -8,6 +8,10 @@ body {
   font-family: 'Ubuntu', sans-serif !important;
 }
 
+#modalComponent {
+  top: 20%;
+}
+
 @media (max-width: 991.98px) {
   .offcanvas-collapse {
     position: fixed;
