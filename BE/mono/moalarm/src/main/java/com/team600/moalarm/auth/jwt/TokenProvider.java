@@ -36,7 +36,7 @@ public class TokenProvider {
 
     public String createToken(String email) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime tokenValidTime = now.plusMinutes(ACCESS_TOKEN_VALID_DAY);
+        LocalDateTime tokenValidTime = now.plusDays(ACCESS_TOKEN_VALID_DAY);
 
         return Jwts.builder()
                 .setSubject(email)
@@ -57,7 +57,9 @@ public class TokenProvider {
                 Arrays.stream(claims.get(AUTHORITY_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
+
         User principal = new User(claims.getSubject(), "", authorities);
+
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
