@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @AllArgsConstructor
-public class Token {
+public class SignInResponse {
 
     private String token;
 }

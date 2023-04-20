@@ -1,6 +1,5 @@
 package com.team600.moalarm.auth.jwt;
 
-import com.team600.moalarm.auth.dto.response.Token;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -35,18 +34,16 @@ public class TokenProvider {
         this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
-    public Token createToken(String email) {
+    public String createToken(String email) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tokenValidTime = now.plusMinutes(ACCESS_TOKEN_VALID_DAY);
 
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(email)
                 .claim(AUTHORITY_KEY, List.of("USER"))
                 .setExpiration(Date.from(tokenValidTime.toInstant(ZoneOffset.UTC)))
                 .signWith(accessKey, SignatureAlgorithm.HS256)
                 .compact();
-
-        return new Token(accessToken);
     }
 
     public Authentication getAuthentication(String token) {

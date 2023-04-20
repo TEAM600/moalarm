@@ -1,7 +1,7 @@
 package com.team600.moalarm.auth.controller;
 
-import com.team600.moalarm.auth.dto.request.SignIn;
-import com.team600.moalarm.auth.dto.response.Token;
+import com.team600.moalarm.auth.dto.request.SignInRequest;
+import com.team600.moalarm.auth.dto.response.SignInResponse;
 import com.team600.moalarm.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +20,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/auth/signin")
-    public ResponseEntity<Token> signIn(@RequestBody SignIn signIn)
+    public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest signInRequest)
             throws AuthenticationException {
-        log.info("signin : {}", signIn);
+        log.info("signin : {}", signInRequest);
 
-        Token token = authService.signIn(signIn);
-        return ResponseEntity.ok(token);
+        SignInResponse signInResponse = authService.signIn(signInRequest);
+        return ResponseEntity.ok(signInResponse);
     }
 
     // TODO: 2023-04-20 handler 구현 필요
