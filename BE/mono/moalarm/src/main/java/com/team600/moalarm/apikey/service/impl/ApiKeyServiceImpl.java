@@ -16,14 +16,14 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 
     @Override
     public ApiKeyDto getApiKey(String memberId) {
-        String newKey = null;   //TODO: get from Member
+        String newKey = null;   //TODO: get member(api_key)
         return new ApiKeyDto(newKey);
     }
 
     @Override
-    public ApiKeyDto updateApiKey(String memberId) {
+    public ApiKeyDto refreshApiKey(String memberId) {
         String newKey = apiKeyGenerator.createApiKey();
-        // TODO: update member
+        // TODO: update member(api_key, api_key_refreshed_at)
         return new ApiKeyDto(newKey);
     }
 }
