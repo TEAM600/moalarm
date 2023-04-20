@@ -2,6 +2,8 @@ package com.team600.moalarm.apikey.controller;
 
 import com.team600.moalarm.apikey.dto.response.ApiKeyDto;
 import com.team600.moalarm.apikey.service.ApiKeyService;
+import java.net.URI;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,10 @@ public class KeyController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiKeyDto> updateKey() {
+    public ResponseEntity<ApiKeyDto> refreshKey(HttpServletRequest request) {
         log.info("PUT /key");
         String memberId = null; //TODO
-        return ResponseEntity.ok(apiKeyService.updateApiKey(memberId));
+        return ResponseEntity.created(URI.create(request.getRequestURL().toString()))
+                .body(apiKeyService.refreshApiKey(memberId));
     }
 }

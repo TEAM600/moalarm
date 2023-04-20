@@ -21,7 +21,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
     }
 
     @Override
-    public ApiKeyDto updateApiKey(String memberId) {
+    public ApiKeyDto refreshApiKey(String memberId) {
         String newKey = apiKeyGenerator.createApiKey();
         // TODO: update member
         return new ApiKeyDto(newKey);
