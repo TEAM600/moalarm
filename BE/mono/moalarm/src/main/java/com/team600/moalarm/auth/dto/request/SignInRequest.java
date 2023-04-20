@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@ToString
+@ToString(of = {"email"})
 @Getter
 @Setter
 public class SignInRequest {

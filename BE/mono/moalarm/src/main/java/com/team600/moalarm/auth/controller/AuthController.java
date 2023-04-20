@@ -22,7 +22,6 @@ public class AuthController {
     @PostMapping("/auth/signin")
     public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest signInRequest)
             throws AuthenticationException {
-        log.info("signin : {}", signInRequest);
 
         SignInResponse signInResponse = authService.signIn(signInRequest);
         return ResponseEntity.ok(signInResponse);
