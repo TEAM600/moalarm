@@ -8,5 +8,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ApiKeyDto {
+
     private String apiKey;
 }
