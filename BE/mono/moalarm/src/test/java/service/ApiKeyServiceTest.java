@@ -18,7 +18,7 @@ public class ApiKeyServiceTest {
     @Test
     public void testUpdateApiKey() {
         String memberId = null;
-        ApiKeyDto apiKeyDto = apiKeyService.updateApiKey(memberId);
+        ApiKeyDto apiKeyDto = apiKeyService.refreshApiKey(memberId);
         assertNotNull(apiKeyDto);
         assertNotNull(apiKeyDto.getApiKey());
     }

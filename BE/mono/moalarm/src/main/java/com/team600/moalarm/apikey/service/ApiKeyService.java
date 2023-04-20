@@ -6,5 +6,5 @@ public interface ApiKeyService {
 
     ApiKeyDto getApiKey(String memberId);
 
-    ApiKeyDto updateApiKey(String memberId);
+    ApiKeyDto refreshApiKey(String memberId);
 }
