@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,12 +27,14 @@ import org.springframework.stereotype.Component;
 public class TokenProvider {
 
     private static final String AUTHORITY_KEY = "roles";
-    private final String secret = "theKeySizeMustBeGreaterThanOrEqualToTheHashOutputSize";
     private final Key accessKey;
-    private final int ACCESS_TOKEN_VALID_DAY = 30;
+    @Value("${jwt.expire-day}")
+    private final int ACCESS_TOKEN_VALID_DAY;
 
-    public TokenProvider() {
+    public TokenProvider(@Value(value = "${jwt.secret}") String secret,
+            @Value("${jwt.expire-day}") int accessTokenValidDay) {
         this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        ACCESS_TOKEN_VALID_DAY = accessTokenValidDay;
     }
 
     public String createToken(String email) {
