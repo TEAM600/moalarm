@@ -1,3 +1,7 @@
 jwt:
   secret: theKeySizeMustBeGreaterThanOrEqualToTheHashOutputSize
   expire-day: 30
+
+
+crypto:
+  secret: it's secret

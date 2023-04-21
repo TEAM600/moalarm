@@ -7,6 +7,7 @@ import com.team600.moalarm.member.entiry.Member;
 import com.team600.moalarm.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
 
 
@@ -17,6 +18,7 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final TextEncryptor encryptor;
 
     public SignInResponse signIn(SignInRequest signInRequest) {
         Member member = memberRepository.findByEmail(signInRequest.getEmail()).orElseThrow(
@@ -26,7 +28,8 @@ public class AuthService {
             throw new RuntimeException("password not correct"); // TODO: 2023-04-19 Exception 정의 필요
         }
 
-        return new SignInResponse(tokenProvider.createToken(member.getEmail()));
+        return new SignInResponse(tokenProvider.createToken(
+                encryptor.encrypt(member.getEmail())));
     }
 
 }

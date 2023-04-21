@@ -37,12 +37,12 @@ public class TokenProvider {
         ACCESS_TOKEN_VALID_DAY = accessTokenValidDay;
     }
 
-    public String createToken(String email) {
+    public String createToken(String subject) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime tokenValidTime = now.plusDays(ACCESS_TOKEN_VALID_DAY);
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(subject)
                 .claim(AUTHORITY_KEY, List.of("USER"))
                 .setExpiration(Date.from(tokenValidTime.toInstant(ZoneOffset.UTC)))
                 .signWith(accessKey, SignatureAlgorithm.HS256)
