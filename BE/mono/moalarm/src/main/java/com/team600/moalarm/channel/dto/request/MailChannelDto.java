@@ -5,7 +5,5 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MailChannelDto {
-    private String email;
-    private String secret;
+public class MailChannelDto extends ChannelDto {
 }

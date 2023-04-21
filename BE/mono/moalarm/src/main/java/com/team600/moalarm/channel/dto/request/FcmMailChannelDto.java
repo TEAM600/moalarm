@@ -5,6 +5,5 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FcmMailChannelDto {
-    private String serviceKey;
+public class FcmMailChannelDto extends ChannelDto {
 }
