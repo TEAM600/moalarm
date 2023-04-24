@@ -1,18 +1,16 @@
 package com.team600.moalarm.channel.controller;
+
 import com.team600.moalarm.channel.dto.request.ChannelDto;
-import com.team600.moalarm.channel.dto.request.MailChannelDto;
 import com.team600.moalarm.channel.dto.response.ChannelPossessionDto;
+import com.team600.moalarm.channel.exception.ChannelTypeNotValidException;
 import com.team600.moalarm.channel.service.ChannelSaveService;
 import com.team600.moalarm.channel.service.ChannelService;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ChannelController {
 
     private final ChannelService channelService;
-    private final Map<String, ChannelSaveService> channelSaveService ;
+    private final Map<String, ChannelSaveService> channelSaveService;
 
     //TODO: memberId 전부 담아줘야함
     @GetMapping
@@ -48,13 +46,9 @@ public class ChannelController {
                 channelSaveService.get(type + "ChannelSaveService").saveChannel(requestDto, memberId);
                 break;
             default:
-                throw new RuntimeException("올바르지 않은 타입값이 들어왔습니다.\ntype은 sms, fcm, mail중 하나여야 합니다.");
+                throw new ChannelTypeNotValidException();
         }
         return ResponseEntity.ok().build();
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntime(RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
 }
