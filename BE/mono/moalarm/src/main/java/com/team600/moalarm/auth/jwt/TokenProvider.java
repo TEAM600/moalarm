@@ -1,5 +1,6 @@
 package com.team600.moalarm.auth.jwt;
 
+import com.team600.moalarm.auth.vo.JwtAuthResult;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -16,10 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -49,7 +47,7 @@ public class TokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
+    public JwtAuthResult getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(accessKey)
                 .build()
@@ -61,9 +59,7 @@ public class TokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new JwtAuthResult(claims.getSubject(), authorities);
     }
 
     public boolean validateAccessToken(String token) {

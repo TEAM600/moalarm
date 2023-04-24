@@ -1,6 +1,6 @@
 package com.team600.moalarm.auth.filter;
 
-import com.team600.moalarm.auth.jwt.TokenProvider;
+import com.team600.moalarm.auth.service.TokenManager;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -20,17 +20,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String AUTHENTICATION_REQUEST_URL = "/auth";
-    private final TokenProvider tokenProvider;
+    private final TokenManager tokenManager;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(request);
 
-        if (token != null && tokenProvider.validateAccessToken(token)) {
-            Authentication authentication = tokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+        Authentication authentication = tokenManager.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }
 
