@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,12 +24,6 @@ public class AuthController {
 
         SignInResponse signInResponse = authService.signIn(signInRequest);
         return ResponseEntity.ok(signInResponse);
-    }
-
-    // TODO: 2023-04-20 handler 구현 필요
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntime(RuntimeException e) {
-        return ResponseEntity.ok(e.getMessage());
     }
 }
 
