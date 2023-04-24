@@ -1,5 +1,6 @@
 package com.team600.moalarm.common;
 
+import com.team600.moalarm.member.entiry.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -20,6 +21,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
