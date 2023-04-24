@@ -1,6 +1,6 @@
 package com.team600.moalarm.member.repository;
 
-import com.team600.moalarm.member.entiry.Member;
+import com.team600.moalarm.member.entity.Member;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +20,14 @@ public class MemberRepository {
 
     public Optional<Member> findByEmail(String email) {
         return Optional.ofNullable(storage.get(email));
+    }
+
+    public boolean existsByEmail(String email) {
+        return storage.containsKey(email);
+    }
+
+    public void save(Member member) {
+        storage.put(member.getEmail(), member);
     }
 
 }
