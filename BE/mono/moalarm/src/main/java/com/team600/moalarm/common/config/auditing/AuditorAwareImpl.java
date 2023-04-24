@@ -1,6 +1,6 @@
 package com.team600.moalarm.common.config.auditing;
 
-import com.team600.moalarm.member.entiry.Member;
+import com.team600.moalarm.member.entity.Member;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.AuditorAware;

@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
-@Builder
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
