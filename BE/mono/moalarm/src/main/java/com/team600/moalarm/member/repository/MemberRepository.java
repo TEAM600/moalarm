@@ -23,7 +23,7 @@ public class MemberRepository {
     }
 
     public boolean existsByEmail(String email) {
-        return storage.containsKey(email) ? true : false;
+        return storage.containsKey(email);
     }
 
     public void save(Member member) {
