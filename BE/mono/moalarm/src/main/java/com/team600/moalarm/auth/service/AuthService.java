@@ -3,7 +3,7 @@ package com.team600.moalarm.auth.service;
 import com.team600.moalarm.auth.dto.request.SignInRequest;
 import com.team600.moalarm.auth.dto.response.SignInResponse;
 import com.team600.moalarm.auth.jwt.TokenProvider;
-import com.team600.moalarm.member.entiry.Member;
+import com.team600.moalarm.member.entity.Member;
 import com.team600.moalarm.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
