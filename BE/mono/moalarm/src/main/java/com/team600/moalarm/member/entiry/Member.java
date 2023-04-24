@@ -24,7 +24,7 @@ public class Member extends BaseEntity {
     @Column
     private String moalarmKey;
     @Column
-    private LocalDateTime moaalarmKeyRefreshedAt;
+    private LocalDateTime moalarmKeyRefreshedAt;
 
 
 }
