@@ -1,29 +1,29 @@
 package com.team600.moalarm.apikey.service.impl;
 
-import com.team600.moalarm.apikey.dto.response.ApiKeyDto;
+import com.team600.moalarm.apikey.dto.response.MoalarmKeyDto;
 import com.team600.moalarm.apikey.service.ApiKeyGenerator;
-import com.team600.moalarm.apikey.service.ApiKeyService;
+import com.team600.moalarm.apikey.service.MoalarmKeyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ApiKeyServiceImpl implements ApiKeyService {
+public class MoalarmKeyServiceImpl implements MoalarmKeyService {
 
     @Autowired
     private final ApiKeyGenerator apiKeyGenerator;
 
     @Override
-    public ApiKeyDto getApiKey(String memberId) {
+    public MoalarmKeyDto getApiKey(String memberId) {
         String newKey = null;   //TODO: get member(api_key)
-        return new ApiKeyDto(newKey);
+        return new MoalarmKeyDto(newKey);
     }
 
     @Override
-    public ApiKeyDto refreshApiKey(String memberId) {
+    public MoalarmKeyDto refreshApiKey(String memberId) {
         String newKey = apiKeyGenerator.createApiKey();
         // TODO: update member(api_key, api_key_refreshed_at)
-        return new ApiKeyDto(newKey);
+        return new MoalarmKeyDto(newKey);
     }
 }

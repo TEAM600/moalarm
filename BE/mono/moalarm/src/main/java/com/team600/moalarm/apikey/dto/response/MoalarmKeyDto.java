@@ -7,7 +7,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class ApiKeyDto {
+public class MoalarmKeyDto {
 
-    private String apiKey;
+    private String moalarmKey;
 }
