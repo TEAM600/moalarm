@@ -1,6 +1,5 @@
 package com.team600.moalarm.common;
 
-import com.team600.moalarm.member.entiry.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -8,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -34,7 +34,15 @@ public abstract class BaseEntity {
     private LocalDateTime lastModifiedAt;
     @LastModifiedBy
     private long lastModifiedBy;
-    @Column(columnDefinition = "tinyint(1) default 0")
-    private boolean delYN;
+    private String delYn;
+
+    @PrePersist
+    public void setDefaultValues() {
+        this.delYn = this.delYn == null ? "N" : this.delYn;
+    }
+
+    public void remove() {
+        this.delYn = "Y";
+    }
 }
 

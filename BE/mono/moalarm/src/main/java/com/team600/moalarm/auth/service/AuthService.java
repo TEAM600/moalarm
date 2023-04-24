@@ -2,8 +2,9 @@ package com.team600.moalarm.auth.service;
 
 import com.team600.moalarm.auth.dto.request.SignInRequest;
 import com.team600.moalarm.auth.dto.response.SignInResponse;
+import com.team600.moalarm.auth.exception.SignInFailedException;
 import com.team600.moalarm.auth.jwt.TokenProvider;
-import com.team600.moalarm.member.entiry.Member;
+import com.team600.moalarm.member.entity.Member;
 import com.team600.moalarm.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +22,11 @@ public class AuthService {
     private final TextEncryptor encryptor;
 
     public SignInResponse signIn(SignInRequest signInRequest) {
-        Member member = memberRepository.findByEmail(signInRequest.getEmail()).orElseThrow(
-                () -> new RuntimeException("user not found"));// TODO: 2023-04-19 Exception 정의 필요
+        Member member = memberRepository.findByEmail(signInRequest.getEmail())
+                .orElseThrow(SignInFailedException::new);
 
         if (!member.getPassword().equals(signInRequest.getPassword())) {
-            throw new RuntimeException("password not correct"); // TODO: 2023-04-19 Exception 정의 필요
+            throw new SignInFailedException();
         }
 
         return new SignInResponse(tokenProvider.createToken(

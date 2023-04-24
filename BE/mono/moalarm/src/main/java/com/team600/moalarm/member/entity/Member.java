@@ -1,4 +1,4 @@
-package com.team600.moalarm.member.entiry;
+package com.team600.moalarm.member.entity;
 
 import com.team600.moalarm.common.BaseEntity;
 import java.time.LocalDateTime;
@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
+@Builder
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
