@@ -46,7 +46,7 @@ public class ChannelController {
                 channelSaveService.get(type + "ChannelSaveService").saveChannel(requestDto, memberId);
                 break;
             default:
-                throw new ChannelTypeNotValidException();
+                throw new ChannelTypeNotValidException(type);
         }
         return ResponseEntity.ok().build();
     }
