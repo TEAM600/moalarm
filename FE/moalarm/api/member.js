@@ -23,6 +23,7 @@ onload = () => {
             await signup($emailInput.value, $passwordInput.value, $confirmPasswordInput.value);
             window.location.href = "signin.html";
         }catch(error) {
+            alert(error);
             console.log("error :",error);
         }
     }
