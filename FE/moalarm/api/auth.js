@@ -16,7 +16,8 @@ onload = () => {
         try {
             const response = await signin($emailInput.value, $passwordInput.value);
             window.localStorage.setItem("token", response.token);
-            console.log("로그인 성공");
+            console.log("signin success");
+            window.location.replace(`main-page.html`);
         } catch(error) {
             alert(error);
         }
