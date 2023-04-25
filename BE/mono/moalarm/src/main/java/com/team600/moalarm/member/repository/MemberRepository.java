@@ -15,7 +15,10 @@ public class MemberRepository {
 
     public MemberRepository() {
         String email = "test";
-        storage.put(email, new Member(email, "1234"));
+        storage.put(email, Member.builder()
+                        .email(email)
+                        .password("1234")
+                .build());
     }
 
     public Optional<Member> findByEmail(String email) {
