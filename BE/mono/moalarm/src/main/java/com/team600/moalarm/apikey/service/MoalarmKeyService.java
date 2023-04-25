@@ -1,10 +1,10 @@
 package com.team600.moalarm.apikey.service;
 
-import com.team600.moalarm.apikey.dto.response.MoalarmKeyDto;
+import com.team600.moalarm.apikey.dto.response.MoalarmKeyResponse;
 
 public interface MoalarmKeyService {
 
-    MoalarmKeyDto getApiKey(String memberId);
+    MoalarmKeyResponse getApiKey(String memberId);
 
-    MoalarmKeyDto refreshApiKey(String memberId);
+    MoalarmKeyResponse refreshApiKey(String memberId);
 }

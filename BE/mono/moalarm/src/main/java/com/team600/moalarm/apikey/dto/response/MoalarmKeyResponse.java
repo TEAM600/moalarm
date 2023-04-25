@@ -7,7 +7,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class MoalarmKeyDto {
+public class MoalarmKeyResponse {
 
     private String moalarmKey;
 }

@@ -1,7 +1,7 @@
 package com.team600.moalarm.auth.service;
 
 import com.team600.moalarm.auth.jwt.TokenProvider;
-import com.team600.moalarm.auth.vo.JwtAuthResult;
+import com.team600.moalarm.auth.vo.JwtDecryptResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,11 +25,11 @@ public class TokenManager {
         Authentication authentication = null;
 
         if (token != null && tokenProvider.validateAccessToken(token)) {
-            JwtAuthResult jwtAuthResult = tokenProvider.getAuthentication(token);
-            String decryptedSubject = encryptor.decrypt(jwtAuthResult.getSubject());
-            User principal = new User(decryptedSubject, "", jwtAuthResult.getAuthorities());
+            JwtDecryptResult jwtDecryptResult = tokenProvider.decryptJwt(token);
+            String decryptedSubject = encryptor.decrypt(jwtDecryptResult.getSubject());
+            User principal = new User(decryptedSubject, "", jwtDecryptResult.getAuthorities());
             authentication = new UsernamePasswordAuthenticationToken(principal, token,
-                    jwtAuthResult.getAuthorities());
+                    jwtDecryptResult.getAuthorities());
         }
 
         return authentication;

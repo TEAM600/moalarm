@@ -1,6 +1,6 @@
 package com.team600.moalarm.apikey.controller;
 
-import com.team600.moalarm.apikey.dto.response.MoalarmKeyDto;
+import com.team600.moalarm.apikey.dto.response.MoalarmKeyResponse;
 import com.team600.moalarm.apikey.service.MoalarmKeyService;
 import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
@@ -23,14 +23,15 @@ public class KeyController {
     private final MoalarmKeyService moalarmKeyService;
 
     @GetMapping
-    public ResponseEntity<MoalarmKeyDto> getKey(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<MoalarmKeyResponse> getKey(
+            @AuthenticationPrincipal UserDetails userDetails) {
         log.info("GET /key, {}", userDetails.getUsername());
         String memberId = userDetails.getUsername();
         return ResponseEntity.ok(moalarmKeyService.getApiKey(memberId));
     }
 
     @PostMapping
-    public ResponseEntity<MoalarmKeyDto> refreshKey(
+    public ResponseEntity<MoalarmKeyResponse> refreshKey(
             @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
         log.info("POST /key, {}", userDetails.getUsername());
         String memberId = userDetails.getUsername();

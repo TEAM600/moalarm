@@ -1,6 +1,6 @@
 package com.team600.moalarm.auth.jwt;
 
-import com.team600.moalarm.auth.vo.JwtAuthResult;
+import com.team600.moalarm.auth.vo.JwtDecryptResult;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -47,7 +47,7 @@ public class TokenProvider {
                 .compact();
     }
 
-    public JwtAuthResult getAuthentication(String token) {
+    public JwtDecryptResult decryptJwt(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(accessKey)
                 .build()
@@ -59,7 +59,7 @@ public class TokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        return new JwtAuthResult(claims.getSubject(), authorities);
+        return new JwtDecryptResult(claims.getSubject(), authorities);
     }
 
     public boolean validateAccessToken(String token) {

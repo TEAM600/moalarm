@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @AllArgsConstructor
 @Getter
-public class JwtAuthResult {
+public class JwtDecryptResult {
 
     private final String subject;
     private final Collection<SimpleGrantedAuthority> authorities;
