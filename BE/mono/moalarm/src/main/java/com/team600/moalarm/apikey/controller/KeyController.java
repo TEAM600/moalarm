@@ -1,11 +1,12 @@
 package com.team600.moalarm.apikey.controller;
 
-import com.team600.moalarm.apikey.dto.response.MoalarmKeyResponse;
-import com.team600.moalarm.apikey.service.MoalarmKeyService;
+import com.team600.moalarm.apikey.dto.response.KeyDto;
+import com.team600.moalarm.apikey.service.ApiKeyService;
 import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,22 +21,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/key")
 public class KeyController {
 
-    private final MoalarmKeyService moalarmKeyService;
+
+    @Autowired
+    private final ApiKeyService<?> apiKeyService;
 
     @GetMapping
-    public ResponseEntity<MoalarmKeyResponse> getKey(
+    public ResponseEntity<KeyDto> getKey(
             @AuthenticationPrincipal UserDetails userDetails) {
         log.info("GET /key, {}", userDetails.getUsername());
         String memberId = userDetails.getUsername();
-        return ResponseEntity.ok(moalarmKeyService.getApiKey(memberId));
+        return ResponseEntity.ok(apiKeyService.getApiKey(memberId));
     }
 
     @PostMapping
-    public ResponseEntity<MoalarmKeyResponse> refreshKey(
+    public ResponseEntity<KeyDto> refreshKey(
             @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
         log.info("POST /key, {}", userDetails.getUsername());
         String memberId = userDetails.getUsername();
         return ResponseEntity.created(URI.create(request.getRequestURL().toString()))
-                .body(moalarmKeyService.refreshApiKey(memberId));
+                .body(apiKeyService.refreshApiKey(memberId));
     }
 }

@@ -15,6 +15,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+
     public void signUp(SignUpRequest signUpRequest) {
         log.info("[SignUp] 회원가입 시작");
         if (!signUpRequest.isPasswordMatch()) {

@@ -2,14 +2,14 @@ package com.team600.moalarm.apikey.service.impl;
 
 import com.team600.moalarm.apikey.dto.response.MoalarmKeyResponse;
 import com.team600.moalarm.apikey.service.ApiKeyGenerator;
-import com.team600.moalarm.apikey.service.MoalarmKeyService;
+import com.team600.moalarm.apikey.service.ApiKeyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class MoalarmKeyServiceImpl implements MoalarmKeyService {
+public class MoalarmKeyServiceImpl implements ApiKeyService<MoalarmKeyResponse> {
 
     @Autowired
     private final ApiKeyGenerator apiKeyGenerator;
