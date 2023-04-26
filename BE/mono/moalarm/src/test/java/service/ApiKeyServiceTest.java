@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.team600.moalarm.MoalarmApplication;
 import com.team600.moalarm.apikey.dto.response.MoalarmKeyResponse;
-import com.team600.moalarm.apikey.service.MoalarmKeyService;
+import com.team600.moalarm.apikey.service.ApiKeyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,11 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ApiKeyServiceTest {
 
     @Autowired
-    private MoalarmKeyService moalarmKeyService;
+    private ApiKeyService<MoalarmKeyResponse> moalarmKeyService;
 
     @Test
     public void testUpdateApiKey() {
-        String memberId = null;
+        long memberId = 1L;
         MoalarmKeyResponse moalarmKeyResponse = moalarmKeyService.refreshApiKey(memberId);
         assertNotNull(moalarmKeyResponse);
         assertNotNull(moalarmKeyResponse.getMoalarmKey());

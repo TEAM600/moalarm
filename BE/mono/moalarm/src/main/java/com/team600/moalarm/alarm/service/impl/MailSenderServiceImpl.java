@@ -14,6 +14,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class MailSenderServiceImpl implements SenderService {
+
+    private static int socketPort = 465;
+    private static boolean auth = true;
+    private static boolean starttls = true;
+    private static boolean startlls_required = true;
+    private static boolean fallback = false;
+
     @Override
     public void send(SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
         SendMailRequest sendMailRequest = requirementDto.getMail();
@@ -52,11 +60,11 @@ public class MailSenderServiceImpl implements SenderService {
     private Properties getMailProperties()
     {
         Properties pt = new Properties();
-        pt.put("mail.smtp.socketFactory.port", 465);
-        pt.put("mail.smtp.auth", true);
-        pt.put("mail.smtp.starttls.enable", true);
-        pt.put("mail.smtp.starttls.required", true);
-        pt.put("mail.smtp.socketFactory.fallback",false);
+        pt.put("mail.smtp.socketFactory.port", socketPort);
+        pt.put("mail.smtp.auth", auth);
+        pt.put("mail.smtp.starttls.enable", starttls);
+        pt.put("mail.smtp.starttls.required", startlls_required);
+        pt.put("mail.smtp.socketFactory.fallback",fallback);
         pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         return pt;
     }
