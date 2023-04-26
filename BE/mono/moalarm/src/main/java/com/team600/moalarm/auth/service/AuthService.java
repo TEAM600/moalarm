@@ -7,6 +7,7 @@ import com.team600.moalarm.member.entity.Member;
 import com.team600.moalarm.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -17,16 +18,18 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final TokenManager tokenManager;
+    private final PasswordEncoder passwordEncoder;
+
 
     public SignInResponse signIn(SignInRequest signInRequest) {
         Member member = memberRepository.findByEmail(signInRequest.getEmail())
                 .orElseThrow(SignInFailedException::new);
 
-        if (!member.getPassword().equals(signInRequest.getPassword())) {
+        if (!passwordEncoder.matches(signInRequest.getPassword(), member.getPassword())) {
             throw new SignInFailedException();
         }
 
-        return new SignInResponse(tokenManager.createToken(member.getEmail()));
+        return new SignInResponse(tokenManager.createToken(String.valueOf(member.getId())));
     }
 
 }
