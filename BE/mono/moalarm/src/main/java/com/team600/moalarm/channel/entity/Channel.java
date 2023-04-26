@@ -25,4 +25,6 @@ public class Channel extends BaseEntity {
     private String apiKey;
     @Column(nullable = false)
     private String secret;
+    @Column
+    private String phone;
 }

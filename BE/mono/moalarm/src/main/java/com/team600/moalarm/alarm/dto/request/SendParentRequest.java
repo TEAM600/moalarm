@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ParentRequirementDto {
+public class SendParentRequest {
     private List<String> to;
     private String content;
 }

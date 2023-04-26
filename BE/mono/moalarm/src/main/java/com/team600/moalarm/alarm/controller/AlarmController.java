@@ -1,6 +1,6 @@
 package com.team600.moalarm.alarm.controller;
 
-import com.team600.moalarm.alarm.dto.request.AlarmRequirementDto;
+import com.team600.moalarm.alarm.dto.request.SendAlarmRequest;
 import com.team600.moalarm.alarm.service.AlarmSenderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +18,10 @@ public class AlarmController {
     private final AlarmSenderService mailSenderService;
 
     @PostMapping
-    public ResponseEntity<Void> sendNotification(@RequestBody AlarmRequirementDto requirementDto) {
-        log.info("[AlarmController] sendNotification 들어옴");
-        mailSenderService.sendAlarms(requirementDto);
+    public ResponseEntity<Void> sendNotification(@RequestBody SendAlarmRequest requirementDto) {
+        String moalarmKey = "";
+        log.info("POST /notification : {}", moalarmKey);
+        mailSenderService.sendAlarms(requirementDto, moalarmKey);
         return ResponseEntity.ok().build();
     }
 }

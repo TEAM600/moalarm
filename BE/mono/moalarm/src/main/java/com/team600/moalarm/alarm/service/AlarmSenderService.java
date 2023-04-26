@@ -1,7 +1,7 @@
 package com.team600.moalarm.alarm.service;
 
-import com.team600.moalarm.alarm.dto.request.AlarmRequirementDto;
+import com.team600.moalarm.alarm.dto.request.SendAlarmRequest;
 
 public interface AlarmSenderService {
-    public void sendAlarms(AlarmRequirementDto requirementDto);
+    void sendAlarms(SendAlarmRequest requirementDto, String moalarmKey);
 }
