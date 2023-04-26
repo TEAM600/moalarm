@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @AllArgsConstructor
@@ -26,5 +25,8 @@ public class Member extends BaseEntity {
     @Column
     private LocalDateTime moalarmKeyRefreshedAt;
 
-
+    public void setMoalarmKey(String moalarmKey) {
+        this.moalarmKey = moalarmKey;
+        this.moalarmKeyRefreshedAt = LocalDateTime.now();
+    }
 }
