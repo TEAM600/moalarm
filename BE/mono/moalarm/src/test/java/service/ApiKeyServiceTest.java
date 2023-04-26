@@ -17,7 +17,7 @@ public class ApiKeyServiceTest {
 
     @Test
     public void testUpdateApiKey() {
-        String memberId = null;
+        long memberId = 1L;
         MoalarmKeyResponse moalarmKeyResponse = moalarmKeyService.refreshApiKey(memberId);
         assertNotNull(moalarmKeyResponse);
         assertNotNull(moalarmKeyResponse.getMoalarmKey());

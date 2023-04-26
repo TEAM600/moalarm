@@ -20,16 +20,16 @@ public class MoalarmKeyServiceImpl implements ApiKeyService<MoalarmKeyResponse> 
 
     @Transactional(readOnly = true)
     @Override
-    public MoalarmKeyResponse getApiKey(String memberId) {
-        Member member = memberRepository.findByEmail(memberId).orElseThrow();
+    public MoalarmKeyResponse getApiKey(long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
         String apiKey = member.getMoalarmKey();
         return new MoalarmKeyResponse(apiKey);
     }
 
     @Transactional
     @Override
-    public MoalarmKeyResponse refreshApiKey(String memberId) {
-        Member member = memberRepository.findByEmail(memberId).orElseThrow();
+    public MoalarmKeyResponse refreshApiKey(long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
         String newKey = apiKeyGenerator.createApiKey();
         member.setMoalarmKey(newKey);
         return new MoalarmKeyResponse(newKey);

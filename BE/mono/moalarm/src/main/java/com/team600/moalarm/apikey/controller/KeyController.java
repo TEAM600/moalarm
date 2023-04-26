@@ -29,7 +29,7 @@ public class KeyController {
     public ResponseEntity<KeyResponse> getKey(
             @AuthenticationPrincipal UserDetails userDetails) {
         log.info("GET /key, {}", userDetails.getUsername());
-        String memberId = userDetails.getUsername();
+        long memberId = Long.parseLong(userDetails.getUsername());
         return ResponseEntity.ok(apiKeyService.getApiKey(memberId));
     }
 
@@ -37,7 +37,7 @@ public class KeyController {
     public ResponseEntity<KeyResponse> refreshKey(
             @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
         log.info("POST /key, {}", userDetails.getUsername());
-        String memberId = userDetails.getUsername();
+        long memberId = Long.parseLong(userDetails.getUsername());
         return ResponseEntity.created(URI.create(request.getRequestURL().toString()))
                 .body(apiKeyService.refreshApiKey(memberId));
     }

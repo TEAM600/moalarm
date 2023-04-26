@@ -4,7 +4,7 @@ import com.team600.moalarm.apikey.dto.response.KeyResponse;
 
 public interface ApiKeyService<T extends KeyResponse> {
 
-    T getApiKey(String memberId);
+    T getApiKey(long memberId);
 
-    T refreshApiKey(String memberId);
+    T refreshApiKey(long memberId);
 }
