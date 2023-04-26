@@ -46,3 +46,12 @@ nav {
   font-size: 28px;
 }
 
+.btn-primary:hover {
+  background-color: #9b70aa;
+  border-color: #9b70aa;
+}
+
+.btn-primary {
+  background-color: #553A75;
+  border-color: #553A75;
+}

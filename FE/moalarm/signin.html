@@ -27,25 +27,28 @@
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
       <div class="container-fluid">
-        <a class="navbar-brand mx-3" href="#">Moalarm</a>
-        <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
+        <a class="navbar-brand mx-3" href="index.html">Moalarm</a>
+        <button class="navbar-toggler border-0 ms-auto" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav me-auto align-items-center">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Key</a>
+              <a class="nav-link active" aria-current="page" href="main-page.html">Key</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Dashboard</a>
-            </li>
-            <li>
+              <a class="nav-link" href="logs.html">Dashboard</a>
             </li>
           </ul>
-          <i class="bi bi-github mx-2" style="font-size: 2.5rem; color: white;"></i>
-          <!-- <i class="bi bi-door-closed"  style="font-size: 2.5rem; color: white;"></i> -->
-          <button class="btn btn-lg btn-outline-light mx-3" type="submit">Logout</button>
+          <ul class="navbar-nav align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/"><i class="bi bi-github" style="font-size: 2.8rem; color: white;"></i></a>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-lg btn-outline-light mx-3" type="submit">Logout</button>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
@@ -54,10 +57,11 @@
 <main class="form-signin w-100 m-auto">
   <form id="signin-form">
     <img class="mb-4" src="./image/alarm-icon.png" alt="" width="72" height="57">
+
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
     <div class="form-floating">
-      <input type="" class="form-control inp-top" id="floatingInput" placeholder="name@example.com">
+      <input type="email" class="form-control inp-top" id="floatingInput" placeholder="name@example.com">
       <label for="floatingInput">Email address</label>
     </div>
     <div class="form-floating">
@@ -71,7 +75,7 @@
       </label>
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-    <!-- <a class="mt-4" href="/signup.html" type="submit">Sign up</a> -->
+    <a class="mt-4" href="/signup.html" type="submit">Sign up</a>
     <p class="mt-5 mb-3 text-muted">&copy;Moalarm 2023</p>
   </form>
 </main>
