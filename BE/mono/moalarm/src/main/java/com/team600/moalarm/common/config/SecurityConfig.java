@@ -3,6 +3,7 @@ package com.team600.moalarm.common.config;
 import com.team600.moalarm.auth.filter.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -29,8 +30,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorize -> authorize
-                        .antMatchers("/auth/signin", "/member/signup")
-                        .permitAll()
+                        .antMatchers("/auth/signin").permitAll()
+                        .antMatchers(HttpMethod.POST, "/member").permitAll()
                         .anyRequest().authenticated()
                 )
                 .build();

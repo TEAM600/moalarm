@@ -21,7 +21,7 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity<Void> signUp(@Validated @RequestBody final SignUpRequest signUpRequest) {
-        log.info("POST /member/signup");
+        log.info("POST /member");
         memberService.signUp(signUpRequest);
         return ResponseEntity.ok().build();
     }
