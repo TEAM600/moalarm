@@ -11,15 +11,13 @@ onload = () => {
     const $emailInput = document.getElementById("floatingInput");
     const $passwordInput = document.getElementById("floatingPassword");
 
-    $signinForm.onsubmit = async (event) => {
+    $signinForm.onsubmit = (event) => {
         event.preventDefault();
-        try {
-            const response = await signin($emailInput.value, $passwordInput.value);
+        signin($emailInput.value, $passwordInput.value)
+        .then(response => {
             window.localStorage.setItem("token", response.token);
             window.location.replace(`main-page.html`);
-        } catch(error) {
-            alert(error);
-        }
+        });
     };
 
 }
