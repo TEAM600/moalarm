@@ -1,36 +1,18 @@
 package com.team600.moalarm.member.repository;
 
 import com.team600.moalarm.member.entity.Member;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-@Slf4j
-@Component
-public class MemberRepository {
+@Repository
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    private final Map<String, Member> storage = new ConcurrentHashMap<>();
+    @Query("SELECT COUNT(*) > 0 FROM Member m WHERE m.email = :email AND m.delYn = 'N'")
+    boolean existsByEmail(String email);
 
-    public MemberRepository() {
-        String email = "test";
-        storage.put(email, Member.builder()
-                        .email(email)
-                        .password("1234")
-                .build());
-    }
-
-    public Optional<Member> findByEmail(String email) {
-        return Optional.ofNullable(storage.get(email));
-    }
-
-    public boolean existsByEmail(String email) {
-        return storage.containsKey(email);
-    }
-
-    public void save(Member member) {
-        storage.put(member.getEmail(), member);
-    }
+    @Query("SELECT m FROM Member m WHERE m.email = :email AND m.delYn = 'N'")
+    Optional<Member> findByEmail(String email);
 
 }

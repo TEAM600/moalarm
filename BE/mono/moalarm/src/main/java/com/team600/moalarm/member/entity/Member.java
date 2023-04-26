@@ -10,10 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@NoArgsConstructor
-@Builder
 public class Member extends BaseEntity {
 
     @Column(nullable = false)
