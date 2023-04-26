@@ -3,12 +3,10 @@ package com.team600.moalarm.auth.service;
 import com.team600.moalarm.auth.dto.request.SignInRequest;
 import com.team600.moalarm.auth.dto.response.SignInResponse;
 import com.team600.moalarm.auth.exception.SignInFailedException;
-import com.team600.moalarm.auth.jwt.TokenProvider;
 import com.team600.moalarm.member.entity.Member;
 import com.team600.moalarm.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
 
 
@@ -18,8 +16,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final TokenProvider tokenProvider;
-    private final TextEncryptor encryptor;
+    private final TokenManager tokenManager;
 
     public SignInResponse signIn(SignInRequest signInRequest) {
         Member member = memberRepository.findByEmail(signInRequest.getEmail())
@@ -29,8 +26,7 @@ public class AuthService {
             throw new SignInFailedException();
         }
 
-        return new SignInResponse(tokenProvider.createToken(
-                encryptor.encrypt(member.getEmail())));
+        return new SignInResponse(tokenManager.createToken(member.getEmail()));
     }
 
 }

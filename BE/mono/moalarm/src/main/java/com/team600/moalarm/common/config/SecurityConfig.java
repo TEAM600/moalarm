@@ -1,16 +1,12 @@
 package com.team600.moalarm.common.config;
 
 import com.team600.moalarm.auth.filter.JwtAuthFilter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -18,11 +14,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final String secret;
     private final JwtAuthFilter jwtAuthFilter;
 
-    public SecurityConfig(@Value("${crypto.secret}") String secret, JwtAuthFilter jwtAuthFilter) {
-        this.secret = secret;
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
@@ -40,11 +34,5 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .build();
-    }
-
-    @Bean
-    public TextEncryptor encryptor() {
-        return Encryptors.text(secret,
-                KeyGenerators.string().generateKey());
     }
 }
