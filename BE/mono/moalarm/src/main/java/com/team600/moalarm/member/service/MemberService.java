@@ -18,7 +18,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public void signUp(SignUpRequest signUpRequest) {
-        log.info("[SignUp] start");
         if (memberRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new EmailConflictException();
         }
@@ -26,7 +25,6 @@ public class MemberService {
         memberRepository.existsById(1L);
 
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
-        log.info("[SignUp] encodedPassword = {}", encodedPassword);
 
         Member member = Member.builder()
                 .email(signUpRequest.getEmail())
@@ -34,7 +32,6 @@ public class MemberService {
                 .build();
 
         memberRepository.save(member);
-        log.info("[SignUp] end");
     }
 
 }
