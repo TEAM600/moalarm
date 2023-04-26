@@ -1,7 +1,7 @@
 function signin(email, password) {
     return post(`/auth/signin`, {
-        "email":email,
-        "password":password
+        "email": email,
+        "password": password
     });
 }
 
@@ -11,7 +11,7 @@ onload = () => {
     const $emailInput = document.getElementById("floatingInput");
     const $passwordInput = document.getElementById("floatingPassword");
 
-    $signinForm.onsubmit = async (event)=>{
+    $signinForm.onsubmit = async (event) => {
         event.preventDefault();
         try {
             const response = await signin($emailInput.value, $passwordInput.value);
