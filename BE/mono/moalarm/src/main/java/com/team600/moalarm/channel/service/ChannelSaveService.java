@@ -1,9 +1,8 @@
 package com.team600.moalarm.channel.service;
 
-import com.team600.moalarm.channel.dto.request.ChannelDto;
-import com.team600.moalarm.channel.dto.response.ChannelPossessionDto;
-import java.util.List;
+import com.team600.moalarm.channel.data.dto.request.ChannelCreateRequest;
 
 public interface ChannelSaveService {
-    void saveChannel(ChannelDto requestDto, String memberId);
+
+    void saveChannel(ChannelCreateRequest requestDto, String memberId);
 }
