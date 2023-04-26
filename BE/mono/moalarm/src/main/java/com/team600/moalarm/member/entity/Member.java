@@ -20,11 +20,8 @@ public class Member extends BaseEntity {
     private String email;
     @Column(nullable = false)
     private String password;
-    @Column
     private String moalarmKey;
-    @Column
     private LocalDateTime moalarmKeyRefreshedAt;
-    @Column
     private int channelRegistrationStatus;
 
 }
