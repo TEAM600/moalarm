@@ -31,7 +31,7 @@ public class MoalarmKeyServiceImpl implements ApiKeyService<MoalarmKeyResponse> 
     public MoalarmKeyResponse refreshApiKey(long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         String newKey = apiKeyGenerator.createApiKey();
-        member.setMoalarmKey(newKey);
+        member.refreshMoalarmKey(newKey);
         return new MoalarmKeyResponse(newKey);
     }
 }

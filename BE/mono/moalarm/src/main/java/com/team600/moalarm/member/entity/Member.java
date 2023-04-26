@@ -25,7 +25,7 @@ public class Member extends BaseEntity {
     @Column
     private LocalDateTime moalarmKeyRefreshedAt;
 
-    public void setMoalarmKey(String moalarmKey) {
+    public void refreshMoalarmKey(String moalarmKey) {
         this.moalarmKey = moalarmKey;
         this.moalarmKeyRefreshedAt = LocalDateTime.now();
     }
