@@ -23,14 +23,14 @@ public class ChannelServiceImpl implements ChannelService {
     private final MemberRepository memberRepository;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ChannelPossessionResponse> getPossessions(String memberId) {
         List<ChannelPossessionResponse> responseDto = new ArrayList<>(); //TODO: get Channels
         return responseDto;
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Map<ChannelCode, ChannelKeyDto> getChannelKeyList(String moalarmKey) {
         //TODO: memberRepository 구현 되면 모알람키를 통해 유저 key값을 가져오기
         List<Channel> channels = channelRepository.findAllByMemberId(1L);

@@ -1,6 +1,6 @@
 package com.team600.moalarm.channel.controller;
 
-import com.team600.moalarm.channel.data.dto.request.ChannelRequest;
+import com.team600.moalarm.channel.data.dto.request.ChannelCreateRequest;
 import com.team600.moalarm.channel.data.dto.response.ChannelPossessionResponse;
 import com.team600.moalarm.channel.exception.ChannelTypeNotValidException;
 import com.team600.moalarm.channel.service.ChannelSaveService;
@@ -39,7 +39,7 @@ public class ChannelController {
     //TODO: login, repository, entity, service 작성 후 완성시키기
     @PostMapping("/type/{type}")
     public ResponseEntity<Void> createChannel(@PathVariable("type") String type,
-            @RequestBody ChannelRequest requestDto,
+            @RequestBody ChannelCreateRequest requestDto,
             @AuthenticationPrincipal UserDetails userDetails) {
         log.info("POST /channels/mail");
         String memberId = userDetails.getUsername();

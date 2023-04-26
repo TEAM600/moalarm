@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChannelRequest {
+public class ChannelCreateRequest {
 
     private String key;
     private String secret;

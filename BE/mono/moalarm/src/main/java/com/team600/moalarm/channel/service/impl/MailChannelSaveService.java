@@ -1,7 +1,7 @@
 package com.team600.moalarm.channel.service.impl;
 
 import com.team600.moalarm.channel.data.code.ChannelCode;
-import com.team600.moalarm.channel.data.dto.request.ChannelRequest;
+import com.team600.moalarm.channel.data.dto.request.ChannelCreateRequest;
 import com.team600.moalarm.channel.data.entity.Channel;
 import com.team600.moalarm.channel.data.repository.ChannelRepository;
 import com.team600.moalarm.channel.service.ChannelSaveService;
@@ -19,7 +19,7 @@ public class MailChannelSaveService implements ChannelSaveService {
 
     @Override
     @Transactional
-    public void saveChannel(ChannelRequest requestDto, String memberId) {
+    public void saveChannel(ChannelCreateRequest requestDto, String memberId) {
         log.info("Mail Channel Save");
         //TODO: 멤버를 가져오는 동작 또는 id 존재 유무 체크
 
