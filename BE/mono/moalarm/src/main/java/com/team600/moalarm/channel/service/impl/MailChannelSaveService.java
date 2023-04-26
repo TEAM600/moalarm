@@ -20,7 +20,6 @@ public class MailChannelSaveService implements ChannelSaveService {
     @Override
     @Transactional
     public void saveChannel(ChannelCreateRequest requestDto, String memberId) {
-        log.info("Mail Channel Save");
         //TODO: 멤버를 가져오는 동작 또는 id 존재 유무 체크
 
         Channel channel = Channel.builder()
@@ -29,8 +28,6 @@ public class MailChannelSaveService implements ChannelSaveService {
                 .secret(requestDto.getSecret())
                 .type(ChannelCode.MAIL)
                 .build();
-        log.info("Mail Channel Save2");
         channelRepository.save(channel);
-        log.info("Mail Channel Save3");
     }
 }
