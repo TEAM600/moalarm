@@ -24,4 +24,8 @@ public class Member extends BaseEntity {
     private LocalDateTime moalarmKeyRefreshedAt;
     private int channelRegistrationStatus;
 
+    public void refreshMoalarmKey(String moalarmKey) {
+        this.moalarmKey = moalarmKey;
+        this.moalarmKeyRefreshedAt = LocalDateTime.now();
+    }
 }
