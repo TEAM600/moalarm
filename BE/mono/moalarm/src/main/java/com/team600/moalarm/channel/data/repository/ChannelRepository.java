@@ -10,4 +10,7 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
 
     @Query("select c from Channel c where c.delYn = 'N' and c.memberId=:memberId")
     List<Channel> findAllByMemberId(@Param("memberId") long memberId);
+
+    @Query("select c from Channel c where c.delYn = 'N' and c.memberId=:memberId AND c.type = :type")
+    Channel findAllByMemberIdAndType(@Param("type") int type, long memberId);
 }

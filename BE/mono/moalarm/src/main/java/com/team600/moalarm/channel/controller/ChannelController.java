@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +42,7 @@ public class ChannelController {
     public ResponseEntity<Void> createChannel(@PathVariable("type") String type,
             @RequestBody ChannelCreateRequest requestDto,
             @AuthenticationPrincipal UserDetails userDetails) {
-        log.info("POST /channels/mail");
+        log.info("POST /channels/type/{}", type);
         String memberId = userDetails.getUsername();
         switch (type) { //TODO: 채널별 DTO 유효성 검사
             case "sms":
@@ -56,4 +57,22 @@ public class ChannelController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/type/{type}")
+    public ResponseEntity<Void> deleteChannel(@PathVariable("type") String type,
+            @RequestBody ChannelCreateRequest requestDto,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        log.info("delete /channels/type/{}", type);
+        String memberId = userDetails.getUsername();
+        switch (type) {
+            case "sms":
+            case "fcm":
+            case "mail":
+                channelSaveService.get(type + "ChannelSaveService")
+                        .deleteChannel(type, memberId);
+                break;
+            default:
+                throw new ChannelTypeNotValidException(type);
+        }
+        return ResponseEntity.noContent().build();
+    }
 }
