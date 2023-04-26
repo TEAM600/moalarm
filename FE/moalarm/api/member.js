@@ -1,12 +1,12 @@
 function signup(email, password, confirmPassword) {
-    if (password!==confirmPassword) {
+    if (password !== confirmPassword) {
         alert("check your password input");
         return;
     }
 
     return post(`/member/signup`,{
-        "email":email,
-        "password":password,
+        "email": email,
+        "password": password,
         "confirmPassword": confirmPassword
     });
 }
@@ -20,11 +20,10 @@ onload = () => {
     $signupForm.onsubmit = async (event) => {
         event.preventDefault();
         try {
-            await signup($emailInput.value, $passwordInput.value, $confirmPasswordInput.value);
+            signup($emailInput.value, $passwordInput.value, $confirmPasswordInput.value);
             window.location.href = "signin.html";
-        }catch(error) {
+        } catch(error) {
             alert(error);
-            console.log("error :",error);
         }
     }
 }

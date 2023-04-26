@@ -1,6 +1,7 @@
 const baseURL = "http://localhost:8080";
 
-const defaultOption = {headers: {
+const defaultOption = {
+    headers: {
     'Content-type': 'application/json; charset=UTF-8',
   }
 };
