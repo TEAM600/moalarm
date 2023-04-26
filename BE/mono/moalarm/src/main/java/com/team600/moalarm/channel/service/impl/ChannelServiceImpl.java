@@ -46,7 +46,7 @@ public class ChannelServiceImpl implements ChannelService {
                 channelKeyDto.setJson("{}");
             } else if (type == ChannelCode.SMS || type == ChannelCode.MAIL) {
                 channelKeyDto.setApiKey(channel.getApiKey());
-                channelKeyDto.setSecret(channelKeyDto.getSecret());
+                channelKeyDto.setSecret(channel.getSecret());
                 if (type == ChannelCode.SMS) {
                     channelKeyDto.setPhoneNumber("01000000000");
                 }

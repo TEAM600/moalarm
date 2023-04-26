@@ -1,8 +1,9 @@
 package com.team600.moalarm.alarm.service.impl;
 
+import com.team600.moalarm.alarm.dto.request.SendAlarmRequest;
 import com.team600.moalarm.alarm.dto.request.SendMailRequest;
-import com.team600.moalarm.alarm.service.MailSenderService;
-import com.team600.moalarm.alarm.vo.SendMailVo;
+import com.team600.moalarm.alarm.service.SenderService;
+import com.team600.moalarm.channel.data.dto.ChannelKeyDto;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Properties;
@@ -20,25 +21,28 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MailSenderServiceImpl implements MailSenderService {
+public class MailSenderServiceImpl implements SenderService {
     @Override
-    public void sendEmail(SendMailRequest requirementDto, SendMailVo sendMailVo) {
-        JavaMailSender emailSender = setMailService(sendMailVo);
+    public void send(SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
+        SendMailRequest sendMailRequest = requirementDto.getMail();
+        JavaMailSender emailSender = setMailService(channelKeyDto);
+
         try {
-            List<String> receivers = requirementDto.getTo();
+            List<String> receivers = sendMailRequest.getTo();
             for (String r:receivers) {
-                MimeMessage message = createMessage(r, emailSender, requirementDto);
+                MimeMessage message = createMessage(r, emailSender, sendMailRequest);
                 sendEmailAsync(message, emailSender);
             }
         } catch(Exception e){
             throw new RuntimeException(e);
         }
     }
-    private JavaMailSender setMailService(SendMailVo sendMailVo){
+    private JavaMailSender setMailService(ChannelKeyDto channelKeyDto){
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        log.info("{}", channelKeyDto.getSecret());
         javaMailSender.setHost("smtp.gmail.com");
-        javaMailSender.setUsername(sendMailVo.getKey());
-        javaMailSender.setPassword(sendMailVo.getSecret());
+        javaMailSender.setUsername(channelKeyDto.getApiKey());
+        javaMailSender.setPassword(channelKeyDto.getSecret());
         javaMailSender.setPort(465);
         javaMailSender.setJavaMailProperties(getMailProperties());
         javaMailSender.setDefaultEncoding("UTF-8");
@@ -62,6 +66,7 @@ public class MailSenderServiceImpl implements MailSenderService {
         return CompletableFuture.runAsync(() -> {
             try {
                 javaMailSender.send(message);
+                log.info("보냄");
             } catch (Exception e) {
                 //TODO: Handle exception
                 throw new RuntimeException(e);

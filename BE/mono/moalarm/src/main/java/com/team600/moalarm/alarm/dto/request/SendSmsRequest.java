@@ -1,5 +1,10 @@
 package com.team600.moalarm.alarm.dto.request;
 
-public class SendSmsRequest extends SendParentRequest {
+import java.util.List;
+import lombok.Getter;
 
+@Getter
+public class SendSmsRequest {
+    private List<String> to;
+    private String content;
 }
