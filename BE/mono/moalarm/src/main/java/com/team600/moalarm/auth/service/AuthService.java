@@ -29,7 +29,7 @@ public class AuthService {
             throw new SignInFailedException();
         }
 
-        return new SignInResponse(tokenManager.createToken(member.getEmail()));
+        return new SignInResponse(tokenManager.createToken(String.valueOf(member.getId())));
     }
 
 }
