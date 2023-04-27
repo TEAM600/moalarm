@@ -16,11 +16,11 @@ public class MemberUtil {
 
     public Member getMemberMoalarmKey(String moalarmKey) {
         return memberRepository.findByMoalarmKey(moalarmKey)
-                .orElseThrow(() -> new MemberNotFoundException("존재하지 않는 유저입니다."));
+                .orElseThrow(MemberNotFoundException::new);
     }
 
     public Member getMemberByMemberId(String memberId) {
         return memberRepository.findById(Long.parseLong(memberId))
-                .orElseThrow(() -> new MemberNotFoundException("존재하지 않는 유저입니다."));
+                .orElseThrow(MemberNotFoundException::new);
     }
 }
