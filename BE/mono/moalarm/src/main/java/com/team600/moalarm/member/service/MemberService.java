@@ -25,8 +25,6 @@ public class MemberService {
             throw new EmailConflictException();
         }
 
-        memberRepository.existsById(1L);
-
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         String apiKey = apiKeyGenerator.createApiKey();
 
