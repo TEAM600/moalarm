@@ -4,8 +4,10 @@ import com.team600.moalarm.apikey.service.ApiKeyGenerator;
 import com.team600.moalarm.member.dto.request.SignUpRequest;
 import com.team600.moalarm.member.entity.Member;
 import com.team600.moalarm.member.exception.EmailConflictException;
+import com.team600.moalarm.member.exception.NotFoundMemberException;
 import com.team600.moalarm.member.repository.MemberRepository;
 import java.time.LocalDateTime;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final ApiKeyGenerator apiKeyGenerator;
 
+    @Transactional
     public void signUp(SignUpRequest signUpRequest) {
         if (memberRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new EmailConflictException();
@@ -38,4 +41,12 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    @Transactional
+    public void withdrawal(long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundMemberException());
+
+        member.remove();
+    }
+    
 }
