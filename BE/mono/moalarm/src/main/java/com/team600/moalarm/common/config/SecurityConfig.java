@@ -27,16 +27,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests()
-                .antMatchers("/notification/**").hasRole("API")
-                .and()
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/test/**").hasRole(MoalarmKeyFilter.ROLE_API)
+                        .antMatchers("/notification/**").hasRole(MoalarmKeyFilter.ROLE_API)
+                )
                 .addFilterBefore(moalarmKeyFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Order(1)
     @Bean
-    public SecurityFilterChain web(HttpSecurity http) throws Exception {
+    public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
         return http
                 .addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
