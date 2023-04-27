@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/key")
 public class KeyController {
 
-
     @Autowired
     private final ApiKeyService<?> apiKeyService;
 
