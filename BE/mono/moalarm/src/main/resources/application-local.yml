@@ -17,4 +17,4 @@ jwt:
   expire-day: 30
 
 crypto:
-  secret: "${random.value}"
+  secret: it's secret
