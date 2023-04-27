@@ -23,7 +23,7 @@ public class SmsChannelService implements ChannelSaveService {
 
     @Override
     @Transactional
-    public void saveChannel(ChannelCreateRequest requestDto, String memberId) {
+    public void saveChannel(ChannelCreateRequest requestDto, long memberId) {
         log.info("SMS Channel Save");
         Member member = memberUtil.getMemberByMemberId(memberId);
 

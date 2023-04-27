@@ -19,7 +19,7 @@ public class FcmChannelService implements ChannelSaveService {
 
     @Override
     @Transactional
-    public void saveChannel(ChannelCreateRequest requestDto, String memberId) {
+    public void saveChannel(ChannelCreateRequest requestDto, long memberId) {
         log.info("FCM Channel Save");
     }
 }

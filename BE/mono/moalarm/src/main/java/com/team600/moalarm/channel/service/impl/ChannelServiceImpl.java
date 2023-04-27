@@ -2,7 +2,7 @@ package com.team600.moalarm.channel.service.impl;
 
 import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.channel.data.dto.ChannelKeyDto;
-import com.team600.moalarm.channel.data.dto.response.ChannelPossessionResponse;
+import com.team600.moalarm.channel.data.dto.response.ChannelRegistrationResponse;
 import com.team600.moalarm.channel.data.entity.Channel;
 import com.team600.moalarm.channel.data.repository.ChannelRepository;
 import com.team600.moalarm.channel.service.ChannelService;
@@ -27,11 +27,11 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ChannelPossessionResponse> getPossessions(String memberId) {
+    public List<ChannelRegistrationResponse> getChannels(long memberId) {
         Member member = memberUtil.getMemberByMemberId(memberId);
 
         //TODO: get Channels
-        List<ChannelPossessionResponse> responseDto = new ArrayList<>();
+        List<ChannelRegistrationResponse> responseDto = new ArrayList<>();
         return responseDto;
     }
 
@@ -42,7 +42,7 @@ public class ChannelServiceImpl implements ChannelService {
 
         List<Channel> channels = channelRepository.findAllByMemberId(member.getId());
 
-        Map<ChannelCode, ChannelKeyDto> returnDto = new HashMap<>();
+        Map<ChannelCode, ChannelKeyDto> result = new HashMap<>();
 
         channels.forEach(channel -> {
             ChannelCode type = channel.getType();
@@ -60,15 +60,15 @@ public class ChannelServiceImpl implements ChannelService {
             } else {
                 throw new RuntimeException("서버 내부 에러");
             }
-            returnDto.put(type, channelKeyDto);
+            result.put(type, channelKeyDto);
         });
 
-        return returnDto;
+        return result;
     }
 
     @Override
     @Transactional
-    public void deleteChannel(ChannelCode type, String memberId) {
+    public void deleteChannel(ChannelCode type, long memberId) {
         Member member = memberUtil.getMemberByMemberId(memberId);
 
         Channel channel = channelRepository.findAllByMemberIdAndType(type, member.getId());

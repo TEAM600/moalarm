@@ -23,7 +23,7 @@ public class MailChannelService implements ChannelSaveService {
 
     @Override
     @Transactional
-    public void saveChannel(ChannelCreateRequest requestDto, String memberId) {
+    public void saveChannel(ChannelCreateRequest requestDto, long memberId) {
         log.info("Mail Channel Save");
         Member member = memberUtil.getMemberByMemberId(memberId);
 

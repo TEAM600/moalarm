@@ -7,7 +7,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class ChannelPossessionResponse {
+public class ChannelRegistrationResponse {
 
     private String type;
     private boolean possession;
