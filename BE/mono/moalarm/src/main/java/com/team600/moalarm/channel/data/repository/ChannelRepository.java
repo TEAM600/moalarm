@@ -14,4 +14,13 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
 
     @Query("select c from Channel c where c.delYn = 'N' and c.memberId=:memberId AND c.type = :type")
     Channel findAllByMemberIdAndType(@Param("type") ChannelCode type, long memberId);
+
+    @Query("SELECT COUNT(*) > 0 "
+            + "FROM Channel c "
+            + "WHERE c.memberId = :memberId "
+            + "AND c.type = :type "
+            + "AND c.delYn = 'N'")
+    boolean existsByMemberIdAndType(@Param("memberId") long memberId,
+            @Param("type") ChannelCode channelCode);
+
 }

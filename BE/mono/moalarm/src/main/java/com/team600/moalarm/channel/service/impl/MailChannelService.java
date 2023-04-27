@@ -4,6 +4,7 @@ import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.channel.data.dto.request.ChannelCreateRequest;
 import com.team600.moalarm.channel.data.entity.Channel;
 import com.team600.moalarm.channel.data.repository.ChannelRepository;
+import com.team600.moalarm.channel.exception.ChannelConflictException;
 import com.team600.moalarm.channel.service.ChannelSaveService;
 import com.team600.moalarm.common.component.MemberUtil;
 import com.team600.moalarm.member.entity.Member;
@@ -25,21 +26,14 @@ public class MailChannelService implements ChannelSaveService {
     public void saveChannel(ChannelCreateRequest requestDto, String memberId) {
         log.info("Mail Channel Save");
         Member member = memberUtil.getMemberByMemberId(memberId);
-        Channel channel = Channel.builder()
-                .memberId(member.getId())
-                .apiKey(requestDto.getKey())
-                .secret(requestDto.getSecret())
-                .type(ChannelCode.MAIL)
-                .build();
+
+        if (channelRepository.existsByMemberIdAndType(member.getId(), ChannelCode.MAIL)) {
+            throw new ChannelConflictException("이미 채널을 소유중입니다.");
+        }
+
+        Channel channel = Channel.builder().memberId(member.getId()).apiKey(requestDto.getKey())
+                .secret(requestDto.getSecret()).type(ChannelCode.MAIL).build();
+        member.registChannel(ChannelCode.MAIL.ordinal());
         channelRepository.save(channel);
-    }
-
-    @Override
-    public void deleteChannel(String type, String memberId) {
-        Member member = memberUtil.getMemberByMemberId(memberId);
-
-        Channel channel = channelRepository.findAllByMemberIdAndType(ChannelCode.MAIL,
-                member.getId());
-        channelRepository.delete(channel);
     }
 }

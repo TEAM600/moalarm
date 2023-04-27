@@ -13,20 +13,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class ChannelServiceImpl implements ChannelService {
 
     private final ChannelRepository channelRepository;
-    private final MemberUtil memberComponent;
+    private final MemberUtil memberUtil;
 
     @Override
     @Transactional(readOnly = true)
     public List<ChannelPossessionResponse> getPossessions(String memberId) {
-        Member member = memberComponent.getMemberByMemberId(memberId);
+        Member member = memberUtil.getMemberByMemberId(memberId);
 
         //TODO: get Channels
         List<ChannelPossessionResponse> responseDto = new ArrayList<>();
@@ -36,7 +38,7 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     @Transactional(readOnly = true)
     public Map<ChannelCode, ChannelKeyDto> getChannelKeyList(String moalarmKey) {
-        Member member = memberComponent.getMemberMoalarmKey(moalarmKey);
+        Member member = memberUtil.getMemberMoalarmKey(moalarmKey);
 
         List<Channel> channels = channelRepository.findAllByMemberId(member.getId());
 
@@ -62,5 +64,18 @@ public class ChannelServiceImpl implements ChannelService {
         });
 
         return returnDto;
+    }
+
+    @Override
+    @Transactional
+    public void deleteChannel(ChannelCode type, String memberId) {
+        Member member = memberUtil.getMemberByMemberId(memberId);
+
+        Channel channel = channelRepository.findAllByMemberIdAndType(type, member.getId());
+        log.info("{}..... member.regi {}", channel.getType(),
+                member.getChannelRegistrationStatus());
+        channel.remove();
+        member.deleteChannel(type.ordinal());
+        log.info(" member.regi {}", member.getChannelRegistrationStatus());
     }
 }

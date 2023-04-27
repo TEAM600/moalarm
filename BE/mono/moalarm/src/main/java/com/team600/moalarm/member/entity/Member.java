@@ -28,4 +28,12 @@ public class Member extends BaseEntity {
         this.moalarmKey = moalarmKey;
         this.moalarmKeyRefreshedAt = LocalDateTime.now();
     }
+
+    public void deleteChannel(int channelCode) {
+        this.channelRegistrationStatus &= ~(1 << channelCode);
+    }
+
+    public void registChannel(int channelCode) {
+        this.channelRegistrationStatus |= 1 << channelCode;
+    }
 }

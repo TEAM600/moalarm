@@ -39,7 +39,7 @@ public class ChannelController {
         return ResponseEntity.ok(channelService.getPossessions(memberId));
     }
 
-    @PostMapping("/type/{type}")
+    @PostMapping("/{type}")
     public ResponseEntity<Void> createChannel(@PathVariable("type") ChannelCode type,
             @RequestBody ChannelCreateRequest requestDto,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -51,12 +51,12 @@ public class ChannelController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/type/{type}")
-    public ResponseEntity<Void> deleteChannel(@PathVariable("type") String type,
+    @DeleteMapping("/{type}")
+    public ResponseEntity<Void> deleteChannel(@PathVariable("type") ChannelCode type,
             @AuthenticationPrincipal UserDetails userDetails) {
         log.info("delete /channels/type/{}", type);
         String memberId = userDetails.getUsername();
-        channelSaveService.get(type + "ChannelService").deleteChannel(type, memberId);
+        channelService.deleteChannel(type, memberId);
 
         return ResponseEntity.noContent().build();
     }

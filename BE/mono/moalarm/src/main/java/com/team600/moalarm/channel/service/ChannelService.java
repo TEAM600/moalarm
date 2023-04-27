@@ -11,4 +11,6 @@ public interface ChannelService {
     List<ChannelPossessionResponse> getPossessions(String memberId);
 
     Map<ChannelCode, ChannelKeyDto> getChannelKeyList(String moalarmKey);
+
+    void deleteChannel(ChannelCode type, String memberId);
 }
