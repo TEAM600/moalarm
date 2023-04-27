@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class FcmChannelSaveService implements ChannelSaveService {
+public class FcmChannelService implements ChannelSaveService {
 
     private final ChannelRepository channelRepository;
     private final MemberUtil memberUtil;
@@ -30,7 +30,7 @@ public class FcmChannelSaveService implements ChannelSaveService {
     public void deleteChannel(String type, String memberId) {
         Member member = memberUtil.getMemberByMemberId(memberId);
 
-        Channel channel = channelRepository.findAllByMemberIdAndType(ChannelCode.FCM.ordinal(),
+        Channel channel = channelRepository.findAllByMemberIdAndType(ChannelCode.FCM,
                 member.getId());
         channelRepository.delete(channel);
     }

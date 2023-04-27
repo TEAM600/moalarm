@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class SmsChannelSaveService implements ChannelSaveService {
+public class MailChannelService implements ChannelSaveService {
 
     private final ChannelRepository channelRepository;
     private final MemberUtil memberUtil;
@@ -23,25 +23,22 @@ public class SmsChannelSaveService implements ChannelSaveService {
     @Override
     @Transactional
     public void saveChannel(ChannelCreateRequest requestDto, String memberId) {
-        log.info("SMS Channel Save");
+        log.info("Mail Channel Save");
         Member member = memberUtil.getMemberByMemberId(memberId);
-
         Channel channel = Channel.builder()
-                .apiKey(requestDto.getKey())
                 .memberId(member.getId())
-                .type(ChannelCode.SMS)
+                .apiKey(requestDto.getKey())
                 .secret(requestDto.getSecret())
+                .type(ChannelCode.MAIL)
                 .build();
-
         channelRepository.save(channel);
     }
 
     @Override
-    @Transactional
     public void deleteChannel(String type, String memberId) {
         Member member = memberUtil.getMemberByMemberId(memberId);
 
-        Channel channel = channelRepository.findAllByMemberIdAndType(ChannelCode.SMS.ordinal(),
+        Channel channel = channelRepository.findAllByMemberIdAndType(ChannelCode.MAIL,
                 member.getId());
         channelRepository.delete(channel);
     }

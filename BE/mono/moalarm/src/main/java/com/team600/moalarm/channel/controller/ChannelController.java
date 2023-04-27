@@ -59,7 +59,6 @@ public class ChannelController {
 
     @DeleteMapping("/type/{type}")
     public ResponseEntity<Void> deleteChannel(@PathVariable("type") String type,
-            @RequestBody ChannelCreateRequest requestDto,
             @AuthenticationPrincipal UserDetails userDetails) {
         log.info("delete /channels/type/{}", type);
         String memberId = userDetails.getUsername();
