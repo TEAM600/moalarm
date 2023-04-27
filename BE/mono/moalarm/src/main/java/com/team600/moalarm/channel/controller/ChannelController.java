@@ -1,12 +1,12 @@
 package com.team600.moalarm.channel.controller;
 
+import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.channel.data.dto.request.ChannelCreateRequest;
 import com.team600.moalarm.channel.data.dto.response.ChannelPossessionResponse;
 import com.team600.moalarm.channel.service.ChannelSaveService;
 import com.team600.moalarm.channel.service.ChannelService;
 import java.util.List;
 import java.util.Map;
-import javax.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -39,22 +39,20 @@ public class ChannelController {
         return ResponseEntity.ok(channelService.getPossessions(memberId));
     }
 
-    //TODO: login, repository, entity, service 작성 후 완성시키기
     @PostMapping("/type/{type}")
-    public ResponseEntity<Void> createChannel(
-            @PathVariable("type") @Pattern(regexp = "sms|mail|push", message = "올바르지 않은 타입값이 들어왔습니다.") String type,
+    public ResponseEntity<Void> createChannel(@PathVariable("type") ChannelCode type,
             @RequestBody ChannelCreateRequest requestDto,
             @AuthenticationPrincipal UserDetails userDetails) {
         log.info("POST /channels/type/{}", type);
         String memberId = userDetails.getUsername();
         //TODO: 채널별 유효성 검사
-        channelSaveService.get(type + "ChannelService").saveChannel(requestDto, memberId);
+        channelSaveService.get(type.getValue() + "ChannelService")
+                .saveChannel(requestDto, memberId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/type/{type}")
-    public ResponseEntity<Void> deleteChannel(
-            @PathVariable("type") @Pattern(regexp = "sms|mail|push", message = "올바르지 않은 타입값이 들어왔습니다.") String type,
+    public ResponseEntity<Void> deleteChannel(@PathVariable("type") String type,
             @AuthenticationPrincipal UserDetails userDetails) {
         log.info("delete /channels/type/{}", type);
         String memberId = userDetails.getUsername();
