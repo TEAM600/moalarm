@@ -10,7 +10,6 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -54,10 +53,9 @@ public class TokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Collection<SimpleGrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITY_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        List<String> authClaim = (List<String>) claims.get(AUTHORITY_KEY);
+        Collection<SimpleGrantedAuthority> authorities = authClaim.stream()
+                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         return new JwtDecryptResult(claims.getSubject(), authorities);
     }
