@@ -42,7 +42,7 @@ public class ChannelController {
     public ResponseEntity<Void> createChannel(@PathVariable("type") ChannelCode type,
             @RequestBody ChannelCreateRequest requestDto,
             @CurrentMemberId long memberId) {
-        log.info("POST /channels/type/{}", type);
+        log.info("POST /channels/{}", type);
         //TODO: 채널별 유효성 검사
         channelSaveService.get(type.getValue() + "ChannelService")
                 .saveChannel(requestDto, memberId);
@@ -52,7 +52,7 @@ public class ChannelController {
     @DeleteMapping("/{type}")
     public ResponseEntity<Void> deleteChannel(@PathVariable("type") ChannelCode type,
             @CurrentMemberId long memberId) {
-        log.info("delete /channels/type/{}", type);
+        log.info("delete /channels/{}", type);
         channelService.deleteChannel(type, memberId);
 
         return ResponseEntity.noContent().build();
