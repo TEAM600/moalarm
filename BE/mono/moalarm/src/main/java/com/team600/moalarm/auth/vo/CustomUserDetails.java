@@ -3,10 +3,12 @@ package com.team600.moalarm.auth.vo;
 import java.util.Collection;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
 
+    private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
     @Getter
     private final long memberId;
     private final String username;
