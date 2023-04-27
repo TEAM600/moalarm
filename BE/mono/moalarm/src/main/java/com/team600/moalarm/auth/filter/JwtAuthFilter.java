@@ -1,6 +1,7 @@
 package com.team600.moalarm.auth.filter;
 
 import com.team600.moalarm.auth.service.EncryptJWTManager;
+import com.team600.moalarm.auth.vo.CustomUserDetails;
 import com.team600.moalarm.auth.vo.JwtDecryptResult;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -12,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -33,7 +33,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         JwtDecryptResult decryptedJwt = encryptJWTManager.decryptJwt(token);
 
         if (decryptedJwt != null) {
-            User principal = new User(decryptedJwt.getSubject(), "", decryptedJwt.getAuthorities());
+            CustomUserDetails principal = new CustomUserDetails(decryptedJwt.getSubject(),
+                    decryptedJwt.getAuthorities());
             Authentication authentication = new UsernamePasswordAuthenticationToken(principal,
                     token,
                     decryptedJwt.getAuthorities());
