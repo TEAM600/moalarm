@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final TokenManager tokenManager;
+    private final EncryptJWTManager encryptJWTManager;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -29,7 +29,7 @@ public class AuthService {
             throw new SignInFailedException();
         }
 
-        return new SignInResponse(tokenManager.createToken(String.valueOf(member.getId())));
+        return new SignInResponse(encryptJWTManager.createToken(String.valueOf(member.getId())));
     }
 
 }

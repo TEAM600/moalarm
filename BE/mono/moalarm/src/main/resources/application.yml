@@ -1,20 +1,8 @@
 spring:
-  datasource:
-    driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3308/moalarm
-    username: root
-    password: 1234
-  jpa:
-    open-in-view: false
-    hibernate:
-      ddl-auto: create
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-jwt:
-  secret: theKeySizeMustBeGreaterThanOrEqualToTheHashOutputSize
-  expire-day: 30
+  profiles:
+    active: local
 
-crypto:
-  secret: it's secret
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1

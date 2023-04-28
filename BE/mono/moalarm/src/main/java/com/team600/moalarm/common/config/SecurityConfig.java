@@ -1,6 +1,9 @@
 package com.team600.moalarm.common.config;
 
 import com.team600.moalarm.auth.filter.JwtAuthFilter;
+import com.team600.moalarm.common.config.filter.ExceptionHandlerFilter;
+import com.team600.moalarm.common.config.filter.MoalarmKeyFilter;
+import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,19 +17,32 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
-        this.jwtAuthFilter = jwtAuthFilter;
-    }
+    private final MoalarmKeyFilter moalarmKeyFilter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
-    public SecurityFilterChain web(HttpSecurity http) throws Exception {
-        return http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/test/**").hasRole(MoalarmKeyFilter.ROLE_API)
+                        .antMatchers("/notification/**").hasRole(MoalarmKeyFilter.ROLE_API)
+                )
+                .addFilterBefore(moalarmKeyFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    @Order(1)
+    @Bean
+    public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS))
@@ -35,7 +51,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .antMatchers("/auth/signin").permitAll()
                         .antMatchers(HttpMethod.POST, "/member").permitAll()
-                        .anyRequest().authenticated()
+                        .antMatchers("/member/**", "/key/**", "/channels/**").authenticated()
                 )
                 .build();
     }

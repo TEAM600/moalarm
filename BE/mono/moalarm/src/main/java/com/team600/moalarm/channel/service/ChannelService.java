@@ -1,14 +1,15 @@
 package com.team600.moalarm.channel.service;
 
+import com.team600.moalarm.alarm.dto.request.SendAlarmRequest;
 import com.team600.moalarm.channel.data.code.ChannelCode;
-import com.team600.moalarm.channel.data.dto.ChannelKeyDto;
-import com.team600.moalarm.channel.data.dto.response.ChannelPossessionResponse;
+import com.team600.moalarm.channel.data.dto.response.ChannelRegistrationResponse;
 import java.util.List;
-import java.util.Map;
 
 public interface ChannelService {
 
-    List<ChannelPossessionResponse> getPossessions(String memberId);
+    List<ChannelRegistrationResponse> getChannels(long memberId);
 
-    Map<ChannelCode, ChannelKeyDto> getChannelKeyList(String moalarmKey);
+    void sendAlarm(long memberId, SendAlarmRequest requirementDto);
+
+    void deleteChannel(ChannelCode type, long memberId);
 }
