@@ -21,7 +21,7 @@ public class MailConfig {
     @Value("${mail.smtp.socketFactory.class}")
     private String socketFactoryClass;
 
-    @Value("{mail.smtp.ssl.checkServerIdentity}")
+    @Value("${mail.smtp.ssl.checkServerIdentity}")
     private boolean checkServerIdentity;
 
     @Bean(name = "mail")
