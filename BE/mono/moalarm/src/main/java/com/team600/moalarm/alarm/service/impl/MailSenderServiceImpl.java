@@ -23,11 +23,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailSenderServiceImpl implements SenderService {
 
-    private static int SOKET_PORT = 465;
-    private static boolean AUTH = true;
-    private static boolean STARTTLS = true;
-    private static boolean STARTTLS_REQUIRED = true;
-    private static boolean FALLBACK = false;
+    private final static int SOKET_PORT = 465;
+    private final static boolean AUTH = true;
+    private final static boolean STARTTLS = true;
+    private final static boolean STARTTLS_REQUIRED = true;
+    private final static boolean FALLBACK = false;
 
     @Override
     public void send(SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
