@@ -3,8 +3,8 @@ package com.team600.moalarm.common.config;
 import com.team600.moalarm.auth.filter.JwtAuthFilter;
 import com.team600.moalarm.common.config.filter.ExceptionHandlerFilter;
 import com.team600.moalarm.common.config.filter.MoalarmKeyFilter;
-import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -28,16 +28,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
+        return http.authorizeHttpRequests(authorize -> authorize
                         .antMatchers("/test/**").hasRole(MoalarmKeyFilter.ROLE_API)
                         .antMatchers("/notification/**").hasRole(MoalarmKeyFilter.ROLE_API)
                 )
-                .addFilterBefore(moalarmKeyFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                .addFilterBefore(moalarmKeyFilter,
+                        UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
-    @Order(1)
+    @Order(0)
     @Bean
     public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -53,20 +53,24 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.POST, "/member").permitAll()
                         .antMatchers("/member/**", "/key/**", "/channels/**").authenticated()
                 )
+                .cors(httpSecurityCorsConfigurer ->
+                        httpSecurityCorsConfigurer.configurationSource(
+                                request -> {
+                                    CorsConfiguration configuration = new CorsConfiguration();
+                                    configuration.applyPermitDefaultValues();
+
+                                    configuration.setAllowedOrigins(
+                                            Arrays.asList("http://localhost:5500",
+                                                    "http://127.0.0.1:5500"));
+                                    configuration.setAllowedMethods(
+                                            Arrays.asList("GET", "POST", "OPTION", "PUT", "PATCH",
+                                                    "DELETE"));
+                                    configuration.setExposedHeaders(
+                                            Arrays.asList("Authorization",
+                                                    "Access-Control-Allow-Origin"));
+                                    return configuration;
+                                }))
                 .build();
     }
 
-    @Order(0)
-    @Bean
-    public SecurityFilterChain cors(HttpSecurity http) throws Exception {
-        return http.cors(httpSecurityCorsConfigurer ->
-                httpSecurityCorsConfigurer.configurationSource(
-                        request -> {
-                            CorsConfiguration corsConfiguration = new CorsConfiguration();
-                            corsConfiguration.applyPermitDefaultValues();
-                            corsConfiguration.setExposedHeaders(
-                                    Arrays.asList("Authorization", "Access-Control-Allow-Origin"));
-                            return corsConfiguration;
-                        })).build();
-    }
 }
