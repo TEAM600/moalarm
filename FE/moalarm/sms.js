@@ -9,14 +9,9 @@ const smsContent = `
           </div>
           <div class="modal-body">
             <form>
-              <div class="mb-3">
-                <label for="recipient-name" class="col-form-label">API-Key:</label>
-                <input type="text" class="form-control" id="apiKey">
-              </div>
-              <div class="mb-3">
-                <label for="recipient-name" class="col-form-label">API-Secret:</label>
-                <input type="password" class="form-control" id="apiSecret">
-              </div>
+              ${createApiKeyInputWithId("key")}
+              ${createApiSecretInputWithId("secret")}
+              ${createPhoneInputWithId("extraValue")}
             </form>
           </div>
           <div class="modal-footer">
@@ -28,6 +23,30 @@ const smsContent = `
 
 smsButton.addEventListener('click', smsModal);
 
+function createApiKeyInputWithId(id) {
+  return `
+    <div class="mb-3">
+      <label for="recipient-name" class="col-form-label">API-Key:</label>
+      <input type="text" class="form-control" id="${id}">
+    </div>`;
+}
+
+function createApiSecretInputWithId(id) {
+  return `
+    <div class="mb-3">
+      <label for="recipient-name" class="col-form-label">API-Secret:</label>
+      <input type="password" class="form-control" id="${id}">
+    </div>`;
+}
+
+function createPhoneInputWithId(id) {
+  return `
+    <div class="mb-3">
+      <label for="recipient-name" class="col-form-label">Phone:</label>
+      <input type="text" class="form-control" id="${id}" placeholder="(ex : 01012345678)">
+    </div>`;
+}
+
 function smsModal() {
     formgetSMS.innerHTML = smsContent;
     const smsPost = document.getElementById("smsPost");
@@ -35,5 +54,9 @@ function smsModal() {
 }
 
 function smsRegistClick() {
-    console.log("sms 정보를 등록합니다.");
+  const $emailInput = document.getElementById("key");
+  const $passwordInput = document.getElementById("secret");
+  const $extraValue = document.getElementById("extraValue");
+  createChannel("sms", $emailInput.value, $passwordInput.value, $extraValue.value)
+  .then(()=>console.log("create channel"));
 }
