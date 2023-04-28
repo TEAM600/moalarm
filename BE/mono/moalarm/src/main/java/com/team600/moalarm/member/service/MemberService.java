@@ -44,7 +44,7 @@ public class MemberService {
     @Transactional
     public void withdrawal(long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException());
+                .orElseThrow(MemberNotFoundException::new);
 
         member.remove();
     }
