@@ -19,11 +19,10 @@ onload = () => {
 
     $signupForm.onsubmit = async (event) => {
         event.preventDefault();
-        try {
-            signup($emailInput.value, $passwordInput.value, $confirmPasswordInput.value);
+        
+        signup($emailInput.value, $passwordInput.value, $confirmPasswordInput.value)
+        .then(response => {
             window.location.href = "signin.html";
-        } catch(error) {
-            alert(error);
-        }
+        })
     }
 }
