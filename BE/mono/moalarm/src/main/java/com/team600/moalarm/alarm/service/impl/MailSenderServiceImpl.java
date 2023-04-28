@@ -27,12 +27,7 @@ public class MailSenderServiceImpl implements SenderService {
 
     @Autowired
     @Qualifier("mail")
-    private Properties properties;
-    private final static int SOKET_PORT = 465;
-    private final static boolean AUTH = true;
-    private final static boolean STARTTLS = true;
-    private final static boolean STARTTLS_REQUIRED = true;
-    private final static boolean FALLBACK = false;
+    private Properties mailProperties;
 
     @Override
     public void send(SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
@@ -56,21 +51,10 @@ public class MailSenderServiceImpl implements SenderService {
         javaMailSender.setUsername(channelKeyDto.getApiKey());
         javaMailSender.setPassword(channelKeyDto.getSecret());
         javaMailSender.setPort(465);
-        javaMailSender.setJavaMailProperties(properties);
+        javaMailSender.setJavaMailProperties(mailProperties);
         javaMailSender.setDefaultEncoding("UTF-8");
         return javaMailSender;
     }
-
-//    private Properties getMailProperties() {
-//        Properties pt = new Properties();
-//        pt.put("mail.smtp.socketFactory.port", SOKET_PORT);
-//        pt.put("mail.smtp.auth", AUTH);
-//        pt.put("mail.smtp.starttls.enable", STARTTLS);
-//        pt.put("mail.smtp.starttls.required", STARTTLS_REQUIRED);
-//        pt.put("mail.smtp.socketFactory.fallback", FALLBACK);
-//        pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-//        return pt;
-//    }
 
     CompletableFuture<Void> sendEmailAsync(MimeMessage message,
             JavaMailSender javaMailSender) {
