@@ -47,7 +47,6 @@ public class MailSenderServiceImpl implements SenderService {
     }
     private JavaMailSender setMailService(ChannelKeyDto channelKeyDto){
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        log.info("{}", channelKeyDto.getSecret());
         javaMailSender.setHost("smtp.gmail.com");
         javaMailSender.setUsername(channelKeyDto.getApiKey());
         javaMailSender.setPassword(channelKeyDto.getSecret());
@@ -74,7 +73,6 @@ public class MailSenderServiceImpl implements SenderService {
         return CompletableFuture.runAsync(() -> {
             try {
                 javaMailSender.send(message);
-                log.info("보냄");
             } catch (Exception e) {
                 //TODO: Handle exception
                 throw new RuntimeException(e);
