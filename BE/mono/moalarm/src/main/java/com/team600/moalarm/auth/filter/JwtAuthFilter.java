@@ -22,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String AUTHORIZATION_TYPE = "Bearer ";
     private static final String AUTHENTICATION_REQUEST_URL = "/auth";
     private final EncryptJWTManager encryptJWTManager;
 
@@ -50,6 +51,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     private String resolveToken(HttpServletRequest request) {
-        return request.getHeader(AUTHORIZATION_HEADER);
+        String authorization = request.getHeader(AUTHORIZATION_HEADER);
+        String token = null;
+        if (authorization != null && authorization.startsWith(AUTHORIZATION_TYPE)) {
+            token = authorization.replaceFirst("^" + AUTHORIZATION_TYPE, "");
+        }
+        return token;
     }
+
 }
