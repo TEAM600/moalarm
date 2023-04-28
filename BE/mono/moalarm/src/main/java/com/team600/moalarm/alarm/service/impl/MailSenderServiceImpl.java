@@ -14,7 +14,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
@@ -24,11 +23,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailSenderServiceImpl implements SenderService {
 
-    private static int socketPort = 465;
-    private static boolean auth = true;
-    private static boolean starttls = true;
-    private static boolean startlls_required = true;
-    private static boolean fallback = false;
+    private static int SOKET_PORT = 465;
+    private static boolean AUTH = true;
+    private static boolean STARTTLS = true;
+    private static boolean STARTTLS_REQUIRED = true;
+    private static boolean FALLBACK = false;
 
     @Override
     public void send(SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
@@ -37,15 +36,16 @@ public class MailSenderServiceImpl implements SenderService {
 
         try {
             List<String> receivers = sendMailRequest.getTo();
-            for (String r:receivers) {
+            for (String r : receivers) {
                 MimeMessage message = createMessage(r, emailSender, sendMailRequest);
                 sendEmailAsync(message, emailSender);
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    private JavaMailSender setMailService(ChannelKeyDto channelKeyDto){
+
+    private JavaMailSender setMailService(ChannelKeyDto channelKeyDto) {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost("smtp.gmail.com");
         javaMailSender.setUsername(channelKeyDto.getApiKey());
@@ -56,14 +56,13 @@ public class MailSenderServiceImpl implements SenderService {
         return javaMailSender;
     }
 
-    private Properties getMailProperties()
-    {
+    private Properties getMailProperties() {
         Properties pt = new Properties();
-        pt.put("mail.smtp.socketFactory.port", socketPort);
-        pt.put("mail.smtp.auth", auth);
-        pt.put("mail.smtp.starttls.enable", starttls);
-        pt.put("mail.smtp.starttls.required", startlls_required);
-        pt.put("mail.smtp.socketFactory.fallback",fallback);
+        pt.put("mail.smtp.socketFactory.port", SOKET_PORT);
+        pt.put("mail.smtp.auth", AUTH);
+        pt.put("mail.smtp.starttls.enable", STARTTLS);
+        pt.put("mail.smtp.starttls.required", STARTTLS_REQUIRED);
+        pt.put("mail.smtp.socketFactory.fallback", FALLBACK);
         pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         return pt;
     }
@@ -79,20 +78,22 @@ public class MailSenderServiceImpl implements SenderService {
             }
         });
     }
-    private MimeMessage createMessage(String to, JavaMailSender emailSender,
-            SendMailRequest requirementDto) throws MessagingException, UnsupportedEncodingException {
 
-        MimeMessage  message = emailSender.createMimeMessage();
+    private MimeMessage createMessage(String to, JavaMailSender emailSender,
+            SendMailRequest requirementDto)
+            throws MessagingException, UnsupportedEncodingException {
+
+        MimeMessage message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to);//보내는 대상
         message.setSubject(requirementDto.getTitle());//제목
 
-        String msgg="";
-        msgg+= "<div style='margin:20px;'>";
-        msgg+= requirementDto.getContent();
-        msgg+= "</div>";
+        String msgg = "";
+        msgg += "<div style='margin:20px;'>";
+        msgg += requirementDto.getContent();
+        msgg += "</div>";
         message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("leewonyoung2323@gmail.com","LEEWONYOUNG"));//보내는 사람
+        message.setFrom(new InternetAddress("leewonyoung2323@gmail.com", "LEEWONYOUNG"));//보내는 사람
 
         return message;
     }
