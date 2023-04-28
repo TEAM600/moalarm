@@ -23,10 +23,15 @@ public class EncryptJWTManager {
 
         if (token != null && tokenProvider.validateAccessToken(token)) {
             JwtDecryptResult jwtDecryptResult = tokenProvider.decryptJwt(token);
-            String decryptedSubject = encryptor.decrypt(jwtDecryptResult.getSubject());
 
-            decryptedResult = new JwtDecryptResult(decryptedSubject,
-                    jwtDecryptResult.getAuthorities());
+            try {
+                String decryptedSubject = encryptor.decrypt(jwtDecryptResult.getSubject());
+                decryptedResult = new JwtDecryptResult(decryptedSubject,
+                        jwtDecryptResult.getAuthorities());
+            } catch (Exception e) {
+                //TODO
+            }
+
         }
 
         return decryptedResult;
