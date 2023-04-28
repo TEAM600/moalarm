@@ -1,8 +1,10 @@
 package com.team600.moalarm.common.config;
 
 import com.team600.moalarm.auth.filter.JwtAuthFilter;
+import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
@@ -35,5 +38,19 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .build();
+    }
+
+    @Order(0)
+    @Bean
+    public SecurityFilterChain cors(HttpSecurity http) throws Exception {
+        return http.cors(httpSecurityCorsConfigurer ->
+                httpSecurityCorsConfigurer.configurationSource(
+                        request -> {
+                            CorsConfiguration corsConfiguration = new CorsConfiguration();
+                            corsConfiguration.applyPermitDefaultValues();
+                            corsConfiguration.setExposedHeaders(
+                                    Arrays.asList("Authorization", "Access-Control-Allow-Origin"));
+                            return corsConfiguration;
+                        })).build();
     }
 }
