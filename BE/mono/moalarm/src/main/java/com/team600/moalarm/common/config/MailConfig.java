@@ -18,6 +18,11 @@ public class MailConfig {
     private boolean starttlsRequired;
     @Value("${mail.smtp.socketFactory.fallback}")
     private boolean fallback;
+    @Value("${mail.smtp.socketFactory.class}")
+    private String socketFactoryClass;
+
+    @Value("{mail.smtp.ssl.checkServerIdentity}")
+    private boolean checkServerIdentity;
 
     @Bean(name = "mail")
     Properties getMailProperties() {
@@ -27,7 +32,8 @@ public class MailConfig {
         pt.put("mail.smtp.starttls.enable", starttls);
         pt.put("mail.smtp.starttls.required", starttlsRequired);
         pt.put("mail.smtp.socketFactory.fallback", fallback);
-        pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        pt.put("mail.smtp.ssl.checkServerIdentity", checkServerIdentity);
+        pt.put("mail.smtp.socketFactory.class", socketFactoryClass);
         return pt;
     }
 }
