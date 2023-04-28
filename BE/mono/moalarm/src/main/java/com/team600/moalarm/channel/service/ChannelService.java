@@ -9,8 +9,7 @@ public interface ChannelService {
 
     List<ChannelRegistrationResponse> getChannels(long memberId);
 
-    void getChannelKeyList(String moalarmKey,
-            SendAlarmRequest requirementDto);
+    void sendAlarm(long memberId, SendAlarmRequest requirementDto);
 
     void deleteChannel(ChannelCode type, long memberId);
 }

@@ -14,6 +14,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailSenderServiceImpl implements SenderService {
 
+    @Autowired
+    @Qualifier("mail")
+    private Properties properties;
     private final static int SOKET_PORT = 465;
     private final static boolean AUTH = true;
     private final static boolean STARTTLS = true;
@@ -51,21 +56,21 @@ public class MailSenderServiceImpl implements SenderService {
         javaMailSender.setUsername(channelKeyDto.getApiKey());
         javaMailSender.setPassword(channelKeyDto.getSecret());
         javaMailSender.setPort(465);
-        javaMailSender.setJavaMailProperties(getMailProperties());
+        javaMailSender.setJavaMailProperties(properties);
         javaMailSender.setDefaultEncoding("UTF-8");
         return javaMailSender;
     }
 
-    private Properties getMailProperties() {
-        Properties pt = new Properties();
-        pt.put("mail.smtp.socketFactory.port", SOKET_PORT);
-        pt.put("mail.smtp.auth", AUTH);
-        pt.put("mail.smtp.starttls.enable", STARTTLS);
-        pt.put("mail.smtp.starttls.required", STARTTLS_REQUIRED);
-        pt.put("mail.smtp.socketFactory.fallback", FALLBACK);
-        pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        return pt;
-    }
+//    private Properties getMailProperties() {
+//        Properties pt = new Properties();
+//        pt.put("mail.smtp.socketFactory.port", SOKET_PORT);
+//        pt.put("mail.smtp.auth", AUTH);
+//        pt.put("mail.smtp.starttls.enable", STARTTLS);
+//        pt.put("mail.smtp.starttls.required", STARTTLS_REQUIRED);
+//        pt.put("mail.smtp.socketFactory.fallback", FALLBACK);
+//        pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+//        return pt;
+//    }
 
     CompletableFuture<Void> sendEmailAsync(MimeMessage message,
             JavaMailSender javaMailSender) {

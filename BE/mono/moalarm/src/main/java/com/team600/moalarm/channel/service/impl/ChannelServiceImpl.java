@@ -39,9 +39,8 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getChannelKeyList(String moalarmKey,
-            SendAlarmRequest requirementDto) {
-        Member member = memberUtil.getMemberMoalarmKey(moalarmKey);
+    public void sendAlarm(long memberId, SendAlarmRequest requirementDto) {
+        Member member = memberUtil.getMemberByMemberId(memberId);
 
         List<Channel> channels = channelRepository.findAllByMemberId(member.getId());
 
