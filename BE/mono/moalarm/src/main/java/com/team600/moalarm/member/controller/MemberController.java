@@ -1,11 +1,13 @@
 package com.team600.moalarm.member.controller;
 
+import com.team600.moalarm.common.annotation.CurrentMemberId;
 import com.team600.moalarm.member.dto.request.SignUpRequest;
 import com.team600.moalarm.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,13 @@ public class MemberController {
     public ResponseEntity<Void> signUp(@Validated @RequestBody final SignUpRequest signUpRequest) {
         log.info("POST /member");
         memberService.signUp(signUpRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> withdrawal(@CurrentMemberId long memberId) {
+        log.info("DELETE /member {}", memberId);
+        memberService.withdrawal(memberId);
         return ResponseEntity.ok().build();
     }
 
