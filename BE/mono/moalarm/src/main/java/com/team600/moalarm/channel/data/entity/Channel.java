@@ -28,5 +28,5 @@ public class Channel extends BaseEntity {
     @Column(nullable = false)
     private String secret;
     @Column
-    private String phone;
+    private String extraValue;
 }
