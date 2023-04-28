@@ -4,7 +4,7 @@ import com.team600.moalarm.apikey.service.ApiKeyGenerator;
 import com.team600.moalarm.member.dto.request.SignUpRequest;
 import com.team600.moalarm.member.entity.Member;
 import com.team600.moalarm.member.exception.EmailConflictException;
-import com.team600.moalarm.member.exception.NotFoundMemberException;
+import com.team600.moalarm.member.exception.MemberNotFoundException;
 import com.team600.moalarm.member.repository.MemberRepository;
 import java.time.LocalDateTime;
 import javax.transaction.Transactional;
@@ -44,9 +44,9 @@ public class MemberService {
     @Transactional
     public void withdrawal(long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundMemberException());
+                .orElseThrow(() -> new MemberNotFoundException());
 
         member.remove();
     }
-    
+
 }
