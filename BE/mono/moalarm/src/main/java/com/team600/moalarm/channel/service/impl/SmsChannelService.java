@@ -31,8 +31,13 @@ public class SmsChannelService implements ChannelSaveService {
             throw new ChannelConflictException("이미 채널을 소유중입니다.");
         }
 
-        Channel channel = Channel.builder().apiKey(requestDto.getKey()).memberId(member.getId())
-                .type(ChannelCode.SMS).secret(requestDto.getSecret()).build();
+        Channel channel = Channel.builder()
+                .apiKey(requestDto.getKey())
+                .memberId(member.getId())
+                .type(ChannelCode.SMS)
+                .secret(requestDto.getSecret())
+                .extraValue(requestDto.getExtraValue())
+                .build();
         member.registChannel(ChannelCode.SMS.ordinal());
         channelRepository.save(channel);
     }
