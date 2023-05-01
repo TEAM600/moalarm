@@ -4,7 +4,10 @@ import com.team600.moalarm.auth.filter.JwtAuthFilter;
 import com.team600.moalarm.common.config.filter.ExceptionHandlerFilter;
 import com.team600.moalarm.common.config.filter.MoalarmKeyFilter;
 import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -17,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
@@ -25,6 +29,8 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final MoalarmKeyFilter moalarmKeyFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
+    @Value("${security.allowed-origins}")
+    private final List<String> allowedOrigins;
 
     @Bean
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
@@ -59,9 +65,7 @@ public class SecurityConfig {
                                     CorsConfiguration configuration = new CorsConfiguration();
                                     configuration.applyPermitDefaultValues();
 
-                                    configuration.setAllowedOrigins(
-                                            Arrays.asList("http://localhost:5500",
-                                                    "http://127.0.0.1:5500"));
+                                    configuration.setAllowedOrigins(allowedOrigins);
                                     configuration.setAllowedMethods(
                                             Arrays.asList("GET", "POST", "OPTION", "PUT", "PATCH",
                                                     "DELETE"));
