@@ -4,7 +4,7 @@ function signup(email, password, confirmPassword) {
         return;
     }
 
-    return post(`/member/signup`,{
+    return post(`/member`,{
         "email": email,
         "password": password,
         "confirmPassword": confirmPassword

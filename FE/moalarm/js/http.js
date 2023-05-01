@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:8080/api/v1";
+const baseURL = "https://k8a407.p.ssafy.io/api/v1";
 
 const defaultOption = () => {
     headers = {
