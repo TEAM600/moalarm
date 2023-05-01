@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:8080";
+const baseURL = "http://localhost:8080/api/v1";
 
 const defaultOption = () => {
     headers = {
@@ -6,7 +6,7 @@ const defaultOption = () => {
     }
     const token = localStorage.getItem("token");
     if (token != null) {
-        headers.Authorization = token;
+        headers.Authorization = "Bearer " + token;
     }
     return headers;
 };
