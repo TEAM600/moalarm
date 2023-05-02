@@ -53,7 +53,7 @@ public class TokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        List<String> authClaim = (List<String>) claims.get(AUTHORITY_KEY);
+        List<String> authClaim = claims.get(AUTHORITY_KEY, List.class);
         Collection<SimpleGrantedAuthority> authorities = authClaim.stream()
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 

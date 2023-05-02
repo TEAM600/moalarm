@@ -1,8 +1,8 @@
 package com.team600.moalarm.common.config;
 
-import com.team600.moalarm.auth.filter.JwtAuthFilter;
 import com.team600.moalarm.common.config.filter.ExceptionHandlerFilter;
-import com.team600.moalarm.common.config.filter.MoalarmKeyFilter;
+import com.team600.moalarm.common.config.filter.JwtAuthFilter;
+import com.team600.moalarm.common.config.filter.MoalarmKeyAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,37 +20,36 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    public static final String[] ENDPOINTS_WHITELIST_POST = {
+            "/auth/signin",
+            "/member"
+    };
+    public static final String[] ENDPOINTS_ROLE_API = {
+            "/test/**",
+            "/notification/**"
+    };
+    private final MoalarmKeyAuthFilter moalarmKeyFilter;
     private final JwtAuthFilter jwtAuthFilter;
-    private final MoalarmKeyFilter moalarmKeyFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
 
+    @Order(0)
     @Bean
-    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/test/**").hasRole(MoalarmKeyFilter.ROLE_API)
-                        .antMatchers("/notification/**").hasRole(MoalarmKeyFilter.ROLE_API)
-                )
-                .addFilterBefore(moalarmKeyFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
-
-    @Order(1)
-    @Bean
-    public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(httpSecuritySessionManagementConfigurer ->
-                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS))
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .authorizeRequests(authorize -> authorize
-                        .antMatchers("/auth/signin").permitAll()
-                        .antMatchers(HttpMethod.POST, "/member").permitAll()
-                        .antMatchers("/member/**", "/key/**", "/channels/**").authenticated()
+                .authorizeRequests(request -> request
+                        .antMatchers(HttpMethod.POST, ENDPOINTS_WHITELIST_POST).permitAll()
+                        .antMatchers(HttpMethod.GET, ENDPOINTS_ROLE_API)
+                        .hasAuthority(MoalarmKeyAuthFilter.ROLE_API)
+                        .anyRequest().hasAuthority("USER")
                 )
-                .build();
+                .addFilterBefore(exceptionHandlerFilter,
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(moalarmKeyFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 }
