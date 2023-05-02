@@ -10,5 +10,5 @@ public class ChannelCreateRequest {
     private String key;
     private String secret;
     private String phone;
-    private String json;
+    private String extraValue;
 }
