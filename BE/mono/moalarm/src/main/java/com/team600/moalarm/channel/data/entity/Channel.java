@@ -2,7 +2,9 @@ package com.team600.moalarm.channel.data.entity;
 
 import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.common.BaseEntity;
+import com.team600.moalarm.common.component.EncryptStringColumnConverter;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,10 +25,13 @@ public class Channel extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private ChannelCode type;
+    @Convert(converter = EncryptStringColumnConverter.class)
     @Column(nullable = false)
     private String apiKey;
+    @Convert(converter = EncryptStringColumnConverter.class)
     @Column(nullable = false)
     private String secret;
+    @Convert(converter = EncryptStringColumnConverter.class)
     @Column
     private String extraValue;
 }
