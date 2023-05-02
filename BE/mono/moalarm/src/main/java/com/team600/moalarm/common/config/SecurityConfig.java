@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,26 +25,25 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    public static final String[] ENDPOINTS_WHITELIST_POST = {
+    @Value("${security.allowed-origins}")
+    private final List<String> allowedOrigins;
+    private final String[] ENDPOINTS_WHITELIST_POST = {
             "/auth/signin",
             "/member"
     };
-    public static final String[] ENDPOINTS_ROLE_API = {
+    private final String[] ENDPOINTS_ROLE_API = {
             "/test/**",
             "/notification/**"
     };
     private final MoalarmKeyAuthFilter moalarmKeyFilter;
     private final JwtAuthFilter jwtAuthFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
-    @Value("${security.allowed-origins}")
-    private final List<String> allowedOrigins;
 
-    @Order(0)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource(
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
+                        .configurationSource(
                                 request -> {
                                     CorsConfiguration configuration = new CorsConfiguration();
                                     configuration.applyPermitDefaultValues();
@@ -58,9 +56,7 @@ public class SecurityConfig {
                                             Arrays.asList("Authorization",
                                                     "Access-Control-Allow-Origin"));
                                     return configuration;
-                                }));
-
-        http
+                                }))
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -75,6 +71,7 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(moalarmKeyFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }
