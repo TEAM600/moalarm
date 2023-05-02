@@ -13,6 +13,7 @@ import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +55,9 @@ public class TokenProvider {
                 .getBody();
 
         List<String> authClaim = claims.get(AUTHORITY_KEY, List.class);
-        Collection<SimpleGrantedAuthority> authorities = authClaim.stream()
+        Collection<SimpleGrantedAuthority> authorities = Optional.ofNullable(authClaim)
+                .orElseThrow()
+                .stream()
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         return new JwtDecryptResult(claims.getSubject(), authorities);
