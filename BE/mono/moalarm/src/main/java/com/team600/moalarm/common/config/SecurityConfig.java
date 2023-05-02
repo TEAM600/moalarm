@@ -27,11 +27,11 @@ public class SecurityConfig {
 
     @Value("${security.allowed-origins}")
     private final List<String> allowedOrigins;
-    private final String[] ENDPOINTS_WHITELIST_POST = {
+    private final String[] ENDPOINTS_WHITELIST_WITH_POST_METHOD = {
             "/auth/signin",
             "/member"
     };
-    private final String[] ENDPOINTS_ROLE_API = {
+    private final String[] ENDPOINTS_MOALARM_API = {
             "/notification/**"
     };
     private final MoalarmKeyAuthFilter moalarmKeyFilter;
@@ -61,8 +61,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeRequests(request -> request
-                        .antMatchers(HttpMethod.POST, ENDPOINTS_WHITELIST_POST).permitAll()
-                        .antMatchers(HttpMethod.GET, ENDPOINTS_ROLE_API)
+                        .antMatchers(HttpMethod.POST, ENDPOINTS_WHITELIST_WITH_POST_METHOD)
+                        .permitAll()
+                        .antMatchers(HttpMethod.GET, ENDPOINTS_MOALARM_API)
                         .hasAuthority(MoalarmKeyAuthFilter.ROLE_API)
                         .anyRequest().hasAuthority("USER")
                 )

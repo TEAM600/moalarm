@@ -54,6 +54,7 @@ public class TokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
+        @SuppressWarnings("unchecked")
         List<String> authClaim = claims.get(AUTHORITY_KEY, List.class);
         Collection<SimpleGrantedAuthority> authorities = Optional.ofNullable(authClaim)
                 .orElseThrow()
