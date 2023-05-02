@@ -32,7 +32,6 @@ public class SecurityConfig {
             "/member"
     };
     private final String[] ENDPOINTS_ROLE_API = {
-            "/test/**",
             "/notification/**"
     };
     private final MoalarmKeyAuthFilter moalarmKeyFilter;
