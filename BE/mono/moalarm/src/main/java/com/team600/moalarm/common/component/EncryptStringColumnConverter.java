@@ -9,7 +9,7 @@ import org.springframework.security.crypto.encrypt.TextEncryptor;
 @Slf4j
 @Converter
 @RequiredArgsConstructor
-public class ApiConverter implements AttributeConverter<String, String> {
+public class EncryptStringColumnConverter implements AttributeConverter<String, String> {
 
     private final TextEncryptor textEncryptor;
 

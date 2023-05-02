@@ -28,7 +28,7 @@ public class FcmChannelService implements ChannelSaveService {
         Member member = memberUtil.getMemberByMemberId(memberId);
 
         if (channelRepository.existsByMemberIdAndType(member.getId(), ChannelCode.SMS)) {
-            throw new ChannelConflictException("이미 채널을 소유중입니다.");
+            throw new ChannelConflictException();
         }
 
         Channel channel = Channel.builder()
