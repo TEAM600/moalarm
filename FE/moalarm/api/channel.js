@@ -3,7 +3,7 @@ function getChannels() {
 }
 
 function createChannel(type, key, secret, json) {
-    return post(`/channels/type/${type}`, {
+    return post(`/channels/${type}`, {
         "key": key,
         "secret": secret,
         "json": json

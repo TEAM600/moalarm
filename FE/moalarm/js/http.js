@@ -6,7 +6,7 @@ const defaultOption = () => {
     }
     const token = localStorage.getItem("token");
     if (token != null) {
-        headers.Authorization = token;
+        headers.Authorization = "Bearer " + token;
     }
     return headers;
 };
