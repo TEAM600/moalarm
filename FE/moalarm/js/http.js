@@ -11,23 +11,35 @@ const defaultOption = () => {
     return headers;
 };
 
-async function get(url) {
-    return await fetch(baseURL + url, {
+function get(url) {
+    return fetch(baseURL + url, {
         method: "GET",
         headers: defaultOption()
-    }).then((response) => {
+    }).then(async response => {
         if (response.status === 204) return;
-        return response.json();
-    }).catch(error => alert(error));
+        if (!response.ok) {
+            return Promise.reject(await response.json());
+        }
+        return await response.json();
+    }).catch(error => {
+        alert(error.message)
+        throw Error(error);
+    });
 }
 
-async function post(url, data) {
-    return await fetch(baseURL + url, {
+function post(url, data) {
+    return fetch(baseURL + url, {
         method: "POST",
         headers: defaultOption(),
         body: JSON.stringify(data)
-    }).then(response => {
+    }).then(async response => {
         if (response.status === 204) return;
-        return response.json()
-    }).catch(error => alert(error));
+        if (!response.ok) {
+            return Promise.reject(await response.json());
+        }
+        return await response.json();
+    }).catch(error => {
+        alert(error.message)
+        throw Error(error);
+    });
 }
