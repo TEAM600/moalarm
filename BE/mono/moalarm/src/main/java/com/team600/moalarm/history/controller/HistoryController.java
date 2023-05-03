@@ -2,6 +2,7 @@ package com.team600.moalarm.history.controller;
 
 import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.common.annotation.CurrentMemberId;
+import com.team600.moalarm.history.dto.response.HistoryChartResponse;
 import com.team600.moalarm.history.dto.response.HistoryResponse;
 import com.team600.moalarm.history.service.HistoryService;
 import java.util.List;
@@ -25,6 +26,14 @@ public class HistoryController {
     public ResponseEntity<List<HistoryResponse>> getHistory(@CurrentMemberId long memberId) {
         log.info("GET /history");
         List<HistoryResponse> body = historyService.getHistory(memberId);
+        return ResponseEntity.ok()
+                .body(body);
+    }
+
+    @GetMapping("/chart")
+    public ResponseEntity<?> getHistoryChart(@CurrentMemberId long memberId) {
+        log.info("GET /history/chart");
+        HistoryChartResponse body = historyService.getHistoryChart(memberId);
         return ResponseEntity.ok()
                 .body(body);
     }
