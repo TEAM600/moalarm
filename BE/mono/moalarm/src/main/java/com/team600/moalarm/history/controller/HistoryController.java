@@ -22,7 +22,8 @@ public class HistoryController {
     @GetMapping
     public ResponseEntity<List<HistoryResponse>> getHistory(@CurrentMemberId long memberId) {
         List<HistoryResponse> body = historyService.getHistory(memberId);
-        return null;
+        return ResponseEntity.ok()
+                .body(body);
     }
 
 }
