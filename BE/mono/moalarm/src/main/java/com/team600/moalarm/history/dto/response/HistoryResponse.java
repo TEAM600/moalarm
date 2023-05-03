@@ -12,7 +12,7 @@ public class HistoryResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss")
     private LocalDateTime dateTime;
     private String type;
-    private String to;
+    private String receiver;
     private String success;
 
 }

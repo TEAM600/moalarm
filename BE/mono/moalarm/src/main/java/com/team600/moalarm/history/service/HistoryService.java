@@ -1,5 +1,6 @@
 package com.team600.moalarm.history.service;
 
+import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.history.dto.response.HistoryResponse;
 import com.team600.moalarm.history.entity.History;
 import com.team600.moalarm.history.repository.HistoryRepository;
@@ -23,10 +24,21 @@ public class HistoryService {
                 .map(history -> HistoryResponse.builder()
                         .dateTime(history.getCreatedAt())
                         .type(history.getType().name())
-                        .to(history.getTo())
+                        .receiver(history.getReceiver())
                         .success(history.getSuccess())
                         .build())
                 .collect(Collectors.toList());
     }
-    
+
+    public void createHistory(long memberId, ChannelCode type, String receiver, String success) {
+        History history = History.builder()
+                .memberId(memberId)
+                .type(type)
+                .receiver(receiver)
+                .success(success)
+                .build();
+
+        historyRepository.save(history);
+    }
+
 }

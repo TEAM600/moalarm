@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HistoryRepository extends JpaRepository<History, Long> {
 
-    @Query("SELECT h FROM History h WHERE h.memberId = :memberId AND h.delYn = 'N'")
+    @Query("SELECT h FROM History h WHERE h.memberId = :memberId AND h.delYn = 'N' ORDER BY h.createdAt DESC")
     List<History> findAllByMemberId(long memberId);
 
 }

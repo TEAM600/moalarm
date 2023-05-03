@@ -29,7 +29,7 @@ public class History extends BaseEntity {
 
     @Convert(converter = EncryptStringColumnConverter.class)
     @Column(nullable = false)
-    private String to;
+    private String receiver;
 
     @Column(nullable = false)
     private String success;
