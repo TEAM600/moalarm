@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .authorizeRequests(request -> request
                         .antMatchers(HttpMethod.POST, ENDPOINTS_WHITELIST_WITH_POST_METHOD)
                         .permitAll()
-                        .antMatchers(HttpMethod.GET, ENDPOINTS_MOALARM_API)
+                        .antMatchers(ENDPOINTS_MOALARM_API)
                         .hasAuthority(MoalarmKeyAuthFilter.ROLE_API)
                         .anyRequest().hasAuthority("USER")
                 )
