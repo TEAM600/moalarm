@@ -23,7 +23,7 @@ public class AlarmController {
     public ResponseEntity<Void> sendNotification(@RequestBody SendAlarmRequest requirementDto,
             @CurrentMemberId long memberId) {
         log.info("POST /notification : {}", memberId);
-        channelService.sendAlarm(memberId, requirementDto);
+//        channelService.sendAlarm(memberId, requirementDto);
         return ResponseEntity.ok().build();
     }
 

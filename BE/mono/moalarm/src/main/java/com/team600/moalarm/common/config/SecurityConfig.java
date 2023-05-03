@@ -61,6 +61,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeRequests(request -> request
+                        .antMatchers("/test/**").permitAll()    //TODO
                         .antMatchers(HttpMethod.POST, ENDPOINTS_WHITELIST_WITH_POST_METHOD)
                         .permitAll()
                         .antMatchers(ENDPOINTS_MOALARM_API)

@@ -12,6 +12,15 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: "test"
+      username: root
+      password: 1234
+
 jwt:
   secret: "${random.value}${random.value}"
   expire-day: 30
