@@ -32,7 +32,7 @@ public class HistoryController {
     }
 
     @GetMapping("/chart")
-    public ResponseEntity<?> getHistoryChart(@CurrentMemberId long memberId,
+    public ResponseEntity<HistoryChartResponse> getHistoryChart(@CurrentMemberId long memberId,
             @RequestParam int period) {
         log.info("GET /history/chart?period={}", period);
         HistoryChartResponse body = historyService.getHistoryChart(memberId, period);
