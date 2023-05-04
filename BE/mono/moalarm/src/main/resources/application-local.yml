@@ -12,6 +12,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  data:
+    mongodb:
+      uri: mongodb://root:1234@localhost:27017/moalarm?authSource=admin
+
 jwt:
   secret: "${random.value}${random.value}"
   expire-day: 30
