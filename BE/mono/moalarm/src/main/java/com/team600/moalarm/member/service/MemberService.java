@@ -61,14 +61,15 @@ public class MemberService {
         int channelRegistrationStatus = member.getChannelRegistrationStatus();
 
         for (ChannelCode code : ChannelCode.values()) {
-            boolean has = (channelRegistrationStatus & (1 << code.ordinal())) != 0;
             returnDto.add(ChannelRegistrationResponse.builder()
                     .type(code.getValue())
-                    .registration(has)
+                    .registration(checkRegistration(channelRegistrationStatus, code.ordinal()))
                     .build());
         }
-
         return returnDto;
     }
 
+    private boolean checkRegistration(int channelRegistrationStatus, int codeOrdinal) {
+        return (channelRegistrationStatus & (1 << codeOrdinal)) != 0;
+    }
 }
