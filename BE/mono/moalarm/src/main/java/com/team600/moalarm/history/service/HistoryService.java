@@ -1,13 +1,15 @@
 package com.team600.moalarm.history.service;
 
 import com.team600.moalarm.channel.data.code.ChannelCode;
-import com.team600.moalarm.history.dto.response.HistoryChartDatasetDto;
+import com.team600.moalarm.history.dto.response.HistoryChartDataDto;
 import com.team600.moalarm.history.dto.response.HistoryChartResponse;
 import com.team600.moalarm.history.dto.response.HistoryResponse;
 import com.team600.moalarm.history.entity.History;
 import com.team600.moalarm.history.repository.HistoryRepository;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,38 @@ public class HistoryService {
                 .collect(Collectors.toList());
     }
 
+    public HistoryChartResponse getHistoryChart(long memberId, int period) {
+        LocalDate today = LocalDate.now();
+        LocalDate start = today.minusDays(period - 1);
+
+        List<HistoryChartDataDto> chartDataset = historyRepository.getHistoryChartDateset(
+                memberId, start, today);
+
+        List<LocalDate> labels = new ArrayList<>();
+        while (!start.isAfter(today)) {
+            labels.add(start);
+            start = start.plusDays(1);
+        }
+
+        Map<String, List<Integer>> dataset = new HashMap<>();
+
+        for (ChannelCode channelCode : ChannelCode.values()) {
+            dataset.put(channelCode.name(), new ArrayList<>(Collections.nCopies(period, 0)));
+        }
+
+        for (HistoryChartDataDto chartData : chartDataset) {
+            LocalDate date = LocalDate.parse(chartData.getDate().toString());
+            int daysBetween = (int) ChronoUnit.DAYS.between(date, today);
+            int index = period - daysBetween - 1;
+            dataset.get(chartData.getType().name()).set(index, (int) chartData.getCount());
+        }
+
+        return HistoryChartResponse.builder()
+                .labels(labels)
+                .dataset(dataset)
+                .build();
+    }
+
     public void createHistory(long memberId, ChannelCode type, String receiver, String success) {
         History history = History.builder()
                 .memberId(memberId)
@@ -45,37 +79,5 @@ public class HistoryService {
                 .build();
 
         historyRepository.save(history);
-    }
-
-    public HistoryChartResponse getHistoryChart(long memberId) {
-        LocalDate now = LocalDate.now();
-        LocalDate start = now.minusDays(6);
-
-        List<HistoryChartDatasetDto> chartDateset = historyRepository.getHistoryChartDateset(
-                memberId, start, now);
-
-        List<LocalDate> labels = new ArrayList<>();
-        while (!start.isAfter(now)) {
-            labels.add(start);
-            start = start.plusDays(1);
-        }
-
-        Map<String, List<Integer>> dataset = new HashMap<>();
-
-        for (ChannelCode channelCode : ChannelCode.values()) {
-            log.info("channelCode: {}", channelCode);
-            dataset.put(channelCode.name(), new ArrayList<>());
-        }
-
-        for (HistoryChartDatasetDto chartData : chartDateset) {
-
-        }
-
-        log.info("labels: {}", labels);
-        log.info("dataset: {}", chartDateset);
-        return HistoryChartResponse.builder()
-                .labels(labels)
-                .dataset(dataset)
-                .build();
     }
 }

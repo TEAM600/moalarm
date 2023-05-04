@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -31,9 +32,10 @@ public class HistoryController {
     }
 
     @GetMapping("/chart")
-    public ResponseEntity<?> getHistoryChart(@CurrentMemberId long memberId) {
-        log.info("GET /history/chart");
-        HistoryChartResponse body = historyService.getHistoryChart(memberId);
+    public ResponseEntity<?> getHistoryChart(@CurrentMemberId long memberId,
+            @RequestParam int period) {
+        log.info("GET /history/chart?period={}", period);
+        HistoryChartResponse body = historyService.getHistoryChart(memberId, period);
         return ResponseEntity.ok()
                 .body(body);
     }

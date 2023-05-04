@@ -15,7 +15,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HistoryChartDatasetDto {
+public class HistoryChartDataDto {
 
     @Enumerated(EnumType.ORDINAL)
     private ChannelCode type;
