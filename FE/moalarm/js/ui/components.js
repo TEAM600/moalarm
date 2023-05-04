@@ -24,10 +24,26 @@ function createModalContent(label ,doms) {
     return modalTop + modalMid + modalBot;
 }
 
-function createInputWithIdAndLabel(id, label) {
+function createTextInputWithIdAndLabel(id, label) {
+    return createInputWithIdAndLabelAndType(id, label, "text");
+}
+
+function createPasswordInputWithIdAndLabel(id, label) {
+    return createInputWithIdAndLabelAndType(id, label, "password");
+}
+
+function createInputWithIdAndLabelAndType(id, label, type) {
     return `
-      <div class="mb-3">
+        <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">${label}</label>
+            <input type="${type}" class="form-control" id="${id}">
+        </div>`;
+}
+
+function createInputWithIdAndLabelAndTypeAndPlaceHolder(id, label, type, placeholder) {
+    return `
+    <div class="mb-3">
         <label for="recipient-name" class="col-form-label">${label}</label>
-        <input type="text" class="form-control" id="${id}">
-      </div>`;
-  }
+        <input type="${type}" class="form-control" id="${id}" placeholder="${placeholder}">
+    </div>`;
+}

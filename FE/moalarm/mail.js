@@ -4,7 +4,7 @@ const mailButton = document.getElementById("mailButton");
 mailButton.addEventListener('click', mailModal);
 
 function mailModal() {
-    formget.innerHTML = createModalContent("Mail",[createInputWithIdAndLabel("key", "Email"), createInputWithIdAndLabel("secret","Secret")]);
+    formget.innerHTML = createModalContent("Mail",[createTextInputWithIdAndLabel("key", "Email"), createPasswordInputWithIdAndLabel("secret","Secret")]);
   
     const $registBtn = document.getElementById("regist-btn");
 
