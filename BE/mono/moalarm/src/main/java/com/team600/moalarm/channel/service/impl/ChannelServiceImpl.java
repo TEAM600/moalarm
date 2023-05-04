@@ -57,8 +57,6 @@ public class ChannelServiceImpl implements ChannelService {
                 if (type == ChannelCode.SMS) {
                     channelKeyDto.setPhoneNumber(channel.getExtraValue());
                 }
-            } else {
-                throw new RuntimeException("서버 내부 에러");
             }
             senderService.get(type.getValue() + "SenderServiceImpl")
                     .send(memberId, requirementDto, channelKeyDto);

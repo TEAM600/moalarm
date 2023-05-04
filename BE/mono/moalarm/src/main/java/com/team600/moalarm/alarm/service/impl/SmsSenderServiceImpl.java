@@ -42,7 +42,7 @@ public class SmsSenderServiceImpl implements SenderService {
             List<String> receivers = sendSmsRequest.getTo();
             String content = sendSmsRequest.getContent();
             for (String r : receivers) {
-                setSms(memberId, r, content, messageService, phone);
+                sendSms(memberId, r, content, messageService, phone);
             }
         } catch (NurigoMessageNotReceivedException exception) {
             // 발송에 실패한 메시지 목록을 확인할 수 있습니다!
@@ -53,7 +53,7 @@ public class SmsSenderServiceImpl implements SenderService {
         }
     }
 
-    void setSms(long memberId, String receiver, String content,
+    void sendSms(long memberId, String receiver, String content,
             DefaultMessageService messageService, String phone)
             throws NurigoMessageNotReceivedException, NurigoEmptyResponseException, NurigoUnknownException {
         Message message = new Message();
@@ -71,11 +71,8 @@ public class SmsSenderServiceImpl implements SenderService {
         try {
             messageService.send(message);
             historyService.createHistory(memberId, ChannelCode.SMS, receiver, "Y");
-        } catch (NurigoMessageNotReceivedException e) {
-            historyService.createHistory(memberId, ChannelCode.SMS, receiver, "N");
-        } catch (NurigoEmptyResponseException e) {
-            historyService.createHistory(memberId, ChannelCode.SMS, receiver, "N");
-        } catch (NurigoUnknownException e) {
+        } catch (NurigoMessageNotReceivedException | NurigoEmptyResponseException |
+                 NurigoUnknownException e) {
             historyService.createHistory(memberId, ChannelCode.SMS, receiver, "N");
         }
     }

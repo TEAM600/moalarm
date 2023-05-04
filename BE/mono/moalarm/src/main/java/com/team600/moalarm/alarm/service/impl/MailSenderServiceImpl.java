@@ -2,6 +2,7 @@ package com.team600.moalarm.alarm.service.impl;
 
 import com.team600.moalarm.alarm.dto.request.SendAlarmRequest;
 import com.team600.moalarm.alarm.dto.request.SendMailRequest;
+import com.team600.moalarm.alarm.exception.MailSendFailedException;
 import com.team600.moalarm.alarm.service.SenderService;
 import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.channel.data.dto.ChannelKeyDto;
@@ -42,12 +43,12 @@ public class MailSenderServiceImpl implements SenderService {
         JavaMailSender emailSender = setMailService(channelKeyDto);
         try {
             List<String> receivers = sendMailRequest.getTo();
-            for (String r : receivers) {
-                MimeMessage message = createMessage(r, emailSender, sendMailRequest);
-                sendEmailAsync(memberId, r, message, emailSender);
+            for (String receiver : receivers) {
+                MimeMessage message = createMessage(receiver, emailSender, sendMailRequest);
+                sendEmailAsync(memberId, receiver, message, emailSender);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new MailSendFailedException();
         }
     }
 
@@ -69,7 +70,6 @@ public class MailSenderServiceImpl implements SenderService {
                 javaMailSender.send(message);
                 historyService.createHistory(memberId, ChannelCode.MAIL, receiver, "Y");
             } catch (Exception e) {
-                //TODO: Handle exception
                 historyService.createHistory(memberId, ChannelCode.MAIL, receiver, "N");
             }
         });
