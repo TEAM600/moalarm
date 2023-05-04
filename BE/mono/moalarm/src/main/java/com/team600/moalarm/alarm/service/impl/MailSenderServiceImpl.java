@@ -3,7 +3,9 @@ package com.team600.moalarm.alarm.service.impl;
 import com.team600.moalarm.alarm.dto.request.SendAlarmRequest;
 import com.team600.moalarm.alarm.dto.request.SendMailRequest;
 import com.team600.moalarm.alarm.service.SenderService;
+import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.channel.data.dto.ChannelKeyDto;
+import com.team600.moalarm.history.service.HistoryService;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Properties;
@@ -25,20 +27,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailSenderServiceImpl implements SenderService {
 
+    private final HistoryService historyService;
+
     @Autowired
     @Qualifier("mail")
     private Properties mailProperties;
 
     @Override
-    public void send(SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
+    public void send(long memberId, SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
         SendMailRequest sendMailRequest = requirementDto.getMail();
+        if (sendMailRequest == null) {
+            return;
+        }
         JavaMailSender emailSender = setMailService(channelKeyDto);
-
         try {
             List<String> receivers = sendMailRequest.getTo();
             for (String r : receivers) {
                 MimeMessage message = createMessage(r, emailSender, sendMailRequest);
-                sendEmailAsync(message, emailSender);
+                sendEmailAsync(memberId, r, message, emailSender);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -56,14 +62,15 @@ public class MailSenderServiceImpl implements SenderService {
         return javaMailSender;
     }
 
-    CompletableFuture<Void> sendEmailAsync(MimeMessage message,
+    CompletableFuture<Void> sendEmailAsync(long memberId, String receiver, MimeMessage message,
             JavaMailSender javaMailSender) {
         return CompletableFuture.runAsync(() -> {
             try {
                 javaMailSender.send(message);
+                historyService.createHistory(memberId, ChannelCode.MAIL, receiver, "Y");
             } catch (Exception e) {
                 //TODO: Handle exception
-                throw new RuntimeException(e);
+                historyService.createHistory(memberId, ChannelCode.MAIL, receiver, "N");
             }
         });
     }
