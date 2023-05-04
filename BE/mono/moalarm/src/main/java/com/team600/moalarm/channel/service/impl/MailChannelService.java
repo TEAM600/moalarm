@@ -31,8 +31,13 @@ public class MailChannelService implements ChannelSaveService {
             throw new ChannelConflictException();
         }
 
-        Channel channel = Channel.builder().memberId(member.getId()).apiKey(requestDto.getKey())
-                .secret(requestDto.getSecret()).type(ChannelCode.MAIL).build();
+        Channel channel = Channel.builder()
+                .memberId(member.getId())
+                .apiKey(requestDto.getKey())
+                .secret(requestDto.getSecret())
+                .type(ChannelCode.MAIL)
+                .extraValue(requestDto.getExtraValue())
+                .build();
         member.registChannel(ChannelCode.MAIL.ordinal());
         channelRepository.save(channel);
     }
