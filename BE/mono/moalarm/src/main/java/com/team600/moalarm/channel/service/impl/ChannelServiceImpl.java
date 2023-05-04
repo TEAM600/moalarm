@@ -55,13 +55,11 @@ public class ChannelServiceImpl implements ChannelService {
                 channelKeyDto.setApiKey(channel.getApiKey());
                 channelKeyDto.setSecret(channel.getSecret());
                 if (type == ChannelCode.SMS) {
-                    channelKeyDto.setPhoneNumber("");
+                    channelKeyDto.setPhoneNumber(channel.getExtraValue());
                 }
-            } else {
-                throw new RuntimeException("서버 내부 에러");
             }
             senderService.get(type.getValue() + "SenderServiceImpl")
-                    .send(requirementDto, channelKeyDto);
+                    .send(memberId, requirementDto, channelKeyDto);
         });
 
     }
