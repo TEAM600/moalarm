@@ -6,6 +6,7 @@ import com.team600.moalarm.channel.data.dto.response.ChannelRegistrationResponse
 import com.team600.moalarm.channel.service.ChannelSaveService;
 import com.team600.moalarm.channel.service.ChannelService;
 import com.team600.moalarm.common.annotation.CurrentMemberId;
+import com.team600.moalarm.member.service.MemberService;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -27,15 +28,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/channels")
 public class ChannelController {
 
+    private final MemberService memberService;
     private final ChannelService channelService;
     private final Map<String, ChannelSaveService> channelSaveService;
 
-    //TODO: memberId 전부 담아줘야함
     @GetMapping
     public ResponseEntity<List<ChannelRegistrationResponse>> getChannels(
             @CurrentMemberId long memberId) {
         log.info("GET /channels");
-        return ResponseEntity.ok(channelService.getChannels(memberId));
+        return ResponseEntity.ok(memberService.getChannels(memberId));
     }
 
     @PostMapping("/{type}")
