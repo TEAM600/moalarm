@@ -1,4 +1,4 @@
-package com.team600.moalarm.channel.data.entity;
+package com.team600.moalarm.history.entity;
 
 import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.common.BaseEntity;
@@ -8,30 +8,35 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Channel extends BaseEntity {
+public class History extends BaseEntity {
 
     @Column(nullable = false)
     private long memberId;
-    @Column(nullable = false)
+
     @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
     private ChannelCode type;
+
     @Convert(converter = EncryptStringColumnConverter.class)
     @Column(nullable = false)
-    private String apiKey;
-    @Convert(converter = EncryptStringColumnConverter.class)
+    private String receiver;
+
     @Column(nullable = false)
-    private String secret;
-    @Convert(converter = EncryptStringColumnConverter.class)
-    @Column
-    private String extraValue;
+    private String success;
+
+    @Builder
+    public History(long memberId, ChannelCode type, String receiver, String success) {
+        this.memberId = memberId;
+        this.type = type;
+        this.receiver = receiver;
+        this.success = success;
+    }
 }

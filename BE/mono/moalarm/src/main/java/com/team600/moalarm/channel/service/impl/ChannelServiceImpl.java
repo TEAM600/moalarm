@@ -1,5 +1,7 @@
 package com.team600.moalarm.channel.service.impl;
 
+import com.team600.moalarm.alarm.dto.request.SendAlarmRequest;
+import com.team600.moalarm.alarm.service.SenderService;
 import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.channel.data.dto.ChannelKeyDto;
 import com.team600.moalarm.channel.data.dto.response.ChannelRegistrationResponse;
@@ -9,7 +11,6 @@ import com.team600.moalarm.channel.service.ChannelService;
 import com.team600.moalarm.common.component.MemberUtil;
 import com.team600.moalarm.member.entity.Member;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     private final ChannelRepository channelRepository;
     private final MemberUtil memberUtil;
+    private final Map<String, SenderService> senderService;
 
     @Override
     @Transactional(readOnly = true)
@@ -37,12 +39,10 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     @Transactional(readOnly = true)
-    public Map<ChannelCode, ChannelKeyDto> getChannelKeyList(String moalarmKey) {
-        Member member = memberUtil.getMemberMoalarmKey(moalarmKey);
+    public void sendAlarm(long memberId, SendAlarmRequest requirementDto) {
+        Member member = memberUtil.getMemberByMemberId(memberId);
 
         List<Channel> channels = channelRepository.findAllByMemberId(member.getId());
-
-        Map<ChannelCode, ChannelKeyDto> result = new HashMap<>();
 
         channels.forEach(channel -> {
             ChannelCode type = channel.getType();
@@ -53,17 +53,17 @@ public class ChannelServiceImpl implements ChannelService {
                 channelKeyDto.setJson("{}");
             } else if (type == ChannelCode.SMS || type == ChannelCode.MAIL) {
                 channelKeyDto.setApiKey(channel.getApiKey());
-                channelKeyDto.setSecret(channelKeyDto.getSecret());
+                channelKeyDto.setSecret(channel.getSecret());
                 if (type == ChannelCode.SMS) {
                     channelKeyDto.setPhoneNumber("");
                 }
             } else {
                 throw new RuntimeException("서버 내부 에러");
             }
-            result.put(type, channelKeyDto);
+            senderService.get(type.getValue() + "SenderServiceImpl")
+                    .send(requirementDto, channelKeyDto);
         });
 
-        return result;
     }
 
     @Override
@@ -72,10 +72,7 @@ public class ChannelServiceImpl implements ChannelService {
         Member member = memberUtil.getMemberByMemberId(memberId);
 
         Channel channel = channelRepository.findAllByMemberIdAndType(type, member.getId());
-        log.info("{}..... member.regi {}", channel.getType(),
-                member.getChannelRegistrationStatus());
         channel.remove();
         member.deleteChannel(type.ordinal());
-        log.info(" member.regi {}", member.getChannelRegistrationStatus());
     }
 }

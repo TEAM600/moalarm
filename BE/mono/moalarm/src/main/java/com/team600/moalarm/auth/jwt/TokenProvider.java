@@ -10,10 +10,10 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,10 +54,12 @@ public class TokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Collection<SimpleGrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITY_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        @SuppressWarnings("unchecked")
+        List<String> authClaim = claims.get(AUTHORITY_KEY, List.class);
+        Collection<SimpleGrantedAuthority> authorities = Optional.ofNullable(authClaim)
+                .orElseThrow()
+                .stream()
+                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         return new JwtDecryptResult(claims.getSubject(), authorities);
     }

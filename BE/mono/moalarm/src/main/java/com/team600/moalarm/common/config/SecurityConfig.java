@@ -1,6 +1,13 @@
 package com.team600.moalarm.common.config;
 
-import com.team600.moalarm.auth.filter.JwtAuthFilter;
+import com.team600.moalarm.common.config.filter.ExceptionHandlerFilter;
+import com.team600.moalarm.common.config.filter.JwtAuthFilter;
+import com.team600.moalarm.common.config.filter.MoalarmKeyAuthFilter;
+import java.util.Arrays;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,30 +17,58 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
+@Slf4j
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Value("${security.allowed-origins}")
+    private final List<String> allowedOrigins;
+    private final String[] ENDPOINTS_WHITELIST_WITH_POST_METHOD = {
+            "/auth/signin",
+            "/member"
+    };
+    private final String[] ENDPOINTS_MOALARM_API = {
+            "/notification/**"
+    };
+    private final MoalarmKeyAuthFilter moalarmKeyFilter;
     private final JwtAuthFilter jwtAuthFilter;
-
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
-        this.jwtAuthFilter = jwtAuthFilter;
-    }
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
-    public SecurityFilterChain web(HttpSecurity http) throws Exception {
-        return http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(httpSecuritySessionManagementConfigurer ->
-                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS))
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
+                        .configurationSource(
+                                request -> {
+                                    CorsConfiguration configuration = new CorsConfiguration();
+                                    configuration.applyPermitDefaultValues();
+
+                                    configuration.setAllowedOrigins(allowedOrigins);
+                                    configuration.setAllowedMethods(
+                                            Arrays.asList("GET", "POST", "OPTIONS", "PUT", "PATCH",
+                                                    "DELETE"));
+                                    return configuration;
+                                }))
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .authorizeRequests(authorize -> authorize
-                        .antMatchers("/auth/signin").permitAll()
-                        .antMatchers(HttpMethod.POST, "/member").permitAll()
-                        .anyRequest().authenticated()
+                .authorizeRequests(request -> request
+                        .antMatchers(HttpMethod.POST, ENDPOINTS_WHITELIST_WITH_POST_METHOD)
+                        .permitAll()
+                        .antMatchers(ENDPOINTS_MOALARM_API)
+                        .hasAuthority(MoalarmKeyAuthFilter.ROLE_API)
+                        .anyRequest().hasAuthority("USER")
                 )
-                .build();
+                .addFilterBefore(exceptionHandlerFilter,
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(moalarmKeyFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 }

@@ -5,20 +5,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.security.crypto.keygen.KeyGenerators;
 
 @Configuration
 public class EncryptorConfig {
 
     private final String secret;
+    public final String salt;
 
-    public EncryptorConfig(@Value("${crypto.secret}") String secret) {
+    public EncryptorConfig(@Value("${crypto.secret}") String secret,
+            @Value("${crypto.salt}") String salt) {
         this.secret = secret;
+        this.salt = salt;
     }
 
     @Bean
     public TextEncryptor encryptor() {
-        return Encryptors.text(secret,
-                KeyGenerators.string().generateKey());
+        return Encryptors.text(secret, salt);
     }
 }
