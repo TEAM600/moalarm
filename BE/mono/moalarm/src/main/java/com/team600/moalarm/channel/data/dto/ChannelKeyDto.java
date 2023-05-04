@@ -16,5 +16,5 @@ public class ChannelKeyDto {
     private String json;
     private String apiKey; // email, apikey
     private String secret; // secretKey, password
-    private String phoneNumber;
+    private String extraValue;
 }
