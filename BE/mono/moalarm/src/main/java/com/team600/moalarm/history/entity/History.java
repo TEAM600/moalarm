@@ -8,15 +8,13 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class History extends BaseEntity {
 
@@ -34,4 +32,11 @@ public class History extends BaseEntity {
     @Column(nullable = false)
     private String success;
 
+    @Builder
+    public History(long memberId, ChannelCode type, String receiver, String success) {
+        this.memberId = memberId;
+        this.type = type;
+        this.receiver = receiver;
+        this.success = success;
+    }
 }
