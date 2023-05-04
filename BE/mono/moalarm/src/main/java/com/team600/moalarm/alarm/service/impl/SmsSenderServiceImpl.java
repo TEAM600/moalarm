@@ -34,7 +34,7 @@ public class SmsSenderServiceImpl implements SenderService {
 
         String apiKey = channelKeyDto.getApiKey();
         String apiSecrect = channelKeyDto.getSecret();
-        String phone = channelKeyDto.getPhoneNumber();
+        String phone = channelKeyDto.getExtraValue();
         DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecrect,
                 "https://api.coolsms.co.kr");
 

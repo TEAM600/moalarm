@@ -54,7 +54,7 @@ public class ChannelServiceImpl implements ChannelService {
             } else if (type == ChannelCode.SMS || type == ChannelCode.MAIL) {
                 channelKeyDto.setApiKey(channel.getApiKey());
                 channelKeyDto.setSecret(channel.getSecret());
-                channelKeyDto.setPhoneNumber(channel.getExtraValue());
+                channelKeyDto.setExtraValue(channel.getExtraValue());
             }
             senderService.get(type.getValue() + "SenderServiceImpl")
                     .send(memberId, requirementDto, channelKeyDto);

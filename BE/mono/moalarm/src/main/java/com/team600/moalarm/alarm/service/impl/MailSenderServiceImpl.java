@@ -44,7 +44,8 @@ public class MailSenderServiceImpl implements SenderService {
         try {
             List<String> receivers = sendMailRequest.getTo();
             for (String receiver : receivers) {
-                MimeMessage message = createMessage(receiver, emailSender, sendMailRequest);
+                MimeMessage message = createMessage(receiver, emailSender, sendMailRequest,
+                        channelKeyDto);
                 sendEmailAsync(memberId, receiver, message, emailSender);
             }
         } catch (Exception e) {
@@ -76,7 +77,7 @@ public class MailSenderServiceImpl implements SenderService {
     }
 
     private MimeMessage createMessage(String to, JavaMailSender emailSender,
-            SendMailRequest requirementDto)
+            SendMailRequest requirementDto, ChannelKeyDto channelKeyDto)
             throws MessagingException, UnsupportedEncodingException {
 
         MimeMessage message = emailSender.createMimeMessage();
@@ -89,7 +90,8 @@ public class MailSenderServiceImpl implements SenderService {
         msgg += requirementDto.getContent();
         msgg += "</div>";
         message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("leewonyoung2323@gmail.com", "LEEWONYOUNG"));//보내는 사람
+        message.setFrom(new InternetAddress(channelKeyDto.getApiKey(),
+                channelKeyDto.getExtraValue()));//보내는 사람
 
         return message;
     }
