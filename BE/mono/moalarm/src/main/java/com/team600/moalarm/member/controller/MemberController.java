@@ -1,7 +1,7 @@
 package com.team600.moalarm.member.controller;
 
 import com.team600.moalarm.common.annotation.CurrentMemberId;
-import com.team600.moalarm.member.dto.request.SignUpRequest;
+import com.team600.moalarm.member.data.request.SignUpRequest;
 import com.team600.moalarm.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

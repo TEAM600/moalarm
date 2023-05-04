@@ -9,7 +9,7 @@ import com.team600.moalarm.channel.data.entity.Channel;
 import com.team600.moalarm.channel.data.repository.ChannelRepository;
 import com.team600.moalarm.channel.service.ChannelService;
 import com.team600.moalarm.common.component.MemberUtil;
-import com.team600.moalarm.member.entity.Member;
+import com.team600.moalarm.member.data.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

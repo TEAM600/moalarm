@@ -1,11 +1,11 @@
 package com.team600.moalarm.member.service;
 
 import com.team600.moalarm.apikey.service.ApiKeyGenerator;
-import com.team600.moalarm.member.dto.request.SignUpRequest;
-import com.team600.moalarm.member.entity.Member;
+import com.team600.moalarm.member.data.entity.Member;
+import com.team600.moalarm.member.data.repository.MemberRepository;
+import com.team600.moalarm.member.data.request.SignUpRequest;
 import com.team600.moalarm.member.exception.EmailConflictException;
 import com.team600.moalarm.member.exception.MemberNotFoundException;
-import com.team600.moalarm.member.repository.MemberRepository;
 import java.time.LocalDateTime;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

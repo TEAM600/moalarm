@@ -1,4 +1,4 @@
-package com.team600.moalarm.member.dto.request;
+package com.team600.moalarm.member.data.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;

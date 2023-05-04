@@ -1,4 +1,4 @@
-package com.team600.moalarm.member.entity;
+package com.team600.moalarm.member.data.entity;
 
 import com.team600.moalarm.common.BaseEntity;
 import java.time.LocalDateTime;

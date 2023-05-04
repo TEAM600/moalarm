@@ -1,8 +1,8 @@
 package com.team600.moalarm.common.component;
 
-import com.team600.moalarm.member.entity.Member;
+import com.team600.moalarm.member.data.entity.Member;
+import com.team600.moalarm.member.data.repository.MemberRepository;
 import com.team600.moalarm.member.exception.MemberNotFoundException;
-import com.team600.moalarm.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

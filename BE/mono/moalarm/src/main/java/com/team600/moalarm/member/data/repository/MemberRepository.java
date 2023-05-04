@@ -1,6 +1,6 @@
-package com.team600.moalarm.member.repository;
+package com.team600.moalarm.member.data.repository;
 
-import com.team600.moalarm.member.entity.Member;
+import com.team600.moalarm.member.data.entity.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

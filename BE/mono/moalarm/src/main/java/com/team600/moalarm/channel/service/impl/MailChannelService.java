@@ -7,7 +7,7 @@ import com.team600.moalarm.channel.data.repository.ChannelRepository;
 import com.team600.moalarm.channel.exception.ChannelConflictException;
 import com.team600.moalarm.channel.service.ChannelSaveService;
 import com.team600.moalarm.common.component.MemberUtil;
-import com.team600.moalarm.member.entity.Member;
+import com.team600.moalarm.member.data.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
