@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class HistoryService {
 
     private final HistoryRepository historyRepository;
 
+    @Transactional(readOnly = true)
     public List<HistoryResponse> getHistory(long memberId) {
         List<History> historyList = historyRepository.findAllByMemberId(memberId);
 
@@ -38,6 +40,7 @@ public class HistoryService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public HistoryChartResponse getHistoryChart(long memberId, int period) {
         LocalDate today = LocalDate.now();
         LocalDate start = today.minusDays(period - 1);
@@ -70,6 +73,7 @@ public class HistoryService {
                 .build();
     }
 
+    @Transactional
     public void createHistory(long memberId, ChannelCode type, String receiver, String success) {
         History history = History.builder()
                 .memberId(memberId)
