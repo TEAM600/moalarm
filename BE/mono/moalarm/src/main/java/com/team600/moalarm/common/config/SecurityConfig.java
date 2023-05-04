@@ -49,11 +49,8 @@ public class SecurityConfig {
 
                                     configuration.setAllowedOrigins(allowedOrigins);
                                     configuration.setAllowedMethods(
-                                            Arrays.asList("GET", "POST", "OPTION", "PUT", "PATCH",
+                                            Arrays.asList("GET", "POST", "OPTIONS", "PUT", "PATCH",
                                                     "DELETE"));
-                                    configuration.setExposedHeaders(
-                                            Arrays.asList("Authorization",
-                                                    "Access-Control-Allow-Origin"));
                                     return configuration;
                                 }))
                 .sessionManagement(sessionManagement -> sessionManagement
