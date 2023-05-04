@@ -17,6 +17,7 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
     @Query("SELECT new com.team600.moalarm.history.dto.response.HistoryChartDataDto(h.type, DATE(h.createdAt), COUNT(h.memberId))\n"
             + "FROM History h\n"
             + "WHERE h.memberId = :memberId\n"
+            + "AND h.delYn = 'N'\n"
             + "AND DATE(h.createdAt) BETWEEN DATE(:start) AND DATE(:end)\n"
             + "GROUP BY h.type, DATE(h.createdAt)\n"
             + "ORDER BY h.type, DATE(h.createdAt)")
