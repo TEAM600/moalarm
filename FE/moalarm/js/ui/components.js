@@ -47,3 +47,11 @@ function createInputWithIdAndLabelAndTypeAndPlaceHolder(id, label, type, placeho
         <input type="${type}" class="form-control" id="${id}" placeholder="${placeholder}">
     </div>`;
 }
+
+function createTextAreaWithIdAndLabel(id, label) {
+    return `
+    <div class="mb-3">
+        <label for="recipient-name" class="col-form-label">${label}</label>
+        <textarea rows="15" class="form-control" id="${id}"></textarea>
+    </div>`;
+}
