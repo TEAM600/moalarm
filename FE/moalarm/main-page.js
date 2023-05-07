@@ -16,8 +16,12 @@ function sendRegistChannel(channelType) {
         .then(()=>console.log("create channel"));
 }
 
+function setApiKeyContent(moalarmKey) {
+    const $apiKey = document.getElementById("api-key");
+    $apiKey.innerText = moalarmKey;
+}
+
 onload = () => {
-    console.log("main-page.js loaded")
     const $modalDialog = document.getElementById("modal-dialog");
     const mailButton = document.getElementById("mailButton");
     const smsButton = document.getElementById("smsButton");
@@ -43,6 +47,18 @@ onload = () => {
             [createTextAreaWithIdAndLabel("service-key", "Service-Key")]);
         const $registBtn = document.getElementById("regist-btn");
         $registBtn.addEventListener('click', () => sendRegistChannel("push"));
+    }
+
+
+    const $refreshButton = document.getElementById("refresh-api-key");
+
+    getKey()
+        .then(response => {
+            setApiKeyContent(response.moalarmKey);
+        });
+
+    $refreshButton.onclick = () => {
+        refreshKey().then(response=>setApiKeyContent(response.moalarmKey));
     }
 
 }
