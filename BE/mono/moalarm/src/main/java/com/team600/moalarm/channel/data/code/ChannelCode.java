@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum ChannelCode {
-    SMS("sms"), MAIL("mail"), FCM("push");
+    SMS("sms"), MAIL("mail"), PUSH("push");
     private final String value;
 
     ChannelCode(String type) {

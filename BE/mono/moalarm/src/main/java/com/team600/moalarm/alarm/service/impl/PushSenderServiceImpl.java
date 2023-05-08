@@ -79,9 +79,9 @@ public class PushSenderServiceImpl implements SenderService {
         return CompletableFuture.runAsync(() -> {
             try {
                 FirebaseMessaging.getInstance().send(message);
-                historyService.createHistory(memberId, ChannelCode.FCM, receiver, "Y");
+                historyService.createHistory(memberId, ChannelCode.PUSH, receiver, "Y");
             } catch (Exception e) {
-                historyService.createHistory(memberId, ChannelCode.FCM, receiver, "N");
+                historyService.createHistory(memberId, ChannelCode.PUSH, receiver, "N");
             }
         });
     }
