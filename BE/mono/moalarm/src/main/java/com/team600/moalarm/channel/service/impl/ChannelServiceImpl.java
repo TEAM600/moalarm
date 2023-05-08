@@ -48,9 +48,9 @@ public class ChannelServiceImpl implements ChannelService {
             ChannelCode type = channel.getType();
             ChannelKeyDto channelKeyDto = new ChannelKeyDto();
             channelKeyDto.setType(type);
-            if (type == ChannelCode.FCM) {
+            if (type == ChannelCode.PUSH) {
                 //TODO: 제이슨 구현 후 FILE String 넣기
-                channelKeyDto.setJson("{}");
+                channelKeyDto.setExtraValue("{}");
             } else if (type == ChannelCode.SMS || type == ChannelCode.MAIL) {
                 channelKeyDto.setApiKey(channel.getApiKey());
                 channelKeyDto.setSecret(channel.getSecret());

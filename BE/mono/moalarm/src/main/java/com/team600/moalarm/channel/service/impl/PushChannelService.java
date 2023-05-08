@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class FcmChannelService implements ChannelSaveService {
+public class PushChannelService implements ChannelSaveService {
 
     private final ChannelRepository channelRepository;
     private final MemberUtil memberUtil;
@@ -24,7 +24,7 @@ public class FcmChannelService implements ChannelSaveService {
     @Override
     @Transactional
     public void saveChannel(ChannelCreateRequest requestDto, long memberId) {
-        log.info("FCM Channel Save");
+        log.info("Push Channel Save");
         Member member = memberUtil.getMemberByMemberId(memberId);
 
         if (channelRepository.existsByMemberIdAndType(member.getId(), ChannelCode.SMS)) {
@@ -33,10 +33,10 @@ public class FcmChannelService implements ChannelSaveService {
 
         Channel channel = Channel.builder()
                 .memberId(member.getId())
-                .type(ChannelCode.FCM)
+                .type(ChannelCode.PUSH)
                 .extraValue(requestDto.getExtraValue())
                 .build();
-        member.registChannel(ChannelCode.FCM.ordinal());
+        member.registChannel(ChannelCode.PUSH.ordinal());
         channelRepository.save(channel);
     }
 }
