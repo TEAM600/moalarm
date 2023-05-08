@@ -47,7 +47,7 @@ public class ChannelController {
         //TODO: 채널별 유효성 검사
         channelSaveService.get(type.getValue() + "ChannelService")
                 .saveChannel(requestDto, memberId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{type}")

@@ -25,14 +25,14 @@ public class MemberController {
     public ResponseEntity<Void> signUp(@Validated @RequestBody final SignUpRequest signUpRequest) {
         log.info("POST /member");
         memberService.signUp(signUpRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping
     public ResponseEntity<Void> withdrawal(@CurrentMemberId long memberId) {
         log.info("DELETE /member {}", memberId);
         memberService.withdrawal(memberId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }
