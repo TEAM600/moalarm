@@ -43,7 +43,7 @@ public class HistoryService {
     @Transactional(readOnly = true)
     public HistoryChartResponse getHistoryChart(long memberId, int period) {
         LocalDate today = LocalDate.now();
-        LocalDate start = today.minusDays(period - 1);
+        LocalDate start = today.minusDays(period - 1L);
 
         List<HistoryChartDataDto> chartDataset = historyRepository.getHistoryChartDateset(
                 memberId, start, today);
