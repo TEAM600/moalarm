@@ -13,7 +13,6 @@ import lombok.Setter;
 public class ChannelKeyDto {
 
     private ChannelCode type;
-    private String json;
     private String apiKey; // email, apikey
     private String secret; // secretKey, password
     private String extraValue;

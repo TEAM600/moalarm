@@ -6,8 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SendAlarmRequest {
+
     private SendMailRequest mail;
     private SendSmsRequest sms;
-    private SendFcmRequest push;
+    private SendPushRequest push;
 
 }

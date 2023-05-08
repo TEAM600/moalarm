@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SendFcmRequest {
+public class SendPushRequest {
 
     private List<String> to;
     private String content;
