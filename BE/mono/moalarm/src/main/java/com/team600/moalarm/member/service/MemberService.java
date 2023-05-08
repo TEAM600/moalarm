@@ -1,17 +1,21 @@
 package com.team600.moalarm.member.service;
 
 import com.team600.moalarm.apikey.service.ApiKeyGenerator;
+import com.team600.moalarm.channel.data.code.ChannelCode;
+import com.team600.moalarm.channel.data.dto.response.ChannelRegistrationResponse;
 import com.team600.moalarm.member.dto.request.SignUpRequest;
 import com.team600.moalarm.member.entity.Member;
 import com.team600.moalarm.member.exception.EmailConflictException;
 import com.team600.moalarm.member.exception.MemberNotFoundException;
 import com.team600.moalarm.member.repository.MemberRepository;
 import java.time.LocalDateTime;
-import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -49,4 +53,23 @@ public class MemberService {
         member.remove();
     }
 
+    @Transactional(readOnly = true)
+    public List<ChannelRegistrationResponse> getChannels(long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+        List<ChannelRegistrationResponse> returnDto = new ArrayList<>();
+        int channelRegistrationStatus = member.getChannelRegistrationStatus();
+
+        for (ChannelCode code : ChannelCode.values()) {
+            returnDto.add(ChannelRegistrationResponse.builder()
+                    .type(code.getValue())
+                    .registration(checkRegistration(channelRegistrationStatus, code.ordinal()))
+                    .build());
+        }
+        return returnDto;
+    }
+
+    private boolean checkRegistration(int channelRegistrationStatus, int codeOrdinal) {
+        return (channelRegistrationStatus & (1 << codeOrdinal)) != 0;
+    }
 }
