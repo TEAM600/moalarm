@@ -7,7 +7,6 @@ import com.team600.moalarm.alarm.service.SenderService;
 import com.team600.moalarm.channel.data.code.ChannelCode;
 import com.team600.moalarm.channel.data.entity.Channel;
 import com.team600.moalarm.channel.data.repository.ChannelRepository;
-import com.team600.moalarm.channel.exception.ChannelNotFoundException;
 import com.team600.moalarm.common.component.MemberUtil;
 import com.team600.moalarm.member.entity.Member;
 import com.team600.moalarm.member.repository.MemberRepository;
@@ -64,10 +63,7 @@ class ChannelServiceImplTest {
 
         channelServiceImpl.deleteChannel(channelCode, memberId);
 
-        Channel foundChannel = channelRepository.findByTypeAndMemberId(channelCode, memberId)
-                .orElseThrow(ChannelNotFoundException::new);
-
-        assertEquals(foundChannel.getDelYn(), "Y"); // 삭제가 되면 channel의 delyn필드가 문자열 Y가 되어야함
+        assertEquals(channel.getDelYn(), "Y"); // 삭제가 되면 channel의 delyn필드가 문자열 Y가 되어야함
         assertEquals(member.getChannelRegistrationStatus(),
                 0); // 삭제가 되면 registration bitmask int값이 0이 되어야함
     }
