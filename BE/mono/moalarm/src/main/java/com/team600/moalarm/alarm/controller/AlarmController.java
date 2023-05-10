@@ -24,7 +24,7 @@ public class AlarmController {
             @CurrentMemberId long memberId) {
         log.info("POST /notification : {}", memberId);
         channelService.sendAlarm(memberId, requirementDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -45,7 +45,7 @@ public class HistoryController {
         log.info("POST /history");
         ChannelCode channelCode = ChannelCode.SMS;
         historyService.createHistory(memberId, channelCode, "010-1234-5678", "Y");
-        return ResponseEntity.ok()
+        return ResponseEntity.noContent()
                 .build();
     }
 
