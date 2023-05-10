@@ -68,7 +68,7 @@ public class ChannelServiceImpl implements ChannelService {
     public void deleteChannel(ChannelCode type, long memberId) {
         Member member = memberUtil.getMemberByMemberId(memberId);
 
-        Channel channel = channelRepository.findByTypeAndMemberId(type, member.getId())
+        Channel channel = channelRepository.findByMemberIdAndType(member.getId(), type)
                 .orElseThrow(ChannelNotFoundException::new);
 
         channel.remove();

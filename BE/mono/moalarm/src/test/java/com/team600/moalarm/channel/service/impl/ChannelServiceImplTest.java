@@ -56,7 +56,7 @@ class ChannelServiceImplTest {
         member.setId(memberId);
         channel.setDelYn("N");
 
-        when(channelRepository.findByTypeAndMemberId(channelCode, memberId))
+        when(channelRepository.findByMemberIdAndType(memberId, channelCode))
                 .thenReturn(Optional.of(channel));
         when(memberRepository.findById(1L))
                 .thenReturn(Optional.of(member));
