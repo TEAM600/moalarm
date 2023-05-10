@@ -7,6 +7,7 @@ import com.team600.moalarm.channel.data.dto.ChannelKeyDto;
 import com.team600.moalarm.channel.data.dto.response.ChannelRegistrationResponse;
 import com.team600.moalarm.channel.data.entity.Channel;
 import com.team600.moalarm.channel.data.repository.ChannelRepository;
+import com.team600.moalarm.channel.exception.ChannelNotFoundException;
 import com.team600.moalarm.channel.service.ChannelService;
 import com.team600.moalarm.common.component.MemberUtil;
 import com.team600.moalarm.member.entity.Member;
@@ -67,7 +68,9 @@ public class ChannelServiceImpl implements ChannelService {
     public void deleteChannel(ChannelCode type, long memberId) {
         Member member = memberUtil.getMemberByMemberId(memberId);
 
-        Channel channel = channelRepository.findAllByMemberIdAndType(type, member.getId());
+        Channel channel = channelRepository.findByMemberIdAndType(member.getId(), type)
+                .orElseThrow(ChannelNotFoundException::new);
+
         channel.remove();
         member.deleteChannel(type.ordinal());
     }
