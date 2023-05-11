@@ -2,7 +2,7 @@ package com.team600.moalarm.member.channel.data.entity;
 
 import com.team600.moalarm.member.channel.data.code.ChannelCode;
 import com.team600.moalarm.member.common.BaseEntity;
-import com.team600.moalarm.member.common.component.EncryptStringColumnConverter;
+import com.team600.moalarm.member.common.utils.EncryptStringColumnConverter;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;

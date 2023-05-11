@@ -1,4 +1,4 @@
-package com.team600.moalarm.member.common.component;
+package com.team600.moalarm.member.common.utils;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

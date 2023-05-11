@@ -3,13 +3,17 @@ package com.team600.moalarm.member.channel.controller;
 import com.team600.moalarm.member.channel.data.code.ChannelCode;
 import com.team600.moalarm.member.channel.data.dto.request.ChannelCreateRequest;
 import com.team600.moalarm.member.channel.data.dto.response.ChannelRegistrationResponse;
+import com.team600.moalarm.member.channel.data.dto.response.ChannelsSecretResponse;
 import com.team600.moalarm.member.channel.service.ChannelSaveService;
 import com.team600.moalarm.member.channel.service.ChannelService;
 import com.team600.moalarm.member.common.annotation.CurrentMemberId;
+import com.team600.moalarm.member.common.utils.AuthUtils;
 import com.team600.moalarm.member.member.service.MemberService;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,13 +44,20 @@ public class ChannelController<ID extends Serializable> {
         return ResponseEntity.ok(memberService.getChannels(memberId));
     }
 
+    @GetMapping("/secret")
+    public ResponseEntity<ChannelsSecretResponse<?>> getChannelsSecret(HttpServletRequest request) {
+        String moalarmKey = AuthUtils.resolveAuthorizationHeader(request);
+        log.info("GET /channels/secret - MoalarmKey: {}", moalarmKey);
+        return ResponseEntity.ok(channelService.getChannelsSecret(moalarmKey));
+    }
+
     @PostMapping("/{type}")
     public ResponseEntity<Void> createChannel(@PathVariable("type") ChannelCode type,
             @RequestBody ChannelCreateRequest requestDto,
             @CurrentMemberId Long memberId) {
         log.info("POST /channels/{}", type);
-        //TODO: 채널별 유효성 검사
-        channelSaveService.get(type.getValue() + "ChannelService")
+        Optional.ofNullable(channelSaveService.get(type.getValue() + "ChannelService"))
+                .orElseThrow()  //TODO: 23.05.11 유효하지 않은 채널 exception
                 .saveChannel(requestDto, memberId);
         return ResponseEntity.noContent().build();
     }
