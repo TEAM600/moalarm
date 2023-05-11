@@ -1,4 +1,4 @@
-package com.team600.moalarm.member.common.component;
+package com.team600.moalarm.member.common.utils;
 
 import com.team600.moalarm.member.member.entity.Member;
 import com.team600.moalarm.member.member.exception.MemberNotFoundException;
