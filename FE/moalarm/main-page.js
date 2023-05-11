@@ -36,14 +36,15 @@ function sendRegistChannel(channelType) {
     let key = $key === null ? null : $key.value;
     let secret = $secret === null ? null : $secret.value;
     let extraValue = $extraValue === null ? null : $extraValue.value;
-
-    console.log("channelType : ", channelType);
-    console.log("key : ", key);
-    console.log("secret : ", secret);
-    console.log("extra : ", extraValue);
     
     createChannel(channelType, key, secret, extraValue)
-        .then(()=>console.log("create channel"));
+        .then(()=>console.log("create channel"))
+        .then(()=>{
+            const $modalComponent = bootstrap.Modal.getInstance(document.getElementById("modalComponent"));
+            $modalComponent.hide();
+            alert("생성되었습니다.");
+        })
+        .catch(console.log);
 }
 
 
