@@ -6,7 +6,7 @@ import com.team600.moalarm.member.channel.data.entity.Channel;
 import com.team600.moalarm.member.channel.data.repository.ChannelRepository;
 import com.team600.moalarm.member.channel.exception.ChannelConflictException;
 import com.team600.moalarm.member.channel.service.ChannelSaveService;
-import com.team600.moalarm.member.common.component.MemberUtil;
+import com.team600.moalarm.member.common.utils.MemberUtil;
 import com.team600.moalarm.member.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
