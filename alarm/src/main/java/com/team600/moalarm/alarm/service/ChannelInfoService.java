@@ -4,5 +4,5 @@ import com.team600.moalarm.alarm.data.dto.request.SendAlarmRequest;
 import java.io.IOException;
 
 public interface ChannelInfoService {
-    public void getChannelInfo(String moalarmKey, SendAlarmRequest alarmRequest) throws IOException;
+    public void sendAlarm(String moalarmKey, SendAlarmRequest alarmRequest) throws IOException;
 }

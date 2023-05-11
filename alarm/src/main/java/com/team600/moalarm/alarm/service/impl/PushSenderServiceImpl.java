@@ -7,7 +7,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.team600.moalarm.alarm.data.code.ChannelCode;
-import com.team600.moalarm.alarm.data.dto.request.ChannelKeyDto;
+import com.team600.moalarm.alarm.data.dto.response.ChannelKeyDto;
 import com.team600.moalarm.alarm.data.dto.request.SendAlarmRequest;
 import com.team600.moalarm.alarm.data.dto.request.SendPushRequest;
 import com.team600.moalarm.alarm.exception.PushSendFailedException;

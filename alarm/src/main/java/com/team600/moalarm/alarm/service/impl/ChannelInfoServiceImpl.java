@@ -2,8 +2,8 @@ package com.team600.moalarm.alarm.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team600.moalarm.alarm.data.code.ChannelCode;
-import com.team600.moalarm.alarm.data.dto.request.ChannelKeyDto;
-import com.team600.moalarm.alarm.data.dto.request.ChannelsSecretRequest;
+import com.team600.moalarm.alarm.data.dto.response.ChannelKeyDto;
+import com.team600.moalarm.alarm.data.dto.response.ChannelsSecretResponse;
 import com.team600.moalarm.alarm.data.dto.request.SendAlarmRequest;
 import com.team600.moalarm.alarm.exception.MoalarmKeySendFailedException;
 import com.team600.moalarm.alarm.service.ChannelInfoService;
@@ -25,7 +25,7 @@ public class ChannelInfoServiceImpl implements ChannelInfoService {
 
     private final Map<String, SenderService> senderService;
     @Override
-    public void getChannelInfo(String moalarmKey, SendAlarmRequest alarmRequest) {
+    public void sendAlarm(String moalarmKey, SendAlarmRequest alarmRequest) {
         OkHttpClient client = new OkHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -38,9 +38,9 @@ public class ChannelInfoServiceImpl implements ChannelInfoService {
         try {
             response = client.newCall(request).execute();
             String responseBody = response.body().string();
-            ChannelsSecretRequest channelsSecretRequest = objectMapper.readValue(responseBody, ChannelsSecretRequest.class);
-            long memberId = channelsSecretRequest.getMemberId();
-            List<ChannelKeyDto> channelKeyDtos = channelsSecretRequest.getChannelKeys();
+            ChannelsSecretResponse channelsSecretResponse = objectMapper.readValue(responseBody, ChannelsSecretResponse.class);
+            long memberId = channelsSecretResponse.getMemberId();
+            List<ChannelKeyDto> channelKeyDtos = channelsSecretResponse.getChannelKeys();
 
             channelKeyDtos.forEach(channelKeyDto -> {
                 ChannelCode type = channelKeyDto.getType();

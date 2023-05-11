@@ -24,7 +24,7 @@ public class AlarmController {
     public ResponseEntity<Void> sendNotification(@RequestBody SendAlarmRequest requirementDto,
             @RequestHeader("Authorization") String moalarmKey) throws IOException {
         log.info("POST /notification : {}", moalarmKey);
-        getChannelsSecrets.getChannelInfo(moalarmKey, requirementDto);
+        getChannelsSecrets.sendAlarm(moalarmKey, requirementDto);
         return ResponseEntity.ok().build();
     }
 

@@ -1,4 +1,4 @@
-package com.team600.moalarm.alarm.data.dto.request;
+package com.team600.moalarm.alarm.data.dto.response;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChannelsSecretRequest {
+public class ChannelsSecretResponse {
     private long memberId;
     private List<ChannelKeyDto> channelKeys;
 }

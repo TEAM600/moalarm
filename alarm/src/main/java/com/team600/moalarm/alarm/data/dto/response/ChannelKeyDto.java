@@ -1,4 +1,4 @@
-package com.team600.moalarm.alarm.data.dto.request;
+package com.team600.moalarm.alarm.data.dto.response;
 
 import com.team600.moalarm.alarm.data.code.ChannelCode;
 import lombok.AllArgsConstructor;
