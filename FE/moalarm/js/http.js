@@ -43,3 +43,19 @@ function post(url, data) {
         throw Error(error);
     });
 }
+
+function remove(url) {
+    return fetch(baseURL + url, {
+        method: "DELETE",
+        headers: defaultOption()
+    }).then(async response => {
+        if (response.status === 204) return;
+        if (!response.ok) {
+            return Promise.reject(await response.json());
+        }
+        return await response.json();
+    }).catch(error => {
+        alert(error.message)
+        throw Error(error);
+    });
+}

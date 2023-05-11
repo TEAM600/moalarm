@@ -9,3 +9,8 @@ function createChannel(type, key, secret, extraValue) {
         "extraValue": extraValue
     });
 }
+
+function deleteChannel(type) {
+    console.log("channel delete");
+    return remove(`/channels/${type}`);
+}

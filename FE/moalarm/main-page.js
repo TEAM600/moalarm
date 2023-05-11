@@ -1,3 +1,33 @@
+function setApiKeyContent(moalarmKey) {
+    const $apiKey = document.getElementById("api-key");
+    $apiKey.innerText = moalarmKey;
+}
+
+const createSMSModal = () => {
+    const $modalDialog = document.getElementById("modal-dialog");
+    $modalDialog.innerHTML = createModalContent("SMS",
+        [createTextInputWithIdAndLabel("key","API-Key"), createPasswordInputWithIdAndLabel("secret", "API-Secret"),
+            createInputWithIdAndLabelAndTypeAndPlaceHolder("extraValue","Phone", "text", "(ex : 01012345678)")]);
+    const $registBtn = document.getElementById("regist-btn");
+    $registBtn.addEventListener('click', () => sendRegistChannel("sms"));
+};
+
+const createMailModal = () => {
+    const $modalDialog = document.getElementById("modal-dialog");
+    $modalDialog.innerHTML = createModalContent("MAIL",
+        [createTextInputWithIdAndLabel("key", "Email"), createPasswordInputWithIdAndLabel("secret","Secret")]);
+    const $registBtn = document.getElementById("regist-btn");
+    $registBtn.addEventListener('click', () => sendRegistChannel("mail"));    
+};
+
+const createPushModal = () => {
+    const $modalDialog = document.getElementById("modal-dialog");
+    $modalDialog.innerHTML = createModalContent("PUSH", 
+        [createTextAreaWithIdAndLabel("service-key", "Service-Key")]);
+    const $registBtn = document.getElementById("regist-btn");
+    $registBtn.addEventListener('click', () => sendRegistChannel("push"));
+};
+
 function sendRegistChannel(channelType) {
     const $key = document.getElementById("key");
     const $secret = document.getElementById("secret");
@@ -6,51 +36,37 @@ function sendRegistChannel(channelType) {
     let key = $key === null ? null : $key.value;
     let secret = $secret === null ? null : $secret.value;
     let extraValue = $extraValue === null ? null : $extraValue.value;
-
-    console.log("channelType : ", channelType);
-    console.log("key : ", key);
-    console.log("secret : ", secret);
-    console.log("extra : ", extraValue);
     
     createChannel(channelType, key, secret, extraValue)
-        .then(()=>console.log("create channel"));
+        .then(()=>console.log("create channel"))
+        .then(()=>{
+            const $modalComponent = bootstrap.Modal.getInstance(document.getElementById("modalComponent"));
+            $modalComponent.hide();
+            alert("생성되었습니다.");
+        })
+        .catch(console.log);
 }
 
-function setApiKeyContent(moalarmKey) {
-    const $apiKey = document.getElementById("api-key");
-    $apiKey.innerText = moalarmKey;
-}
 
 onload = () => {
-    const $modalDialog = document.getElementById("modal-dialog");
-    const mailButton = document.getElementById("mailButton");
-    const smsButton = document.getElementById("smsButton");
-    const pushButton = document.getElementById("pushButton");
-
-    smsButton.onclick = () => {
-        $modalDialog.innerHTML = createModalContent("SMS",
-            [createTextInputWithIdAndLabel("key","API-Key"), createPasswordInputWithIdAndLabel("secret", "API-Secret"),
-                createInputWithIdAndLabelAndTypeAndPlaceHolder("extraValue","Phone", "text", "(ex : 01012345678)")]);
-        const $registBtn = document.getElementById("regist-btn");
-        $registBtn.addEventListener('click', () => sendRegistChannel("sms"));
-    };
-
-    mailButton.onclick = () => {
-        $modalDialog.innerHTML = createModalContent("MAIL",
-            [createTextInputWithIdAndLabel("key", "Email"), createPasswordInputWithIdAndLabel("secret","Secret")]);
-        const $registBtn = document.getElementById("regist-btn");
-        $registBtn.addEventListener('click', () => sendRegistChannel("mail"));    
-    }
-
-    pushButton.onclick = () => {
-        $modalDialog.innerHTML = createModalContent("PUSH", 
-            [createTextAreaWithIdAndLabel("service-key", "Service-Key")]);
-        const $registBtn = document.getElementById("regist-btn");
-        $registBtn.addEventListener('click', () => sendRegistChannel("push"));
-    }
-
-
     const $refreshButton = document.getElementById("refresh-api-key");
+    
+    const channelMap = {};
+    channelMap["sms"] = {
+        button: document.getElementById("smsButton"),
+        modal: createSMSModal,
+        remove: () => deleteChannel("sms")
+    };
+    channelMap["mail"] = {
+        button: document.getElementById("mailButton"),
+        modal: createMailModal,
+        remove: () => deleteChannel("mail")
+    };
+    channelMap["push"] = {
+        button: document.getElementById("pushButton"),
+        modal: createPushModal,
+        remove: () => deleteChannel("push")
+    };
 
     getKey()
         .then(response => {
@@ -60,5 +76,23 @@ onload = () => {
     $refreshButton.onclick = () => {
         refreshKey().then(response=>setApiKeyContent(response.moalarmKey));
     }
+
+    getChannels()
+        .then((response)=> {
+            for (let channel of response) {
+                console.log(channel);
+                const currentChannel = channelMap[channel.type];
+                if (channel.registration === false) {
+                    currentChannel.button.onclick = currentChannel.modal;
+                } else {
+                    currentChannel.button.onclick = currentChannel.remove;
+                    currentChannel.button.innerText = "DELETE";
+                    currentChannel.button.style.backgroundColor = "RED";
+                    currentChannel.button.removeAttribute("data-bs-toggle");
+                    currentChannel.button.removeAttribute("data-bs-target");
+                }
+            }
+            
+        });
 
 }
