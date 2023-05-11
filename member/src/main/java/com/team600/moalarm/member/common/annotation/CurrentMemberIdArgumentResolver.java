@@ -1,5 +1,8 @@
 package com.team600.moalarm.member.common.annotation;
 
+import com.team600.moalarm.member.common.exception.impl.IllegalMemberIdException;
+import com.team600.moalarm.member.common.utils.HttpRequestUtils;
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -18,11 +21,13 @@ public class CurrentMemberIdArgumentResolver implements HandlerMethodArgumentRes
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        //TODO 23.05.10
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-//        return customUserDetails.getMemberId();
-        log.info("CurrentMemberId: {}", 1L);
-        return 1L;
+        String memberId = HttpRequestUtils.resolveMemberIdHeader(
+                (HttpServletRequest) webRequest.getNativeRequest());
+        //TODO
+        try {
+            return Long.valueOf(memberId);
+        } catch (NumberFormatException e) {
+            throw new IllegalMemberIdException(memberId);
+        }
     }
 }
