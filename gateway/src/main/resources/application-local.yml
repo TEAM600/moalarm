@@ -5,35 +5,36 @@ spring:
         - id: auth_route
           uri: http://localhost:8081
           predicates:
-            - Path=/api/v1/auth/**
-#          filters:
-#            - JwtDecodeFilter
+            - Path=/api/v2/auth/**
         - id: channel_route
-          uri: http://localhost:8081
+          uri: http://localhost:8082
           predicates:
-            - Path=/api/v1/channels/**
+            - Path=/api/v2/channels/**
           filters:
             - JwtDecodeFilter
         - id: key_route
-          uri: http://localhost:8081
+          uri: http://localhost:8082
           predicates:
-            - Path=/api/v1/key/**
+            - Path=/api/v2/key/**
+          filters:
+            - JwtDecodeFilter
+        - id: key_route
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/v2/member/**
           filters:
             - JwtDecodeFilter
         - id: hist_route
-          uri: http://localhost:8082
+          uri: http://localhost:8083
           predicates:
-            - Path=/api/v1/hist/**
+            - Path=/api/v2/history/**
           filters:
             - JwtDecodeFilter
         - id: alarm_route
-          uri: http://localhost:8083
+          uri: http://localhost:8084
           predicates:
-            - Path=/api/v1/alarm/**
-        - id: html_route
-          uri: http://localhost:3000
-          predicates:
-            - Path=/api/v1/alarm/**
+            - Path=/api/v2/alarm/**
+
 
 jwt:
   secret: "kSHg+dcLWjK1JwiS9bttxEMpkMc8+/c+5ca5w5R5R5g="

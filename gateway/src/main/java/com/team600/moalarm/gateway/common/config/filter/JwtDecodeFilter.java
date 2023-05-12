@@ -23,16 +23,13 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
     private static final String MEMBER_ID_HEADER_NAME = "Member-Id";
 
     public JwtDecodeFilter(TokenProvider tokenProvider) {
-        System.out.println("jwt: " + textEncryptor);
         this.tokenProvider = tokenProvider;
     }
 
     public static class Config {
-        //Put the configuration properties
     }
     @Override
     public GatewayFilter apply(Config config) {
-        //Custom Pre Filter
         return (exchange, chain) -> {
             String token = getToken(exchange);
             if (!tokenProvider.validateAccessToken(token)) {
@@ -41,7 +38,6 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
             JwtDecryptResult jwtDecryptResult = tokenProvider.decryptJwt(token);
             addAuthorizationHeaders(exchange.getRequest(), jwtDecryptResult.getSubject());
 
-            System.out.println(exchange.getRequest().getHeaders());
             return chain.filter(exchange);
         };
     }
@@ -52,12 +48,11 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
 
     private String getToken(ServerWebExchange exchange) {
         return exchange.getRequest().getHeaders().get("Authorization").get(0)
-                .substring(BEARER.length());   // 헤더의 토큰 파싱 (Bearer 제거)
+                .substring(BEARER.length());
     }
 
 
     private void addAuthorizationHeaders(ServerHttpRequest request, String subject) {
-
         request.mutate().header(MEMBER_ID_HEADER_NAME, textEncryptor.decrypt(subject));
     }
 }

@@ -23,7 +23,6 @@ public class EncryptorConfig {
     @Bean(name = "JwtSubjectEncryptor")
     public TextEncryptor encryptor() {
         TextEncryptor textEncryptor = Encryptors.text(secret, salt);
-        System.out.println("config: " + textEncryptor);
         return textEncryptor;
     }
 }
