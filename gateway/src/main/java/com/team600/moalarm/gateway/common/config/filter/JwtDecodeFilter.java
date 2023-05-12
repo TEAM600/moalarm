@@ -2,6 +2,8 @@ package com.team600.moalarm.gateway.common.config.filter;
 
 import com.team600.moalarm.gateway.common.config.filter.JwtDecodeFilter.Config;
 import com.team600.moalarm.gateway.common.config.provider.TokenProvider;
+import com.team600.moalarm.gateway.common.config.vo.JwtDecryptResult;
+import com.team600.moalarm.gateway.common.exception.impl.TokenValidateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -10,10 +12,10 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-import com.team600.moalarm.gateway.common.config.vo.JwtDecryptResult;
 
 @Component
 public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
+
     @Autowired
     @Qualifier("JwtSubjectEncryptor")
     private TextEncryptor textEncryptor;
@@ -27,13 +29,15 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
     }
 
     public static class Config {
+        
     }
+
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             String token = getToken(exchange);
             if (!tokenProvider.validateAccessToken(token)) {
-                throw new RuntimeException("토큰 유효성 검사 실패");
+                throw new TokenValidateException();
             }
             JwtDecryptResult jwtDecryptResult = tokenProvider.decryptJwt(token);
             addAuthorizationHeaders(exchange.getRequest(), jwtDecryptResult.getSubject());
@@ -41,6 +45,7 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
             return chain.filter(exchange);
         };
     }
+
     @Override
     public Class<Config> getConfigClass() {
         return Config.class;

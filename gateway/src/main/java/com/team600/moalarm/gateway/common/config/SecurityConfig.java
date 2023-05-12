@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+
     @Value("${security.allowed-origins}")
     private final List<String> allowedOrigins;
     private final String[] ENDPOINTS_WHITELIST_WITH_POST_METHOD = {
@@ -27,6 +28,7 @@ public class SecurityConfig {
     private final String[] ENDPOINTS_MOALARM_API = {
             "/notification/**"
     };
+
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
@@ -45,8 +47,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .anyExchange().permitAll())
                 .httpBasic(withDefaults())
-                .csrf(CsrfSpec::disable)
-                .formLogin(withDefaults());
+                .csrf(CsrfSpec::disable);
 
         return http.build();
     }

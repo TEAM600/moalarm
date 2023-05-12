@@ -6,32 +6,20 @@ spring:
           uri: http://localhost:8081
           predicates:
             - Path=/api/v2/auth/**
-        - id: channel_route
-          uri: http://localhost:8082
+        - id: jwt_route
+          uri: http://localhost:8081
           predicates:
-            - Path=/api/v2/channels/**
-          filters:
-            - JwtDecodeFilter
-        - id: key_route
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/v2/key/**
-          filters:
-            - JwtDecodeFilter
-        - id: key_route
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/v2/member/**
+            - Path=/api/v2/channels/**, /api/v2/key/**, /api/v2/member/**
           filters:
             - JwtDecodeFilter
         - id: hist_route
-          uri: http://localhost:8083
+          uri: http://localhost:8082
           predicates:
             - Path=/api/v2/history/**
           filters:
             - JwtDecodeFilter
         - id: alarm_route
-          uri: http://localhost:8084
+          uri: http://localhost:8083
           predicates:
             - Path=/api/v2/alarm/**
 
@@ -52,3 +40,7 @@ server:
 crypto:
   secret: it's secret
   salt: bf53862cfb2b0148
+
+logging:
+  level:
+    root: trace
