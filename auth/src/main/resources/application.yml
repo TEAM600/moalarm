@@ -18,5 +18,5 @@ crypto:
   salt: bf53862cfb2b0148
 
 jwt:
-  secret: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  secret: "kSHg+dcLWjK1JwiS9bttxEMpkMc8+/c+5ca5w5R5R5g="
   expire-day: 30
