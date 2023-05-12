@@ -25,13 +25,12 @@ public class TokenProvider {
 
     private static final String AUTHORITY_KEY = "roles";
     private final Key accessKey;
-    @Value("${jwt.expire-day}")
     private final int ACCESS_TOKEN_VALID_DAY;
 
     public TokenProvider(@Value("${jwt.secret}") String secret,
-        @Value("${jwt.expire-day}") int accessTokenValidDay) {
-            this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-            ACCESS_TOKEN_VALID_DAY = accessTokenValidDay;
+            @Value("${jwt.expire-day}") int accessTokenValidDay) {
+        this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        this.ACCESS_TOKEN_VALID_DAY = accessTokenValidDay;
     }
 
     public JwtDecryptResult decryptJwt(String token) {
