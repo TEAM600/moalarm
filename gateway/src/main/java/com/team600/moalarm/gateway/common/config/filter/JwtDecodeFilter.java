@@ -29,17 +29,19 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
     }
 
     public static class Config {
-        
+
     }
 
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             String token = getToken(exchange);
-            if (!tokenProvider.validateAccessToken(token)) {
+            try {
+                tokenProvider.validateAccessToken(token);
+            } catch (Exception e) {
                 throw new TokenValidateException();
             }
-            JwtDecryptResult jwtDecryptResult = tokenProvider.decryptJwt(token);
+            JwtDecryptResult jwtDecryptResult = tokenProvider.parseJwt(token);
             addAuthorizationHeaders(exchange.getRequest(), jwtDecryptResult.getSubject());
 
             return chain.filter(exchange);

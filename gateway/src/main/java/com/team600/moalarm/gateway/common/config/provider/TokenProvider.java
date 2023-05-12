@@ -9,14 +9,10 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -33,7 +29,7 @@ public class TokenProvider {
         this.ACCESS_TOKEN_VALID_DAY = accessTokenValidDay;
     }
 
-    public JwtDecryptResult decryptJwt(String token) {
+    public JwtDecryptResult parseJwt(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(accessKey)
                 .build()
@@ -42,12 +38,7 @@ public class TokenProvider {
 
         @SuppressWarnings("unchecked")
         List<String> authClaim = claims.get(AUTHORITY_KEY, List.class);
-        Collection<SimpleGrantedAuthority> authorities = Optional.ofNullable(authClaim)
-                .orElseThrow()
-                .stream()
-                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-
-        return new JwtDecryptResult(claims.getSubject(), authorities);
+        return new JwtDecryptResult(claims.getSubject(), authClaim);
     }
 
     public boolean validateAccessToken(String token) {
