@@ -1,5 +1,6 @@
 package com.team600.moalarm.member.common.utils;
 
+import com.team600.moalarm.member.common.exception.impl.IllegalMemberIdException;
 import com.team600.moalarm.member.common.exception.impl.MissingMemberIdHeaderException;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,17 @@ public class HttpRequestUtils {
     public static String resolveMemberIdHeader(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(MEMBER_ID_HEADER))
                 .orElseThrow(MissingMemberIdHeaderException::new);
+    }
+
+    public static Long getMemberId(HttpServletRequest request) {
+        String memberId = resolveMemberIdHeader(request);
+        //TODO
+        try {
+            return Long.valueOf(memberId);
+        } catch (NumberFormatException e) {
+            throw new IllegalMemberIdException(memberId);
+        }
+
     }
 
     public static String resolveAuthorizationHeader(HttpServletRequest request) {
