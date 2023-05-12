@@ -1,30 +1,35 @@
 package com.team600.moalarm.gateway.common.config.filter;
 
+import com.team600.moalarm.gateway.common.config.filter.JwtDecodeFilter.Config;
 import com.team600.moalarm.gateway.common.config.provider.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import com.team600.moalarm.gateway.common.config.vo.JwtDecryptResult;
 
 @Component
-public class JwtDecodeFilter extends AbstractGatewayFilterFactory<JwtDecodeFilter.Config> {
-    private final TokenProvider tokenProvider;
-    private static final String BEARER = "Bearer ";
-
+public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
     @Autowired
+    @Qualifier("JwtSubjectEncryptor")
+    private TextEncryptor textEncryptor;
+    private final TokenProvider tokenProvider;
+
+    private static final String BEARER = "Bearer ";
+    private static final String MEMBER_ID_HEADER_NAME = "Member-Id";
+
     public JwtDecodeFilter(TokenProvider tokenProvider) {
-        super(Config.class);
+        System.out.println("jwt: " + textEncryptor);
         this.tokenProvider = tokenProvider;
-        System.out.println("만들어짐?");
     }
 
     public static class Config {
         //Put the configuration properties
     }
-
     @Override
     public GatewayFilter apply(Config config) {
         //Custom Pre Filter
@@ -40,13 +45,19 @@ public class JwtDecodeFilter extends AbstractGatewayFilterFactory<JwtDecodeFilte
             return chain.filter(exchange);
         };
     }
+    @Override
+    public Class<Config> getConfigClass() {
+        return Config.class;
+    }
 
     private String getToken(ServerWebExchange exchange) {
         return exchange.getRequest().getHeaders().get("Authorization").get(0)
                 .substring(BEARER.length());   // 헤더의 토큰 파싱 (Bearer 제거)
     }
 
+
     private void addAuthorizationHeaders(ServerHttpRequest request, String subject) {
-        request.getHeaders().add("Member-Id", subject);
+
+        request.mutate().header(MEMBER_ID_HEADER_NAME, textEncryptor.decrypt(subject));
     }
 }

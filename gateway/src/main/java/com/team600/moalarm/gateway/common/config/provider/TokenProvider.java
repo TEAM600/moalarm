@@ -28,7 +28,7 @@ public class TokenProvider {
     @Value("${jwt.expire-day}")
     private final int ACCESS_TOKEN_VALID_DAY;
 
-    public TokenProvider(@Value(value = "${jwt.secret}") String secret,
+    public TokenProvider(@Value("${jwt.secret}") String secret,
         @Value("${jwt.expire-day}") int accessTokenValidDay) {
             this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
             ACCESS_TOKEN_VALID_DAY = accessTokenValidDay;

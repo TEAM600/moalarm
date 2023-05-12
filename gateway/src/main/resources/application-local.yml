@@ -35,12 +35,8 @@ spring:
           predicates:
             - Path=/api/v1/alarm/**
 
-logging:
-  level:
-    root: INFO
-
 jwt:
-  secret: "${random.value}${random.value}"
+  secret: "kSHg+dcLWjK1JwiS9bttxEMpkMc8+/c+5ca5w5R5R5g="
   expire-day: 30
 
 security:
@@ -52,3 +48,6 @@ security:
 server:
   max-http-header-size: 16384
 
+crypto:
+  secret: it's secret
+  salt: bf53862cfb2b0148
