@@ -1,0 +1,22 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v2
+
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 1234
+    url: jdbc:mariadb://localhost:3306/moalarm
+
+  jpa:
+    generate-ddl: true
+
+crypto:
+  secret: it's secret
+  salt: bf53862cfb2b0148
+
+jwt:
+  secret: "kSHg+dcLWjK1JwiS9bttxEMpkMc8+/c+5ca5w5R5R5g="
+  expire-day: 30
