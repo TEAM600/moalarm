@@ -7,7 +7,7 @@ import com.team600.moalarm.member.channel.data.dto.response.ChannelsSecretRespon
 import com.team600.moalarm.member.channel.service.ChannelSaveService;
 import com.team600.moalarm.member.channel.service.ChannelService;
 import com.team600.moalarm.member.common.annotation.CurrentMemberId;
-import com.team600.moalarm.member.common.utils.AuthUtils;
+import com.team600.moalarm.member.common.utils.HttpRequestUtils;
 import com.team600.moalarm.member.member.service.MemberService;
 import java.io.Serializable;
 import java.util.List;
@@ -46,7 +46,7 @@ public class ChannelController<ID extends Serializable> {
 
     @GetMapping("/secret")
     public ResponseEntity<ChannelsSecretResponse<?>> getChannelsSecret(HttpServletRequest request) {
-        String moalarmKey = AuthUtils.resolveAuthorizationHeader(request);
+        String moalarmKey = HttpRequestUtils.resolveAuthorizationHeader(request);
         log.info("GET /channels/secret - MoalarmKey: {}", moalarmKey);
         return ResponseEntity.ok(channelService.getChannelsSecret(moalarmKey));
     }
