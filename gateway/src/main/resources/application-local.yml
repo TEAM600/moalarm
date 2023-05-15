@@ -23,7 +23,6 @@ spring:
           predicates:
             - Path=/api/v2/notification/**
 
-
 jwt:
   secret: "kSHg+dcLWjK1JwiS9bttxEMpkMc8+/c+5ca5w5R5R5g="
   expire-day: 30
