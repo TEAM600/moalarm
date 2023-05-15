@@ -7,19 +7,19 @@ spring:
           predicates:
             - Path=/api/v2/auth/**
         - id: jwt_route
-          uri: http://localhost:8081
+          uri: http://localhost:8082
           predicates:
             - Path=/api/v2/channels/**, /api/v2/key/**, /api/v2/member/**
           filters:
             - JwtDecodeFilter
         - id: hist_route
-          uri: http://localhost:8082
+          uri: http://localhost:8083
           predicates:
             - Path=/api/v2/history/**
           filters:
             - JwtDecodeFilter
         - id: alarm_route
-          uri: http://localhost:8083
+          uri: http://localhost:8084
           predicates:
             - Path=/api/v2/alarm/**
 
