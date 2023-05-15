@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -40,6 +41,12 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+            String domain = request.getPath().subPath(5).toString();
+            
+            if (domain.equals("member") && request.getMethod() == HttpMethod.POST) {
+                return chain.filter(exchange);
+            }
             String token = getToken(exchange);
             try {
                 tokenProvider.validateAccessToken(token);
