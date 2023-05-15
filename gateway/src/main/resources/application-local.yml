@@ -21,7 +21,7 @@ spring:
         - id: alarm_route
           uri: http://localhost:8084
           predicates:
-            - Path=/api/v2/alarm/**
+            - Path=/api/v2/notification/**
 
 
 jwt:
