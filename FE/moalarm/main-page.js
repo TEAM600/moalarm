@@ -15,7 +15,8 @@ const createSMSModal = () => {
 const createMailModal = () => {
     const $modalDialog = document.getElementById("modal-dialog");
     $modalDialog.innerHTML = createModalContent("MAIL",
-        [createTextInputWithIdAndLabel("key", "Email"), createPasswordInputWithIdAndLabel("secret","Secret")]);
+        [createTextInputWithIdAndLabel("key", "Email"), createPasswordInputWithIdAndLabel("secret","Secret"), 
+        createTextInputWithIdAndLabel("extraValue","Sender")]);
     const $registBtn = document.getElementById("regist-btn");
     $registBtn.addEventListener('click', () => sendRegistChannel("mail"));    
 };
