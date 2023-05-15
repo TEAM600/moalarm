@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class ChannelInfoServiceImpl implements ChannelInfoService {
 
     @Value("${url.member}")
-    private final String MEMBER_URL;
+    private static String MEMBER_URL;
     private final Map<String, SenderService> senderService;
     @Override
     public void sendAlarm(String moalarmKey, SendAlarmRequest alarmRequest) {
