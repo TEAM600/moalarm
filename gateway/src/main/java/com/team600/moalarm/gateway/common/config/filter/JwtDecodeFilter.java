@@ -3,15 +3,19 @@ package com.team600.moalarm.gateway.common.config.filter;
 import com.team600.moalarm.gateway.common.config.filter.JwtDecodeFilter.Config;
 import com.team600.moalarm.gateway.common.config.provider.TokenProvider;
 import com.team600.moalarm.gateway.common.config.vo.JwtDecryptResult;
-import com.team600.moalarm.gateway.common.exception.impl.TokenValidateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 @Component
 public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
@@ -28,6 +32,7 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
         this.tokenProvider = tokenProvider;
     }
 
+
     public static class Config {
 
     }
@@ -38,13 +43,33 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
             String token = getToken(exchange);
             try {
                 tokenProvider.validateAccessToken(token);
+                JwtDecryptResult jwtDecryptResult = tokenProvider.parseJwt(token);
+                addAuthorizationHeaders(exchange.getRequest(), jwtDecryptResult.getSubject());
             } catch (Exception e) {
-                throw new TokenValidateException();
-            }
-            JwtDecryptResult jwtDecryptResult = tokenProvider.parseJwt(token);
-            addAuthorizationHeaders(exchange.getRequest(), jwtDecryptResult.getSubject());
+                return chain.filter(exchange).onErrorResume(throwable -> {
+                    ServerHttpResponse response = exchange.getResponse();
+                    response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+                    DataBuffer dataBuffer = exchange.getResponse().bufferFactory()
+                            .wrap(throwable.getMessage().getBytes());
+                    response.setStatusCode(HttpStatus.UNAUTHORIZED);
 
-            return chain.filter(exchange);
+                    return response.writeWith(Mono.just(dataBuffer)).log();
+                });
+            }
+
+            return chain.filter(exchange).onErrorResume(
+                    throwable -> {
+                        ServerHttpResponse response = exchange.getResponse();
+                        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+                        DataBuffer dataBuffer = exchange.getResponse().bufferFactory()
+                                .wrap(throwable.getMessage().substring(
+                                                "Connection refused: no further information: ".length())
+                                        .getBytes());
+                        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+
+                        return response.writeWith(Mono.just(dataBuffer)).log();
+                    }
+            ).log();
         };
     }
 
