@@ -35,8 +35,6 @@ public class HistoryServiceImpl implements HistoryService {
 
         Request request = new Request.Builder()
                 .url(HISTORY_URL)
-                .addHeader("Content-Type", "application/json;")
-                .addHeader("Cache-Control", "no-cache")
                 .addHeader("Member-Id", String.valueOf(memberId))
                 .post(requestBody)
                 .build();
