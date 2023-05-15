@@ -1,6 +1,6 @@
-package com.team600.moalarm.common.config;
+package com.team600.moalarm.member.common.config;
 
-import com.team600.moalarm.channel.data.code.converter.ChannelCodeConverter;
+import com.team600.moalarm.member.channel.data.code.converter.ChannelCodeConverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
