@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChannelInfoServiceImpl implements ChannelInfoService {
 
+    @Value("${url.member}")
+    private final String MEMBER_URL;
     private final Map<String, SenderService> senderService;
     @Override
     public void sendAlarm(String moalarmKey, SendAlarmRequest alarmRequest) {
@@ -30,7 +33,7 @@ public class ChannelInfoServiceImpl implements ChannelInfoService {
         ObjectMapper objectMapper = new ObjectMapper();
 
         Request request = new Request.Builder()
-                .url("http://localhost:8083/api/v2/channels/secret")
+                .url(MEMBER_URL)
                 .addHeader("Authorization", moalarmKey)
                 .build();
 
