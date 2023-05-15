@@ -45,14 +45,14 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
             String domain = request.getPath().subPath(5).toString();
 
             if (domain.equals("member") && request.getMethod() == HttpMethod.POST) {
-                addAuthorizationHeaders(request, "0");
+                request.mutate().header(MEMBER_ID_HEADER_NAME, "0");
                 return chain.filter(exchange);
             }
             String token = getToken(exchange);
             try {
                 tokenProvider.validateAccessToken(token);
                 JwtDecryptResult jwtDecryptResult = tokenProvider.parseJwt(token);
-                request.mutate().header(MEMBER_ID_HEADER_NAME, "0");
+                addAuthorizationHeaders(request, jwtDecryptResult.getSubject());
             } catch (Exception e) {
                 return chain.filter(exchange).onErrorResume(throwable -> {
                     ServerHttpResponse response = exchange.getResponse();
