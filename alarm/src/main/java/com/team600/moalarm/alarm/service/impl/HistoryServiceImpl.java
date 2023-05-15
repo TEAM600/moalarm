@@ -23,12 +23,12 @@ public class HistoryServiceImpl implements HistoryService {
 
         FormBody.Builder createHistory = new FormBody.Builder()
                 .add("memberId", String.valueOf(memberId))
-                .add("code", code.getValue())
+                .add("type", code.getValue())
                 .add("receiver", receiver)
                 .add("success", success);
 
         Request request = new Request.Builder()
-                .url("http://localhost:8080/api/v2/history")
+                .url("http://localhost:8085/api/v2/history")
                 .post(createHistory.build())
                 .build();
 

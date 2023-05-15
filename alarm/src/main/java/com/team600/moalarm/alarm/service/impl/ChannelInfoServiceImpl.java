@@ -30,7 +30,7 @@ public class ChannelInfoServiceImpl implements ChannelInfoService {
         ObjectMapper objectMapper = new ObjectMapper();
 
         Request request = new Request.Builder()
-                .url("http://localhost:8080/api/v2/channels/secret")
+                .url("http://localhost:8083/api/v2/channels/secret")
                 .addHeader("Authorization", moalarmKey)
                 .build();
 
