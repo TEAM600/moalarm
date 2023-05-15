@@ -12,5 +12,5 @@ mail:
       checkServerIdentity: true
 
 url:
-  member: https://k8a407.p.ssafy.io:8083/api/v2/channels/secret
-  history: https://k8a407.p.ssafy.io:8085/api/v2/history
+  member: "http://k8a407.p.ssafy.io:8083/api/v2/channels/secret"
+  history: "http://k8a407.p.ssafy.io:8085/api/v2/history"

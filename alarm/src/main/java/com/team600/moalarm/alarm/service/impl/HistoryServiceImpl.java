@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class HistoryServiceImpl implements HistoryService {
 
     @Value("${url.history}")
-    private static String HISTORY_URL;
+    private String HISTORY_URL;
 
     @Override
     public void postHistory(long memberId, String receiver, ChannelCode code, String success) {
