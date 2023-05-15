@@ -40,7 +40,3 @@ server:
 crypto:
   secret: it's secret
   salt: bf53862cfb2b0148
-
-logging:
-  level:
-    root: trace
