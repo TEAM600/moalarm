@@ -10,12 +10,16 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class HistoryServiceImpl implements HistoryService {
+
+    @Value("${url.history}")
+    private final String HISTORY_URL;
 
     @Override
     public void postHistory(long memberId, String receiver, ChannelCode code, String success) {
@@ -28,7 +32,7 @@ public class HistoryServiceImpl implements HistoryService {
                 .add("success", success);
 
         Request request = new Request.Builder()
-                .url("http://localhost:8085/api/v2/history")
+                .url(HISTORY_URL)
                 .post(createHistory.build())
                 .build();
 
