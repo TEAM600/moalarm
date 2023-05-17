@@ -25,9 +25,33 @@ const createPushModal = () => {
     return createModalContent("PUSH",
         [
             createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key","")
-
         ]);
 };
+
+function deleteChannelAndCloseModal(type) {
+    deleteChannel(type)
+        .then(() => {
+            console.log(`delete ${type}`);
+            closeModal();
+            alert("삭제되었습니다.");
+        })
+        .catch(console.log);
+}
+
+function createChannelAndCloseModal(channelType, key, secret, extraValue) {
+    createChannel(channelType, key, secret, extraValue)
+        .then(() => {
+            console.log("create channel");
+            closeModal();
+            alert("생성되었습니다.");
+        })
+        .catch(console.log);
+}
+
+function closeModal() {
+    const $modalComponent = bootstrap.Modal.getInstance(document.getElementById("modalComponent"));
+    $modalComponent.hide();
+}
 
 function sendRegistChannel(channelType) {
     const $key = document.getElementById("key");
@@ -38,14 +62,7 @@ function sendRegistChannel(channelType) {
     let secret = $secret === null ? null : $secret.value;
     let extraValue = $extraValue === null ? null : $extraValue.value;
     
-    createChannel(channelType, key, secret, extraValue)
-        .then(()=>console.log("create channel"))
-        .then(()=>{
-            const $modalComponent = bootstrap.Modal.getInstance(document.getElementById("modalComponent"));
-            $modalComponent.hide();
-            alert("생성되었습니다.");
-        })
-        .catch(console.log);
+    createChannelAndCloseModal(channelType, key, secret, extraValue);
 }
 
 function changeToViewButton(button) {
@@ -88,7 +105,7 @@ onload = () => {
                 changeToDeleteButton($registBtn);
                 $registBtn.addEventListener('click', () => {
                     console.log("delete sms");
-                    deleteChannel("sms");
+                    deleteChannelAndCloseModal("sms");
                 });
         }
     };
@@ -115,7 +132,7 @@ onload = () => {
                 changeToDeleteButton($registBtn);
                 $registBtn.addEventListener('click', () => {
                     console.log("delete mail");
-                    deleteChannel("mail");
+                    deleteChannelAndCloseModal("mail");
                 });
         }
     };
@@ -140,7 +157,7 @@ onload = () => {
             changeToDeleteButton($registBtn);
             $registBtn.addEventListener('click', () => {
                 console.log("delete push");
-                deleteChannel("push");
+                deleteChannelAndCloseModal("push");
             });
         }
     };
