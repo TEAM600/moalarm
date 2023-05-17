@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -84,7 +86,7 @@ public class ChannelInfoServiceImpl implements ChannelInfoService {
             channelKeyDtos.forEach(channelKeyDto -> {
                 ChannelCode type = channelKeyDto.getType();
                 senderService.get(type.getValue() + "SenderServiceImpl")
-                        .send(memberId, alarmRequest, channelKeyDto);
+                        .send(memberId, requestId, alarmRequest, channelKeyDto);
             });
         } catch (IOException e) {
             throw new MoalarmKeySendFailedException();
