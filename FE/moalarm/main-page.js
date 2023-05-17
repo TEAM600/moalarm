@@ -76,12 +76,13 @@ onload = () => {
         },
         view: async () => {
             console.log("view click");
+            const channelInfo = await getChannel("sms");
             const $modalDialog = document.getElementById("modal-dialog");
             $modalDialog.innerHTML = createModalContent("SMS",
                 [
-                    createTextInputWithIdAndLabelAndValue("key","API-Key","example"), 
-                    createPasswordInputWithIdAndLabelAndValue("secret", "API-Secret","example"),
-                    createInputWithIdAndLabelAndTypeAndPlaceHolderAndValue("extraValue","Phone", "text", "(ex : 01012345678)","example")
+                    createTextInputWithIdAndLabelAndValue("key","API-Key",channelInfo.apiKey), 
+                    createPasswordInputWithIdAndLabelAndValue("secret", "API-Secret",channelInfo.secret),
+                    createInputWithIdAndLabelAndTypeAndPlaceHolderAndValue("extraValue","Phone", "text", "(ex : 01012345678)",channelInfo.extraValue)
                 ]);
                 const $registBtn = document.getElementById("regist-btn");
                 changeToDeleteButton($registBtn);
@@ -101,13 +102,14 @@ onload = () => {
             $registBtn.addEventListener('click', () => sendRegistChannel("mail"));
         },
         view: async () => {
-            console.log("view click");
+            console.log("view click");            
+            const channelInfo = await getChannel("mail");
             const $modalDialog = document.getElementById("modal-dialog");
             $modalDialog.innerHTML = createModalContent("MAIL",
                 [
-                    createTextInputWithIdAndLabelAndValue("key", "Email","example"), 
-                    createPasswordInputWithIdAndLabelAndValue("secret","Secret","example"), 
-                    createTextInputWithIdAndLabelAndValue("extraValue","Sender","example")
+                    createTextInputWithIdAndLabelAndValue("key", "Email",channelInfo.apiKey), 
+                    createPasswordInputWithIdAndLabelAndValue("secret","Secret",channelInfo.secret), 
+                    createTextInputWithIdAndLabelAndValue("extraValue","Sender",channelInfo.extraValue)
                 ]);
                 const $registBtn = document.getElementById("regist-btn");
                 changeToDeleteButton($registBtn);
@@ -128,10 +130,11 @@ onload = () => {
         },
         view: async () => {
             console.log("view click");
+            const channelInfo = await getChannel("push");
             const $modalDialog = document.getElementById("modal-dialog");
             $modalDialog.innerHTML = createModalContent("PUSH",
                 [
-                    createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key","example")
+                    createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key",channelInfo.extraValue)
                 ]);
             const $registBtn = document.getElementById("regist-btn");
             changeToDeleteButton($registBtn);
