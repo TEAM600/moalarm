@@ -1,91 +1,37 @@
-function getHistory() {
-  const history = get(`/history`)
-  console.log(history)
-  return history;
-}
+function createTableBody(item) {
+    const body = document.createElement("tbody");
+    for (let i of item) {
+        const tr = document.createElement("tr");
+        
+        const alarmCnt = document.createElement("td");
+        const doneCnt = document.createElement("td");
+        const dateTime = document.createElement("td");
+        
+        alarmCnt.textContent = i.alarmCnt;
+        doneCnt.textContent = i.doneCnt;
+        dateTime.textContent = i.dateTime;
 
-function getHistoryChart() {
-  const history = get(`/history/chart?period=7`)
-  console.log(history)
-  return history;
-}
+        tr.append(alarmCnt);
+        tr.append(doneCnt);
+        tr.append(dateTime);
 
-/* globals Chart:false, feather:false */
-(async () => {
-  'use strict'
-
-  feather.replace({ 'aria-hidden': 'true' })
-
-  // 히스토리 정보 요청
-  const history = await getHistory();
-  const historyChart = await getHistoryChart();
-  
-  // Graphs
-  const ctx = document.getElementById('myChart')
-
-  // eslint-disable-next-line no-unused-vars
-  const myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: historyChart.labels,
-      datasets: [{
-        data: historyChart.dataset.SMS,
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#2F2040',
-        borderWidth: 4,
-        pointBackgroundColor: '#553A75'
-      },
-      {
-        data: historyChart.dataset.MAIL,
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#7953A8',
-        borderWidth: 4,
-        pointBackgroundColor: '#553A75'
-      },
-      {
-        data: historyChart.dataset.FCM,
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#D3C7E2',
-        borderWidth: 4,
-        pointBackgroundColor: '#553A75'
-      }]
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: false
-          }
-        }]
-      },
-      legend: {
-        display: false
-      }
+        tr.style.cursor = "pointer";
+        
+        tr.onclick = () => {
+            console.log(i.alarmRequestId);
+            localStorage.setItem("alarmRequestId", i.alarmRequestId);
+            window.location.href = "history-detail.html";
+        }
+        body.append(tr);
     }
-  })
+    
+    return body;
+}
 
-  const table = document.querySelector("#history");
+onload = async () => {
+    const $table = document.getElementById("history");
 
-  history.forEach((item) => {
-    const row = document.createElement("tr");
-    const datetimeCell = document.createElement("td");
-    const typeCell = document.createElement("td");
-    const receiverCell = document.createElement("td");
-    const successCell = document.createElement("td");
+    const history = await getHistory();
 
-    datetimeCell.textContent = item.dateTime;
-    typeCell.textContent = item.type;
-    receiverCell.textContent = item.receiver;
-    successCell.textContent = item.success;
-
-    row.appendChild(datetimeCell);
-    row.appendChild(typeCell);
-    row.appendChild(receiverCell);
-    row.appendChild(successCell);
-
-    table.appendChild(row);
-  });
-})()
+    $table.append(createTableBody(history));
+}
