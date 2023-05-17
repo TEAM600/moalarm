@@ -1,3 +1,7 @@
+function getChannel(type) {
+    return get(`/channels//info/${type}`)
+}
+
 function getChannels() {
     return get(`/channels`);
 }
