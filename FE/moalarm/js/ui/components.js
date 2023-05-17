@@ -55,3 +55,36 @@ function createTextAreaWithIdAndLabel(id, label) {
         <textarea rows="15" class="form-control" id="${id}"></textarea>
     </div>`;
 }
+
+function createTextAreaWithIdAndLabelAndValue(id, label, value) {
+    return `
+    <div class="mb-3">
+        <label for="recipient-name" class="col-form-label">${label}</label>
+        <textarea rows="15" class="form-control" id="${id}" vaule="${value}"></textarea>
+    </div>`;
+}
+
+function createTextInputWithIdAndLabelAndValue(id, label, value) {
+    return `
+    <div class="mb-3">
+        <label for="recipient-name" class="col-form-label">${label}</label>
+        <input type="text" class="form-control" id="${id}" value="${value}">
+    </div>`;
+}
+
+function createPasswordInputWithIdAndLabelAndValue(id, label, value) {
+    return `
+    <div class="mb-3">
+        <label for="recipient-name" class="col-form-label">${label}</label>
+        <input type="text" class="form-control" id="${id}" value="${value}">
+    </div>`;
+}
+
+function createInputWithIdAndLabelAndTypeAndPlaceHolderAndValue(id, label, type, placeholder,value) {
+    return `
+    <div class="mb-3">
+        <label for="recipient-name" class="col-form-label">${label}</label>
+        <input type="${type}" class="form-control" id="${id}" placeholder="${placeholder}" value="${value}">
+    </div>`;
+}
+

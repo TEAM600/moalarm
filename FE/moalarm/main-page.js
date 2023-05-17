@@ -4,29 +4,29 @@ function setApiKeyContent(moalarmKey) {
 }
 
 const createSMSModal = () => {
-    const $modalDialog = document.getElementById("modal-dialog");
-    $modalDialog.innerHTML = createModalContent("SMS",
-        [createTextInputWithIdAndLabel("key","API-Key"), createPasswordInputWithIdAndLabel("secret", "API-Secret"),
-            createInputWithIdAndLabelAndTypeAndPlaceHolder("extraValue","Phone", "text", "(ex : 01012345678)")]);
-    const $registBtn = document.getElementById("regist-btn");
-    $registBtn.addEventListener('click', () => sendRegistChannel("sms"));
+    return createModalContent("SMS",
+        [
+            createTextInputWithIdAndLabelAndValue("key","API-Key",""), 
+            createPasswordInputWithIdAndLabelAndValue("secret", "API-Secret",""),
+            createInputWithIdAndLabelAndTypeAndPlaceHolderAndValue("extraValue","Phone", "text", "(ex : 01012345678)","")
+        ]);
 };
 
 const createMailModal = () => {
-    const $modalDialog = document.getElementById("modal-dialog");
-    $modalDialog.innerHTML = createModalContent("MAIL",
-        [createTextInputWithIdAndLabel("key", "Email"), createPasswordInputWithIdAndLabel("secret","Secret"), 
-        createTextInputWithIdAndLabel("extraValue","Sender")]);
-    const $registBtn = document.getElementById("regist-btn");
-    $registBtn.addEventListener('click', () => sendRegistChannel("mail"));    
+    return createModalContent("MAIL",
+        [
+            createTextInputWithIdAndLabelAndValue("key", "Email",""), 
+            createPasswordInputWithIdAndLabelAndValue("secret","Secret",""), 
+            createTextInputWithIdAndLabelAndValue("extraValue","Sender","")
+        ]);
 };
 
 const createPushModal = () => {
-    const $modalDialog = document.getElementById("modal-dialog");
-    $modalDialog.innerHTML = createModalContent("PUSH", 
-        [createTextAreaWithIdAndLabel("service-key", "Service-Key")]);
-    const $registBtn = document.getElementById("regist-btn");
-    $registBtn.addEventListener('click', () => sendRegistChannel("push"));
+    return createModalContent("PUSH",
+        [
+            createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key","")
+
+        ]);
 };
 
 function sendRegistChannel(channelType) {
@@ -48,6 +48,19 @@ function sendRegistChannel(channelType) {
         .catch(console.log);
 }
 
+function changeToViewButton(button) {
+    button.innerText = "VIEW";
+    button.style.backgroundColor = "BLUE";
+    button.style.borderColor = "BLUE";
+}
+
+function changeToDeleteButton(button) {
+    button.innerText = "DELETE";
+    button.style.backgroundColor = "RED";
+    button.style.borderColor = "RED";
+    button.removeAttribute("data-bs-toggle");
+    button.removeAttribute("data-bs-target");            
+}
 
 onload = () => {
     const $refreshButton = document.getElementById("refresh-api-key");
@@ -55,18 +68,81 @@ onload = () => {
     const channelMap = {};
     channelMap["sms"] = {
         button: document.getElementById("smsButton"),
-        modal: createSMSModal,
-        remove: () => deleteChannel("sms")
+        regist: () => {
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createSMSModal();
+            const $registBtn = document.getElementById("regist-btn");
+            $registBtn.addEventListener('click', () => sendRegistChannel("sms"));
+        },
+        view: async () => {
+            console.log("view click");
+            const channelInfo = await getChannel("sms");
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createModalContent("SMS",
+                [
+                    createTextInputWithIdAndLabelAndValue("key","API-Key",channelInfo.apiKey), 
+                    createPasswordInputWithIdAndLabelAndValue("secret", "API-Secret",channelInfo.secret),
+                    createInputWithIdAndLabelAndTypeAndPlaceHolderAndValue("extraValue","Phone", "text", "(ex : 01012345678)",channelInfo.extraValue)
+                ]);
+                const $registBtn = document.getElementById("regist-btn");
+                changeToDeleteButton($registBtn);
+                $registBtn.addEventListener('click', () => {
+                    console.log("delete sms");
+                    deleteChannel("sms");
+                });
+        }
     };
     channelMap["mail"] = {
         button: document.getElementById("mailButton"),
-        modal: createMailModal,
-        remove: () => deleteChannel("mail")
+        regist: () => {
+            console.log("regist modal")
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createMailModal();
+            const $registBtn = document.getElementById("regist-btn");
+            $registBtn.addEventListener('click', () => sendRegistChannel("mail"));
+        },
+        view: async () => {
+            console.log("view click");            
+            const channelInfo = await getChannel("mail");
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createModalContent("MAIL",
+                [
+                    createTextInputWithIdAndLabelAndValue("key", "Email",channelInfo.apiKey), 
+                    createPasswordInputWithIdAndLabelAndValue("secret","Secret",channelInfo.secret), 
+                    createTextInputWithIdAndLabelAndValue("extraValue","Sender",channelInfo.extraValue)
+                ]);
+                const $registBtn = document.getElementById("regist-btn");
+                changeToDeleteButton($registBtn);
+                $registBtn.addEventListener('click', () => {
+                    console.log("delete mail");
+                    deleteChannel("mail");
+                });
+        }
     };
     channelMap["push"] = {
         button: document.getElementById("pushButton"),
-        modal: createPushModal,
-        remove: () => deleteChannel("push")
+        regist: () => {
+            console.log("regist modal")
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createPushModal();
+            const $registBtn = document.getElementById("regist-btn");
+            $registBtn.addEventListener('click', () => sendRegistChannel("push"));
+        },
+        view: async () => {
+            console.log("view click");
+            const channelInfo = await getChannel("push");
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createModalContent("PUSH",
+                [
+                    createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key",channelInfo.extraValue)
+                ]);
+            const $registBtn = document.getElementById("regist-btn");
+            changeToDeleteButton($registBtn);
+            $registBtn.addEventListener('click', () => {
+                console.log("delete push");
+                deleteChannel("push");
+            });
+        }
     };
 
     getKey()
@@ -84,16 +160,12 @@ onload = () => {
                 console.log(channel);
                 const currentChannel = channelMap[channel.type];
                 if (channel.registration === false) {
-                    currentChannel.button.onclick = currentChannel.modal;
+                    currentChannel.button.onclick = currentChannel.regist;
                 } else {
-                    currentChannel.button.onclick = currentChannel.remove;
-                    currentChannel.button.innerText = "DELETE";
-                    currentChannel.button.style.backgroundColor = "RED";
-                    currentChannel.button.removeAttribute("data-bs-toggle");
-                    currentChannel.button.removeAttribute("data-bs-target");
+                    currentChannel.button.onclick = currentChannel.view;
+                    changeToViewButton(currentChannel.button);
                 }
             }
-            
         });
 
 }
