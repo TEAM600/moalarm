@@ -54,4 +54,16 @@ public class ChannelServiceImpl implements ChannelService {
         channel.remove();
         member.deleteChannel(type.ordinal());
     }
+
+    @Override
+    public ChannelKeyDto getChannelInfo(ChannelCode type, long memberId) {
+        Member member = memberUtil.getMemberByMemberId(memberId);
+
+        Channel channel = channelRepository.findByMemberIdAndType(member.getId(), type)
+                .orElseThrow(ChannelNotFoundException::new);
+
+        ChannelKeyDto channelKeyDto = ChannelKeyDto.of(channel);
+
+        return channelKeyDto;
+    }
 }
