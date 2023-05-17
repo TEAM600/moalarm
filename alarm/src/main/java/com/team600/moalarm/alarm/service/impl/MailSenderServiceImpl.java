@@ -35,7 +35,7 @@ public class MailSenderServiceImpl implements SenderService {
     private Properties mailProperties;
 
     @Override
-    public void send(long memberId, SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
+    public void send(long memberId, long requestId, SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
         SendMailRequest sendMailRequest = requirementDto.getMail();
         if (sendMailRequest == null) {
             return;
@@ -46,7 +46,7 @@ public class MailSenderServiceImpl implements SenderService {
             for (String receiver : receivers) {
                 MimeMessage message = createMessage(receiver, emailSender, sendMailRequest,
                         channelKeyDto);
-                sendEmailAsync(memberId, receiver, message, emailSender);
+                sendEmailAsync(memberId, requestId, receiver, message, emailSender);
             }
         } catch (Exception e) {
             throw new MailSendFailedException();
@@ -64,14 +64,14 @@ public class MailSenderServiceImpl implements SenderService {
         return javaMailSender;
     }
 
-    CompletableFuture<Void> sendEmailAsync(long memberId, String receiver, MimeMessage message,
+    CompletableFuture<Void> sendEmailAsync(long memberId, long requestId, String receiver, MimeMessage message,
             JavaMailSender javaMailSender) {
         return CompletableFuture.runAsync(() -> {
             try {
                 javaMailSender.send(message);
-                historyService.postHistory(memberId, receiver, ChannelCode.MAIL,"Y");
+                historyService.postHistory(memberId, requestId, receiver, ChannelCode.MAIL,"Y");
             } catch (Exception e) {
-                historyService.postHistory(memberId, receiver, ChannelCode.MAIL,"N");
+                historyService.postHistory(memberId, requestId, receiver, ChannelCode.MAIL,"N");
             }
         });
     }

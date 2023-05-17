@@ -30,7 +30,7 @@ public class PushSenderServiceImpl implements SenderService {
     private final HistoryService historyService;
 
     @Override
-    public void send(long memberId, SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
+    public void send(long memberId, long requestId, SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
         SendPushRequest sendPushRequest = requirementDto.getPush();
         if (sendPushRequest == null) {
             return;
@@ -46,7 +46,7 @@ public class PushSenderServiceImpl implements SenderService {
 
             for (String receiver : receivers) {
                 Message message = createMessage(receiver, title, content, img);
-                sendPushAsync(memberId, receiver, message);
+                sendPushAsync(memberId, requestId, receiver, message);
             }
         } catch (IOException e) {
             throw new PushSendFailedException();
@@ -75,13 +75,13 @@ public class PushSenderServiceImpl implements SenderService {
                 .build();
     }
 
-    CompletableFuture<Void> sendPushAsync(long memberId, String receiver, Message message) {
+    CompletableFuture<Void> sendPushAsync(long memberId, long requestId, String receiver, Message message) {
         return CompletableFuture.runAsync(() -> {
             try {
                 FirebaseMessaging.getInstance().send(message);
-                historyService.postHistory(memberId, receiver, ChannelCode.PUSH,"Y");
+                historyService.postHistory(memberId, requestId, receiver, ChannelCode.PUSH,"Y");
             } catch (Exception e) {
-                historyService.postHistory(memberId, receiver, ChannelCode.PUSH,"N");
+                historyService.postHistory(memberId, requestId, receiver, ChannelCode.PUSH,"N");
             }
         });
     }
