@@ -4,23 +4,29 @@ function setApiKeyContent(moalarmKey) {
 }
 
 const createSMSModal = () => {
-    const $modalDialog = document.getElementById("modal-dialog");
-    $modalDialog.innerHTML = createModalContent("SMS",
-        [createTextInputWithIdAndLabelAndValue("key","API-Key",""), createPasswordInputWithIdAndLabel("secret", "API-Secret"),
-            createInputWithIdAndLabelAndTypeAndPlaceHolder("extraValue","Phone", "text", "(ex : 01012345678)")]);
+    return createModalContent("SMS",
+        [
+            createTextInputWithIdAndLabelAndValue("key","API-Key",""), 
+            createPasswordInputWithIdAndLabelAndValue("secret", "API-Secret",""),
+            createInputWithIdAndLabelAndTypeAndPlaceHolderAndValue("extraValue","Phone", "text", "(ex : 01012345678)","")
+        ]);
 };
 
 const createMailModal = () => {
-    const $modalDialog = document.getElementById("modal-dialog");
-    $modalDialog.innerHTML = createModalContent("MAIL",
-        [createTextInputWithIdAndLabel("key", "Email"), createPasswordInputWithIdAndLabel("secret","Secret"), 
-        createTextInputWithIdAndLabel("extraValue","Sender")]); 
+    return createModalContent("MAIL",
+        [
+            createTextInputWithIdAndLabelAndValue("key", "Email",""), 
+            createPasswordInputWithIdAndLabelAndValue("secret","Secret",""), 
+            createTextInputWithIdAndLabelAndValue("extraValue","Sender","")
+        ]);
 };
 
 const createPushModal = () => {
-    const $modalDialog = document.getElementById("modal-dialog");
-    $modalDialog.innerHTML = createModalContent("PUSH", 
-        [createTextAreaWithIdAndLabel("service-key", "Service-Key")]);
+    return createModalContent("PUSH",
+        [
+            createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key","")
+
+        ]);
 };
 
 function sendRegistChannel(channelType) {
@@ -64,12 +70,7 @@ onload = () => {
         button: document.getElementById("smsButton"),
         regist: () => {
             const $modalDialog = document.getElementById("modal-dialog");
-            $modalDialog.innerHTML = createModalContent("SMS",
-                [
-                    createTextInputWithIdAndLabelAndValue("key","API-Key",""), 
-                    createPasswordInputWithIdAndLabelAndValue("secret", "API-Secret",""),
-                    createInputWithIdAndLabelAndTypeAndPlaceHolderAndValue("extraValue","Phone", "text", "(ex : 01012345678)","")
-                ]);
+            $modalDialog.innerHTML = createSMSModal();
             const $registBtn = document.getElementById("regist-btn");
             $registBtn.addEventListener('click', () => sendRegistChannel("sms"));
         },
@@ -95,12 +96,7 @@ onload = () => {
         regist: () => {
             console.log("regist modal")
             const $modalDialog = document.getElementById("modal-dialog");
-            $modalDialog.innerHTML = createModalContent("MAIL",
-                [
-                    createTextInputWithIdAndLabelAndValue("key", "Email",""), 
-                    createPasswordInputWithIdAndLabelAndValue("secret","Secret",""), 
-                    createTextInputWithIdAndLabelAndValue("extraValue","Sender","")
-                ]);
+            $modalDialog.innerHTML = createMailModal();
             const $registBtn = document.getElementById("regist-btn");
             $registBtn.addEventListener('click', () => sendRegistChannel("mail"));
         },
@@ -126,10 +122,7 @@ onload = () => {
         regist: () => {
             console.log("regist modal")
             const $modalDialog = document.getElementById("modal-dialog");
-            $modalDialog.innerHTML = createModalContent("PUSH", 
-                [
-                    createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key","")
-                ]);
+            $modalDialog.innerHTML = createPushModal();
             const $registBtn = document.getElementById("regist-btn");
             $registBtn.addEventListener('click', () => sendRegistChannel("push"));
         },
@@ -139,7 +132,6 @@ onload = () => {
             $modalDialog.innerHTML = createModalContent("PUSH",
                 [
                     createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key","example")
-
                 ]);
             const $registBtn = document.getElementById("regist-btn");
             changeToDeleteButton($registBtn);
