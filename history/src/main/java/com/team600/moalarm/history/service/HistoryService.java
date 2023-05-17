@@ -1,11 +1,15 @@
 package com.team600.moalarm.history.service;
 
 import com.team600.moalarm.history.common.code.ChannelCode;
+import com.team600.moalarm.history.data.dto.request.AlarmRequestCreateRequest;
 import com.team600.moalarm.history.data.dto.request.HistoryCreateRequest;
 import com.team600.moalarm.history.data.dto.response.HistoryChartDataDto;
 import com.team600.moalarm.history.data.dto.response.HistoryChartResponse;
+import com.team600.moalarm.history.data.dto.response.HistoryDetailResponse;
 import com.team600.moalarm.history.data.dto.response.HistoryResponse;
+import com.team600.moalarm.history.data.entity.AlarmRequest;
 import com.team600.moalarm.history.data.entity.History;
+import com.team600.moalarm.history.data.repository.AlarmRequestRepository;
 import com.team600.moalarm.history.data.repository.HistoryRepository;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -72,6 +76,19 @@ public class HistoryService {
                 .labels(labels)
                 .dataset(dataset)
                 .build();
+    }
+
+    @Transactional
+    public long createAlarmRequest(long memberId, AlarmRequestCreateRequest request) {
+        log.info("request: {}", request);
+        AlarmRequest alarmRequest = AlarmRequest.builder()
+                .memberId(memberId)
+                .alarmCnt(request.getAlarmCnt())
+                .doneYn("N")
+                .build();
+
+        long requestId = alarmRequestRepository.save(alarmRequest).getId();
+        return requestId;
     }
 
     @Transactional
