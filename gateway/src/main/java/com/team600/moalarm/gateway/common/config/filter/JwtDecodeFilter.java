@@ -80,7 +80,6 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
                                 return response.writeWith(Mono.just(errorDataBuffer)).log();
                             })
                     .onErrorResume(TokenNotFoundException.class, e -> {
-                        System.out.println("들어와라 얍");
                         ServerHttpResponse response = exchange.getResponse();
                         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
                         DataBuffer errorDataBuffer = exchange.getResponse().bufferFactory()
