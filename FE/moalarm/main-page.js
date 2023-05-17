@@ -48,6 +48,19 @@ function sendRegistChannel(channelType) {
         .catch(console.log);
 }
 
+function changeToViewButton(button) {
+    button.innerText = "VIEW";
+    button.style.backgroundColor = "BLUE";
+    button.style.borderColor = "BLUE";
+}
+
+function changeToViewButton(button) {
+    button.innerText = "DELETE";
+    button.style.backgroundColor = "RED";
+    button.style.borderColor = "RED";
+    button.removeAttribute("data-bs-toggle");
+    button.removeAttribute("data-bs-target");            
+}
 
 onload = () => {
     const $refreshButton = document.getElementById("refresh-api-key");
@@ -56,6 +69,9 @@ onload = () => {
     channelMap["sms"] = {
         button: document.getElementById("smsButton"),
         modal: createSMSModal,
+        view: () => {
+            console.log("view click");
+        },
         remove: () => deleteChannel("sms")
     };
     channelMap["mail"] = {
@@ -86,11 +102,9 @@ onload = () => {
                 if (channel.registration === false) {
                     currentChannel.button.onclick = currentChannel.modal;
                 } else {
-                    currentChannel.button.onclick = currentChannel.remove;
-                    currentChannel.button.innerText = "DELETE";
-                    currentChannel.button.style.backgroundColor = "RED";
-                    currentChannel.button.removeAttribute("data-bs-toggle");
-                    currentChannel.button.removeAttribute("data-bs-target");
+                    currentChannel.button.onclick = currentChannel.view;
+                    changeToViewButton(currentChannel.button);
+                    
                 }
             }
             
