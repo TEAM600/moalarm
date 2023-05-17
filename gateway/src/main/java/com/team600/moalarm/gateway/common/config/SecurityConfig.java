@@ -13,13 +13,11 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity.CsrfSpec;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.reactive.config.CorsRegistry;
-import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableWebFluxSecurity
-public class SecurityConfig implements WebFluxConfigurer {
+public class SecurityConfig {
 
     @Value("${security.allowed-origins}")
     private final List<String> allowedOrigins;
@@ -44,6 +42,7 @@ public class SecurityConfig implements WebFluxConfigurer {
                                     configuration.setAllowedMethods(
                                             Arrays.asList("GET", "POST", "OPTIONS", "PUT", "PATCH",
                                                     "DELETE"));
+                                    configuration.setAllowCredentials(true);
                                     return configuration;
                                 }))
                 .authorizeExchange(exchanges -> exchanges
@@ -52,12 +51,5 @@ public class SecurityConfig implements WebFluxConfigurer {
                 .csrf(CsrfSpec::disable);
 
         return http.build();
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://example.com")
-                .allowCredentials(true);
     }
 }
