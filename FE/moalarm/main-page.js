@@ -54,7 +54,7 @@ function changeToViewButton(button) {
     button.style.borderColor = "BLUE";
 }
 
-function changeToViewButton(button) {
+function changeToDeleteButton(button) {
     button.innerText = "DELETE";
     button.style.backgroundColor = "RED";
     button.style.borderColor = "RED";
