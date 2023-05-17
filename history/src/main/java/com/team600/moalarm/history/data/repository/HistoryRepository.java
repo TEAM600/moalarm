@@ -11,8 +11,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HistoryRepository extends JpaRepository<History, Long> {
 
-    @Query("SELECT h FROM History h WHERE h.memberId = :memberId AND h.delYn = 'N' ORDER BY h.createdAt DESC")
-    List<History> findAllByMemberId(long memberId);
+    int countByAlarmRequestId(long alarmRequestId);
+
+    @Query("SELECT h FROM History h WHERE h.memberId = :memberId AND h.alarmRequestId = :alarmRequestId AND h.delYn = 'N' ORDER BY h.createdAt DESC")
+    List<History> findAllByMemberIdAndAlarmRequestId(long memberId, long alarmRequestId);
 
     @Query("SELECT new com.team600.moalarm.history.data.dto.response.HistoryChartDataDto(h.type, DATE(h.createdAt), COUNT(h.memberId))\n"
             + "FROM History h\n"

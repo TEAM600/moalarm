@@ -1,11 +1,15 @@
 package com.team600.moalarm.history.service;
 
 import com.team600.moalarm.history.common.code.ChannelCode;
+import com.team600.moalarm.history.data.dto.request.AlarmRequestCreateRequest;
 import com.team600.moalarm.history.data.dto.request.HistoryCreateRequest;
 import com.team600.moalarm.history.data.dto.response.HistoryChartDataDto;
 import com.team600.moalarm.history.data.dto.response.HistoryChartResponse;
+import com.team600.moalarm.history.data.dto.response.HistoryDetailResponse;
 import com.team600.moalarm.history.data.dto.response.HistoryResponse;
+import com.team600.moalarm.history.data.entity.AlarmRequest;
 import com.team600.moalarm.history.data.entity.History;
+import com.team600.moalarm.history.data.repository.AlarmRequestRepository;
 import com.team600.moalarm.history.data.repository.HistoryRepository;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -25,14 +29,40 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class HistoryService {
 
+    private final AlarmRequestRepository alarmRequestRepository;
     private final HistoryRepository historyRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<HistoryResponse> getHistory(long memberId) {
-        List<History> historyList = historyRepository.findAllByMemberId(memberId);
+        List<AlarmRequest> alarmRequestList = alarmRequestRepository.findAllByMemberId(memberId);
+        List<HistoryResponse> responseList = new ArrayList<>();
+
+        for (AlarmRequest alarmRequest : alarmRequestList) {
+            int doneCnt = alarmRequest.getAlarmCnt();
+            if (alarmRequest.getDoneYn().equals("N")) {
+                doneCnt = historyRepository.countByAlarmRequestId(alarmRequest.getId());
+
+                if (doneCnt == alarmRequest.getAlarmCnt()) {
+                    alarmRequest.setDone();
+                }
+            }
+
+            responseList.add(HistoryResponse.builder()
+                            .dateTime(alarmRequest.getCreatedAt())
+                            .alarmRequestId(alarmRequest.getId())
+                            .alarmCnt(alarmRequest.getAlarmCnt())
+                            .doneCnt(doneCnt).build());
+        }
+
+        return responseList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<HistoryDetailResponse> getHistoryByRequestId(long memberId, long requestId) {
+        List<History> historyList = historyRepository.findAllByMemberIdAndAlarmRequestId(memberId, requestId);
 
         return historyList.stream()
-                .map(history -> HistoryResponse.builder()
+                .map(history -> HistoryDetailResponse.builder()
                         .dateTime(history.getCreatedAt())
                         .type(history.getType().name())
                         .receiver(history.getReceiver())
@@ -75,10 +105,24 @@ public class HistoryService {
     }
 
     @Transactional
+    public long createAlarmRequest(long memberId, AlarmRequestCreateRequest request) {
+        log.info("request: {}", request);
+        AlarmRequest alarmRequest = AlarmRequest.builder()
+                .memberId(memberId)
+                .alarmCnt(request.getAlarmCnt())
+                .doneYn("N")
+                .build();
+
+        long requestId = alarmRequestRepository.save(alarmRequest).getId();
+        return requestId;
+    }
+
+    @Transactional
     public void createHistory(long memberId, HistoryCreateRequest request) {
         log.info("request: {}", request);
         History history = History.builder()
                 .memberId(memberId)
+                .alarmRequestId(request.getAlarmRequestId())
                 .type(request.getType())
                 .receiver(request.getReceiver())
                 .success(request.getSuccess())
