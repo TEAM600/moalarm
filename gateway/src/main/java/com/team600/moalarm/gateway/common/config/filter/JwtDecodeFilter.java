@@ -3,6 +3,8 @@ package com.team600.moalarm.gateway.common.config.filter;
 import com.team600.moalarm.gateway.common.config.filter.JwtDecodeFilter.Config;
 import com.team600.moalarm.gateway.common.config.provider.TokenProvider;
 import com.team600.moalarm.gateway.common.config.vo.JwtDecryptResult;
+import com.team600.moalarm.gateway.common.exception.impl.TokenNotFoundException;
+import java.net.ConnectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -15,7 +17,6 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -48,7 +49,7 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
                 request.mutate().header(MEMBER_ID_HEADER_NAME, "0");
                 return chain.filter(exchange);
             }
-            String token = getToken(exchange);
+            String token = getToken(request);
             try {
                 tokenProvider.validateAccessToken(token);
                 JwtDecryptResult jwtDecryptResult = tokenProvider.parseJwt(token);
@@ -61,23 +62,33 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
                             .wrap(throwable.getMessage().getBytes());
                     response.setStatusCode(HttpStatus.UNAUTHORIZED);
 
-                    return response.writeWith(Mono.just(dataBuffer)).log();
+                    return response.setComplete().log();
                 });
             }
 
-            return chain.filter(exchange).onErrorResume(
-                    throwable -> {
+            return chain.filter(exchange)
+                    .onErrorResume(
+                            ConnectException.class, e -> {
+                                ServerHttpResponse response = exchange.getResponse();
+                                response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+                                DataBuffer errorDataBuffer = exchange.getResponse().bufferFactory()
+                                        .wrap(e.getMessage().substring(
+                                                        "Connection refused: no further information: ".length())
+                                                .getBytes());
+                                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+
+                                return response.writeWith(Mono.just(errorDataBuffer)).log();
+                            })
+                    .onErrorResume(TokenNotFoundException.class, e -> {
+                        System.out.println("들어와라 얍");
                         ServerHttpResponse response = exchange.getResponse();
                         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-                        DataBuffer dataBuffer = exchange.getResponse().bufferFactory()
-                                .wrap(throwable.getMessage().substring(
-                                                "Connection refused: no further information: ".length())
-                                        .getBytes());
+                        DataBuffer errorDataBuffer = exchange.getResponse().bufferFactory()
+                                .wrap(e.getMessage().getBytes());
                         response.setStatusCode(HttpStatus.UNAUTHORIZED);
-
-                        return response.writeWith(Mono.just(dataBuffer)).log();
-                    }
-            ).log();
+                        return response.writeWith(Mono.just(errorDataBuffer));
+                    })
+                    .log();
         };
     }
 
@@ -86,9 +97,13 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
         return Config.class;
     }
 
-    private String getToken(ServerWebExchange exchange) {
-        return exchange.getRequest().getHeaders().get("Authorization").get(0)
-                .substring(BEARER.length());
+    private String getToken(ServerHttpRequest request) {
+        String token = request.getHeaders().getFirst("Authorization");
+
+        if (token == null || token.equals("")) {
+            throw new TokenNotFoundException();
+        }
+        return token.substring(BEARER.length());
     }
 
 

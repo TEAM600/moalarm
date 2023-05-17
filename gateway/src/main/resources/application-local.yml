@@ -32,7 +32,7 @@ security:
     http://localhost:5500,
     http://127.0.0.1:5500,
     https://k8a407.p.ssafy.io
-    https://moalarm600.comS
+    https://moalarm600.com
 server:
   max-http-header-size: 16384
 
