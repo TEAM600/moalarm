@@ -6,27 +6,21 @@ function setApiKeyContent(moalarmKey) {
 const createSMSModal = () => {
     const $modalDialog = document.getElementById("modal-dialog");
     $modalDialog.innerHTML = createModalContent("SMS",
-        [createTextInputWithIdAndLabel("key","API-Key"), createPasswordInputWithIdAndLabel("secret", "API-Secret"),
+        [createTextInputWithIdAndLabelAndValue("key","API-Key",""), createPasswordInputWithIdAndLabel("secret", "API-Secret"),
             createInputWithIdAndLabelAndTypeAndPlaceHolder("extraValue","Phone", "text", "(ex : 01012345678)")]);
-    const $registBtn = document.getElementById("regist-btn");
-    $registBtn.addEventListener('click', () => sendRegistChannel("sms"));
 };
 
 const createMailModal = () => {
     const $modalDialog = document.getElementById("modal-dialog");
     $modalDialog.innerHTML = createModalContent("MAIL",
         [createTextInputWithIdAndLabel("key", "Email"), createPasswordInputWithIdAndLabel("secret","Secret"), 
-        createTextInputWithIdAndLabel("extraValue","Sender")]);
-    const $registBtn = document.getElementById("regist-btn");
-    $registBtn.addEventListener('click', () => sendRegistChannel("mail"));    
+        createTextInputWithIdAndLabel("extraValue","Sender")]); 
 };
 
 const createPushModal = () => {
     const $modalDialog = document.getElementById("modal-dialog");
     $modalDialog.innerHTML = createModalContent("PUSH", 
         [createTextAreaWithIdAndLabel("service-key", "Service-Key")]);
-    const $registBtn = document.getElementById("regist-btn");
-    $registBtn.addEventListener('click', () => sendRegistChannel("push"));
 };
 
 function sendRegistChannel(channelType) {
@@ -68,21 +62,92 @@ onload = () => {
     const channelMap = {};
     channelMap["sms"] = {
         button: document.getElementById("smsButton"),
-        modal: createSMSModal,
-        view: () => {
-            console.log("view click");
+        regist: () => {
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createModalContent("SMS",
+                [
+                    createTextInputWithIdAndLabelAndValue("key","API-Key",""), 
+                    createPasswordInputWithIdAndLabelAndValue("secret", "API-Secret",""),
+                    createInputWithIdAndLabelAndTypeAndPlaceHolderAndValue("extraValue","Phone", "text", "(ex : 01012345678)","")
+                ]);
+            const $registBtn = document.getElementById("regist-btn");
+            $registBtn.addEventListener('click', () => sendRegistChannel("sms"));
         },
-        remove: () => deleteChannel("sms")
+        view: async () => {
+            console.log("view click");
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createModalContent("SMS",
+                [
+                    createTextInputWithIdAndLabelAndValue("key","API-Key","example"), 
+                    createPasswordInputWithIdAndLabelAndValue("secret", "API-Secret","example"),
+                    createInputWithIdAndLabelAndTypeAndPlaceHolderAndValue("extraValue","Phone", "text", "(ex : 01012345678)","example")
+                ]);
+                const $registBtn = document.getElementById("regist-btn");
+                changeToDeleteButton($registBtn);
+                $registBtn.addEventListener('click', () => {
+                    console.log("delete sms");
+                    deleteChannel("sms");
+                });
+        }
     };
     channelMap["mail"] = {
         button: document.getElementById("mailButton"),
-        modal: createMailModal,
-        remove: () => deleteChannel("mail")
+        regist: () => {
+            console.log("regist modal")
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createModalContent("MAIL",
+                [
+                    createTextInputWithIdAndLabelAndValue("key", "Email",""), 
+                    createPasswordInputWithIdAndLabelAndValue("secret","Secret",""), 
+                    createTextInputWithIdAndLabelAndValue("extraValue","Sender","")
+                ]);
+            const $registBtn = document.getElementById("regist-btn");
+            $registBtn.addEventListener('click', () => sendRegistChannel("mail"));
+        },
+        view: async () => {
+            console.log("view click");
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createModalContent("MAIL",
+                [
+                    createTextInputWithIdAndLabelAndValue("key", "Email","example"), 
+                    createPasswordInputWithIdAndLabelAndValue("secret","Secret","example"), 
+                    createTextInputWithIdAndLabelAndValue("extraValue","Sender","example")
+                ]);
+                const $registBtn = document.getElementById("regist-btn");
+                changeToDeleteButton($registBtn);
+                $registBtn.addEventListener('click', () => {
+                    console.log("delete mail");
+                    deleteChannel("mail");
+                });
+        }
     };
     channelMap["push"] = {
         button: document.getElementById("pushButton"),
-        modal: createPushModal,
-        remove: () => deleteChannel("push")
+        regist: () => {
+            console.log("regist modal")
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createModalContent("PUSH", 
+                [
+                    createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key","")
+                ]);
+            const $registBtn = document.getElementById("regist-btn");
+            $registBtn.addEventListener('click', () => sendRegistChannel("push"));
+        },
+        view: async () => {
+            console.log("view click");
+            const $modalDialog = document.getElementById("modal-dialog");
+            $modalDialog.innerHTML = createModalContent("PUSH",
+                [
+                    createTextAreaWithIdAndLabelAndValue("service-key", "Service-Key","example")
+
+                ]);
+            const $registBtn = document.getElementById("regist-btn");
+            changeToDeleteButton($registBtn);
+            $registBtn.addEventListener('click', () => {
+                console.log("delete push");
+                deleteChannel("push");
+            });
+        }
     };
 
     getKey()
@@ -100,14 +165,12 @@ onload = () => {
                 console.log(channel);
                 const currentChannel = channelMap[channel.type];
                 if (channel.registration === false) {
-                    currentChannel.button.onclick = currentChannel.modal;
+                    currentChannel.button.onclick = currentChannel.regist;
                 } else {
                     currentChannel.button.onclick = currentChannel.view;
                     changeToViewButton(currentChannel.button);
-                    
                 }
             }
-            
         });
 
 }
