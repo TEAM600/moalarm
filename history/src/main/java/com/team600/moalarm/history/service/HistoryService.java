@@ -96,6 +96,7 @@ public class HistoryService {
         log.info("request: {}", request);
         History history = History.builder()
                 .memberId(memberId)
+                .alarmRequestId(request.getAlarmRequestId())
                 .type(request.getType())
                 .receiver(request.getReceiver())
                 .success(request.getSuccess())
