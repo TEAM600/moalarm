@@ -1,6 +1,7 @@
 package com.team600.moalarm.member.channel.controller;
 
 import com.team600.moalarm.member.channel.data.code.ChannelCode;
+import com.team600.moalarm.member.channel.data.dto.ChannelKeyDto;
 import com.team600.moalarm.member.channel.data.dto.request.ChannelCreateRequest;
 import com.team600.moalarm.member.channel.data.dto.response.ChannelRegistrationResponse;
 import com.team600.moalarm.member.channel.data.dto.response.ChannelsSecretResponse;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -69,5 +71,13 @@ public class ChannelController<ID extends Serializable> {
         channelService.deleteChannel(type, memberId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/info/{type}")
+    public ResponseEntity<ChannelKeyDto> getChannelInfo(@PathVariable("type") ChannelCode type,
+            @CurrentMemberId Long memberId) {
+        log.info("GET /channels/info/{}", type);
+
+        return ResponseEntity.ok(channelService.getChannelInfo(type, memberId));
     }
 }

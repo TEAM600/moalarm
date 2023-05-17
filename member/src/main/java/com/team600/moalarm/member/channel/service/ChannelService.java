@@ -1,6 +1,7 @@
 package com.team600.moalarm.member.channel.service;
 
 import com.team600.moalarm.member.channel.data.code.ChannelCode;
+import com.team600.moalarm.member.channel.data.dto.ChannelKeyDto;
 import com.team600.moalarm.member.channel.data.dto.response.ChannelRegistrationResponse;
 import com.team600.moalarm.member.channel.data.dto.response.ChannelsSecretResponse;
 import java.util.List;
@@ -12,4 +13,6 @@ public interface ChannelService {
     ChannelsSecretResponse<?> getChannelsSecret(String moalarmKey);
 
     void deleteChannel(ChannelCode type, long memberId);
+
+    ChannelKeyDto getChannelInfo(ChannelCode type, long memberId);
 }
