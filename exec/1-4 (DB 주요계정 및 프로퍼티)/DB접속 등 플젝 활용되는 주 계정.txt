@@ -1,4 +1,4 @@
 - Hostname : k8a407.p.ssafy.io
 - port: 3306
-- username : moalarm
-- password : moalarm!@#
+- username : a407
+- password : a407!@#
