@@ -42,7 +42,6 @@ public class SecurityConfig {
                                     configuration.setAllowedMethods(
                                             Arrays.asList("GET", "POST", "OPTIONS", "PUT", "PATCH",
                                                     "DELETE"));
-                                    configuration.setAllowCredentials(true);
                                     return configuration;
                                 }))
                 .authorizeExchange(exchanges -> exchanges

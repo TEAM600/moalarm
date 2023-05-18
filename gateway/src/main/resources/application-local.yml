@@ -3,7 +3,7 @@ spring:
     gateway:
       routes:
         - id: auth_route
-          uri: http://localhost:8081
+          uri: http://localhost:8082
           predicates:
             - Path=/api/v2/auth/**
         - id: jwt_route

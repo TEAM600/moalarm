@@ -4,6 +4,8 @@ import com.team600.moalarm.gateway.common.config.filter.JwtDecodeFilter.Config;
 import com.team600.moalarm.gateway.common.config.provider.TokenProvider;
 import com.team600.moalarm.gateway.common.config.vo.JwtDecryptResult;
 import com.team600.moalarm.gateway.common.exception.impl.TokenNotFoundException;
+import com.team600.moalarm.gateway.common.exception.impl.TokenValidateException;
+import io.jsonwebtoken.MalformedJwtException;
 import java.net.ConnectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,42 +46,43 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
             String domain = request.getPath().subPath(5).toString();
-
             if (domain.equals("member") && request.getMethod() == HttpMethod.POST) {
                 request.mutate().header(MEMBER_ID_HEADER_NAME, "0");
                 return chain.filter(exchange);
             }
-            String token = getToken(request);
-            try {
-                tokenProvider.validateAccessToken(token);
-                JwtDecryptResult jwtDecryptResult = tokenProvider.parseJwt(token);
-                addAuthorizationHeaders(request, jwtDecryptResult.getSubject());
-            } catch (Exception e) {
-                return chain.filter(exchange).onErrorResume(throwable -> {
-                    ServerHttpResponse response = exchange.getResponse();
-                    response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-                    DataBuffer dataBuffer = exchange.getResponse().bufferFactory()
-                            .wrap(throwable.getMessage().getBytes());
-                    response.setStatusCode(HttpStatus.UNAUTHORIZED);
-
-                    return response.setComplete().log();
-                });
-            }
-
-            return chain.filter(exchange)
-                    .onErrorResume(
-                            ConnectException.class, e -> {
-                                ServerHttpResponse response = exchange.getResponse();
-                                response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-                                DataBuffer errorDataBuffer = exchange.getResponse().bufferFactory()
-                                        .wrap(e.getMessage().substring(
-                                                        "Connection refused: no further information: ".length())
-                                                .getBytes());
-                                response.setStatusCode(HttpStatus.UNAUTHORIZED);
-
-                                return response.writeWith(Mono.just(errorDataBuffer)).log();
-                            })
-                    .onErrorResume(TokenNotFoundException.class, e -> {
+            return getToken(request).flatMap(token -> {
+                        try {
+                            tokenProvider.validateAccessToken(token);
+                            JwtDecryptResult jwtDecryptResult = tokenProvider.parseJwt(token);
+                            addAuthorizationHeaders(request, jwtDecryptResult.getSubject());
+                            return chain.filter(exchange);
+                        } catch (TokenValidateException e) {
+                            return Mono.error(e);
+                        }
+                    }).onErrorResume(ConnectException.class, e -> {
+                        ServerHttpResponse response = exchange.getResponse();
+                        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+                        DataBuffer errorDataBuffer = exchange.getResponse().bufferFactory()
+                                .wrap(e.getMessage().substring(
+                                                "Connection refused: no further information: ".length())
+                                        .getBytes());
+                        response.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE);
+                        return response.writeWith(Mono.just(errorDataBuffer));
+                    }).onErrorResume(TokenNotFoundException.class, e -> {
+                        ServerHttpResponse response = exchange.getResponse();
+                        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+                        DataBuffer errorDataBuffer = exchange.getResponse().bufferFactory()
+                                .wrap(e.getMessage().getBytes());
+                        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                        return response.writeWith(Mono.just(errorDataBuffer));
+                    }).onErrorResume(TokenValidateException.class, e -> {
+                        ServerHttpResponse response = exchange.getResponse();
+                        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+                        DataBuffer errorDataBuffer = exchange.getResponse().bufferFactory()
+                                .wrap(e.getMessage().getBytes());
+                        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                        return response.writeWith(Mono.just(errorDataBuffer));
+                    }).onErrorResume(MalformedJwtException.class, e -> {
                         ServerHttpResponse response = exchange.getResponse();
                         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
                         DataBuffer errorDataBuffer = exchange.getResponse().bufferFactory()
@@ -96,13 +99,13 @@ public class JwtDecodeFilter implements GatewayFilterFactory<Config> {
         return Config.class;
     }
 
-    private String getToken(ServerHttpRequest request) {
+    private Mono<String> getToken(ServerHttpRequest request) {
         String token = request.getHeaders().getFirst("Authorization");
 
         if (token == null || token.equals("")) {
-            throw new TokenNotFoundException();
+            return Mono.error(TokenNotFoundException::new);
         }
-        return token.substring(BEARER.length());
+        return Mono.just(token.substring(BEARER.length()));
     }
 
 
