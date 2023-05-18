@@ -7,8 +7,7 @@ function createProgress(max, current) {
     bar.setAttribute("aria-valuemin", "0");
     bar.setAttribute("aria-valuemax", max);
     bar.setAttribute("aria-valuenow", current);
-    bar.setAttribute("style", `width:${current}%`);
-    bar.textContent = current;
+    bar.textContent = Math.round(current / (max === 0 ? 1 : max) * 100);
     progressBar.append(bar);
 
     return progressBar;
@@ -54,8 +53,43 @@ function createTableBody(item) {
     feather.replace({ 'aria-hidden': 'true' })
   
     // 히스토리 정보 요청
-    const historyChart = await getHistoryChart();
-
+    // const historyChart = await getHistoryChart();
+    const historyChart = {
+        "labels": [
+            "05.02",
+            "05.03",
+            "05.04",
+        ],
+        "dataset": {
+            "FCM": [
+                  15339,
+                  21345,
+                  18483,
+                  24003,
+                  23489,
+                  24092,
+                  12034
+                ],
+            "MAIL": [
+                  15339,
+                  21345,
+                  18483,
+                  24003,
+                  23489,
+                  24092,
+                  12034
+                ],
+            "SMS": [
+                  15339,
+                  21345,
+                  18483,
+                  24003,
+                  23489,
+                  24092,
+                  12034
+                ]
+        }
+    }
     // Graphs
     const ctx = document.getElementById('myChart')
   
