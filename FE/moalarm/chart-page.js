@@ -7,8 +7,7 @@ function createProgress(max, current) {
     bar.setAttribute("aria-valuemin", "0");
     bar.setAttribute("aria-valuemax", max);
     bar.setAttribute("aria-valuenow", current);
-    bar.setAttribute("style", `width:${current}%`);
-    bar.textContent = current;
+    bar.textContent = Math.round(current / (max === 0 ? 1 : max) * 100);
     progressBar.append(bar);
 
     return progressBar;
@@ -55,7 +54,7 @@ function createTableBody(item) {
   
     // 히스토리 정보 요청
     const historyChart = await getHistoryChart();
-
+    
     // Graphs
     const ctx = document.getElementById('myChart')
   
