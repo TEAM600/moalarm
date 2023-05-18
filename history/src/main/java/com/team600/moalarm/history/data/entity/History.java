@@ -21,6 +21,9 @@ public class History extends BaseEntity {
     @Column(nullable = false)
     private long memberId;
 
+    @Column(nullable = false)
+    private long alarmRequestId;
+
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private ChannelCode type;
@@ -33,8 +36,9 @@ public class History extends BaseEntity {
     private String success;
 
     @Builder
-    public History(long memberId, ChannelCode type, String receiver, String success) {
+    public History(long memberId, long alarmRequestId, ChannelCode type, String receiver, String success) {
         this.memberId = memberId;
+        this.alarmRequestId = alarmRequestId;
         this.type = type;
         this.receiver = receiver;
         this.success = success;

@@ -11,6 +11,7 @@ import lombok.ToString;
 @Setter
 public class HistoryCreateRequest {
 
+    private long alarmRequestId;
     @Enumerated(EnumType.ORDINAL)
     private ChannelCode type;
     private String receiver;

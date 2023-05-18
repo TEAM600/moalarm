@@ -7,12 +7,12 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class HistoryResponse {
+public class HistoryDetailResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss")
     private LocalDateTime dateTime;
-    private long alarmRequestId;
-    private int alarmCnt;
-    private int doneCnt;
+    private String type;
+    private String receiver;
+    private String success;
 
 }
