@@ -53,43 +53,8 @@ function createTableBody(item) {
     feather.replace({ 'aria-hidden': 'true' })
   
     // 히스토리 정보 요청
-    // const historyChart = await getHistoryChart();
-    const historyChart = {
-        "labels": [
-            "05.02",
-            "05.03",
-            "05.04",
-        ],
-        "dataset": {
-            "FCM": [
-                  15339,
-                  21345,
-                  18483,
-                  24003,
-                  23489,
-                  24092,
-                  12034
-                ],
-            "MAIL": [
-                  15339,
-                  21345,
-                  18483,
-                  24003,
-                  23489,
-                  24092,
-                  12034
-                ],
-            "SMS": [
-                  15339,
-                  21345,
-                  18483,
-                  24003,
-                  23489,
-                  24092,
-                  12034
-                ]
-        }
-    }
+    const historyChart = await getHistoryChart();
+    
     // Graphs
     const ctx = document.getElementById('myChart')
   
