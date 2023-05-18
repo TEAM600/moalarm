@@ -1,0 +1,4 @@
+- Hostname : k8a407.p.ssafy.io
+- port: 3306
+- username : moalarm
+- password : moalarm!@#
