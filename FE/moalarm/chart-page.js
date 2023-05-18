@@ -7,7 +7,9 @@ function createProgress(max, current) {
     bar.setAttribute("aria-valuemin", "0");
     bar.setAttribute("aria-valuemax", max);
     bar.setAttribute("aria-valuenow", current);
-    bar.textContent = Math.round(current / (max === 0 ? 1 : max) * 100);
+    const ratio =  Math.round(current / (max === 0 ? 1 : max) * 100);
+    bar.setAttribute("style", `width:${ratio}%`);
+    bar.textContent = ratio;
     progressBar.append(bar);
 
     return progressBar;
