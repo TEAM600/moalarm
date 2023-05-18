@@ -1,0 +1,17 @@
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: false
+      port: 465
+    ssl:
+      checkServerIdentity: true
+
+url:
+  member: "http://k8a407.p.ssafy.io:8083/api/v2/channels/secret"
+  history: "http://k8a407.p.ssafy.io:8085/api/v2/history"
+  alarmRequest: "http://k8a407.p.ssafy.io:8085/api/v2/history/alarmRequest"
