@@ -19,6 +19,7 @@
 
     <!-- css -->
     <link href="main.css" rel="stylesheet">
+
   </head>
   <body class="bg-light">
     <!-- navbar -->
@@ -35,7 +36,7 @@
               <a class="nav-link active" aria-current="page" href="main-page.html">Key</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="history.html">Dashboard</a>
+              <a class="nav-link" href="chart-page.html">Dashboard</a>
             </li>
           </ul>
           <ul class="navbar-nav align-items-center">
@@ -55,18 +56,19 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
       </div>
+      <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
       <div class="table-responsive">
-        <table id="history" class="table">
-          <thead>
-            <tr>
-              <th scope="col">Alarm count</th>
-              <th scope="col">Done</th>
-              <th scope="col">Datetime</th>
-              <th scope="col">Progress</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
+        <table id="alarm-request" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Alarm count</th>
+                    <th scope="col">Done</th>
+                    <th scope="col">Datetime</th>
+                    <th scope="col">Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
         </table>
       </div>
     </main>
@@ -77,6 +79,6 @@
     <script src="main.js"></script>
     <script src="./js/http.js"></script>
     <script src="./js/histoty.js"></script>
-    <script src="history.js"></script>
+    <script src="chart-page.js"></script>
   </body>
 </html>
