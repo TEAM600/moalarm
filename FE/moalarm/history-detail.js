@@ -6,56 +6,9 @@
   const alarmRequestId = localStorage.getItem("alarmRequestId");
 
   // 히스토리 정보 요청
-  const history = await getHistory(alarmRequestId);
-  const historyChart = await getHistoryChart();
-  
-  // Graphs
-  const ctx = document.getElementById('myChart')
-
-  // eslint-disable-next-line no-unused-vars
-  const myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: historyChart.labels,
-      datasets: [{
-        data: historyChart.dataset.SMS,
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#2F2040',
-        borderWidth: 4,
-        pointBackgroundColor: '#553A75'
-      },
-      {
-        data: historyChart.dataset.MAIL,
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#7953A8',
-        borderWidth: 4,
-        pointBackgroundColor: '#553A75'
-      },
-      {
-        data: historyChart.dataset.FCM,
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#D3C7E2',
-        borderWidth: 4,
-        pointBackgroundColor: '#553A75'
-      }]
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: false
-          }
-        }]
-      },
-      legend: {
-        display: false
-      }
-    }
-  })
-
+  const history = await getHistoryByRequestId(alarmRequestId);
+  console.log(alarmRequestId);
+  console.log(history);
   const table = document.querySelector("#history");
 
   history.forEach((item) => {

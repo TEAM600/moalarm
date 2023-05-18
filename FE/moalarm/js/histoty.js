@@ -1,4 +1,4 @@
-function getHistory(requestId) {
+function getHistoryByRequestId(requestId) {
     return get(`/history/${requestId}`);
 }
 
