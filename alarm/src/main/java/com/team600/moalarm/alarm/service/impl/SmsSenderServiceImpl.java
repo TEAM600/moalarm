@@ -25,7 +25,7 @@ public class SmsSenderServiceImpl implements SenderService {
 
     private final HistoryService historyService;
 
-    public void send(long memberId, SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
+    public void send(long memberId, long requestId, SendAlarmRequest requirementDto, ChannelKeyDto channelKeyDto) {
 
         SendSmsRequest sendSmsRequest = requirementDto.getSms();
         if (sendSmsRequest == null) {
@@ -42,7 +42,7 @@ public class SmsSenderServiceImpl implements SenderService {
             List<String> receivers = sendSmsRequest.getTo();
             String content = sendSmsRequest.getContent();
             for (String r : receivers) {
-                sendSms(memberId, r, content, messageService, phone);
+                sendSms(memberId, requestId, r, content, messageService, phone);
             }
         } catch (NurigoMessageNotReceivedException exception) {
             // 발송에 실패한 메시지 목록을 확인할 수 있습니다!
@@ -53,7 +53,7 @@ public class SmsSenderServiceImpl implements SenderService {
         }
     }
 
-    void sendSms(long memberId, String receiver, String content,
+    void sendSms(long memberId, long requestId, String receiver, String content,
             DefaultMessageService messageService, String phone)
             throws NurigoMessageNotReceivedException, NurigoEmptyResponseException, NurigoUnknownException {
         Message message = new Message();
@@ -62,18 +62,18 @@ public class SmsSenderServiceImpl implements SenderService {
         message.setTo(receiver);
         message.setText(content);
 
-        sendMessage(memberId, receiver, message, messageService);
+        sendMessage(memberId, requestId, receiver, message, messageService);
     }
 
     @Async
-    void sendMessage(long memberId, String receiver, Message message,
+    void sendMessage(long memberId, long requestId, String receiver, Message message,
             DefaultMessageService messageService) {
         try {
             messageService.send(message);
-            historyService.postHistory(memberId, receiver, ChannelCode.SMS,"Y");
+            historyService.postHistory(memberId, requestId, receiver, ChannelCode.SMS,"Y");
         } catch (NurigoMessageNotReceivedException | NurigoEmptyResponseException |
                  NurigoUnknownException e) {
-            historyService.postHistory(memberId, receiver, ChannelCode.SMS,"N");
+            historyService.postHistory(memberId, requestId, receiver, ChannelCode.SMS,"N");
         }
     }
 }

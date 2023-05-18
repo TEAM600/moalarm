@@ -25,9 +25,10 @@ public class HistoryServiceImpl implements HistoryService {
     private String HISTORY_URL;
 
     @Override
-    public void postHistory(long memberId, String receiver, ChannelCode code, String success) {
+    public void postHistory(long memberId, long requestId, String receiver, ChannelCode code, String success) {
         OkHttpClient client = new OkHttpClient();
         JsonObject createHistory = new JsonObject();
+        createHistory.addProperty("alarmRequestId", requestId);
         createHistory.addProperty("type", code.toString());
         createHistory.addProperty("receiver", receiver);
         createHistory.addProperty("success", success);
